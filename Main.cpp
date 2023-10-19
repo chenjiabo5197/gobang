@@ -1,15 +1,15 @@
-#include<graphics.h>
-#include<conio.h>
+#include <iostream>
+#include "Management.h"
 
 int main()
 {
-	initgraph(400, 400);
-	circle(200, 200, 100);
-	outtextxy(170, 200, _T("chen"));
-	_getch();
-	closegraph();
+	Chess chess(13, 44, 43, 67.4);
+	Player player;
+	AI ai;
+	Management game(&player, &ai, &chess);
+
+	game.play();
+
 	return 0;
 }
-
-
 

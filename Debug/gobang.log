@@ -1,2 +1,14 @@
-﻿  Main.cpp
+﻿  AI.cpp
+  Chess.cpp
+D:\cplusplus-project\gobang\Chess.cpp(32,56): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(32,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(33,56): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(33,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(35,20): warning C4018: '<': signed/unsigned mismatch
+D:\cplusplus-project\gobang\Chess.cpp(37,21): warning C4018: '<': signed/unsigned mismatch
+  main.cpp
+D:\cplusplus-project\gobang\main.cpp(6,30): warning C4305: 'argument': truncation from 'double' to 'float'
+  Management.cpp
+  Player.cpp
+  Generating Code...
   gobang.vcxproj -> D:\cplusplus-project\gobang\Debug\gobang.exe
