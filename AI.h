@@ -1,5 +1,6 @@
 #pragma once
 #include "Chess.h"
+#include "logger.h"
 
 class AI
 {

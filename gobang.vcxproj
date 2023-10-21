@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="AI.h" />
     <ClInclude Include="Chess.h" />
+    <ClInclude Include="logger.h" />
     <ClInclude Include="Management.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
@@ -151,6 +152,7 @@
   <ItemGroup>
     <ClCompile Include="AI.cpp" />
     <ClCompile Include="Chess.cpp" />
+    <ClCompile Include="logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Management.cpp" />
     <ClCompile Include="Player.cpp" />

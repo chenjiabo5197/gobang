@@ -2,6 +2,7 @@
 #include "AI.h"
 #include "Chess.h"
 #include "Player.h"
+#include "logger.h"
 
 class Management
 {

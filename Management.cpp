@@ -7,7 +7,8 @@ Management::Management(Player* player, AI* ai, Chess* chess)
 	this->chess = chess;
 
 	ai->init(chess);
-	player->init(chess);
+	player->init(chess);  // ≥ı ºªØ∆Â ÷
+	INFOLOG("Management::Management||construct management success");
 }
 
 void Management::play()

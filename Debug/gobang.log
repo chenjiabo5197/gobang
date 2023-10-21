@@ -1,13 +1,27 @@
-﻿  AI.cpp
-  Chess.cpp
-D:\cplusplus-project\gobang\Chess.cpp(32,56): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\cplusplus-project\gobang\Chess.cpp(32,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\cplusplus-project\gobang\Chess.cpp(33,56): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\cplusplus-project\gobang\Chess.cpp(33,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\cplusplus-project\gobang\Chess.cpp(35,20): warning C4018: '<': signed/unsigned mismatch
-D:\cplusplus-project\gobang\Chess.cpp(37,21): warning C4018: '<': signed/unsigned mismatch
-  main.cpp
-D:\cplusplus-project\gobang\main.cpp(6,30): warning C4305: 'argument': truncation from 'double' to 'float'
+﻿  Chess.cpp
+D:\cplusplus-project\gobang\Chess.cpp(35,56): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(35,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(36,56): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(36,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(38,20): warning C4018: '<': signed/unsigned mismatch
+D:\cplusplus-project\gobang\Chess.cpp(40,21): warning C4018: '<': signed/unsigned mismatch
+D:\cplusplus-project\gobang\Chess.cpp(57,10): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(58,10): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(62,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(63,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(66,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(67,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(70,21): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(71,21): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(74,22): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(75,22): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(77,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(89,13): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(104,13): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(119,13): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(134,13): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(157,8): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+D:\cplusplus-project\gobang\Chess.cpp(158,8): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   Management.cpp
   Player.cpp
   Generating Code...

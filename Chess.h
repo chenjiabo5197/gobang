@@ -1,12 +1,21 @@
 #pragma once
 #include <graphics.h>
 #include <vector>
+#include "logger.h"
 
 
 typedef enum {
 	CHESS_WHITE = -1,   // 白方
 	CHESS_BLACK = 1		// 黑方
 } chess_kind_type;
+
+// 鼠标点击时在棋盘格子的周围四个角，日志打印有问题，暂时先放弃
+typedef enum {   
+	LEFTTOP = 1,           //左上     
+	RIGHTTOP = 2,          //右上
+	LEFTBOTTOM = 3,        //左下
+	RIGHTBOTTOM = 4        //右下
+} chess_coordinate;
 
 struct ChessPos {   // 棋子位置
 	int row;
@@ -38,11 +47,17 @@ public:
 	// 判断棋局是否结束
 	bool checkOver();
 
+	// 自定义图形渲染，easyx图形库不支持背景透明的png格式图片，把透明背景渲染为黑色
+	void putImagePNG(int x, int y, IMAGE* picture);
+
 private:
 	// 棋盘尺寸
 	int chessBoardSize;
-	int margin_x;  // 49
+
+	// 棋盘边缘距离棋盘的距离
+	int margin_x;  // 49  
 	int margin_y;  // 49
+
 	float chessSize; // 棋盘方格大小
 
 	IMAGE chessBlackImg;
@@ -53,6 +68,11 @@ private:
 
 	// 表示下棋方，true黑棋方，false 白棋方
 	bool playerFlag;
+
+	ChessPos lastPos;
+
+	// 更新棋盘的棋子数据
+	void updateChessMap(ChessPos* pos);
 
 };
 
