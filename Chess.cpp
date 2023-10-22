@@ -173,17 +173,17 @@ void Chess::chessDown(ChessPos* pos, chess_kind_type kind)
 
 int Chess::getChessBoardSize()
 {
-	return 0;
+	return chessBoardSize;
 }
 
 int Chess::getChessData(ChessPos* pos)
 {
-	return 0;
+	return chessMap[pos->row][pos->col];
 }
 
 int Chess::getChessData(int row, int col)
 {
-	return 0;
+	return chessMap[row][col];
 }
 
 bool Chess::checkOver()

@@ -19,6 +19,7 @@ void Management::play()
 		player->go();
 		if (chess->checkOver())
 		{
+			INFOLOG("Management::play||player win||init chess again");
 			chess->init();
 			continue;
 		}
@@ -26,6 +27,7 @@ void Management::play()
 		ai->go();
 		if (chess->checkOver()) 
 		{
+			INFOLOG("Management::play||AI win||init chess again");
 			chess->init();
 			continue;
 		}

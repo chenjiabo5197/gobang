@@ -3,12 +3,13 @@
 #include "spdlog/spdlog.h"
 #include "logger.h"
 
+// 初始化日志
 void initLogger()
 {
     // 定义日志配置项
     LogConfig conf = {
         "trace",
-        "logs/test.log",
+        "logs/gobang.log",
         5 * 1024 * 1024,
         10
     };

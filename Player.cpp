@@ -29,4 +29,5 @@ void Player::go()
 
 	// Âä×Ó
 	chess->chessDown(&pos, CHESS_BLACK);
+	DEBUGLOG("Player::go||Player chess down success");
 }

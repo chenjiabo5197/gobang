@@ -40,7 +40,7 @@ public:
 	// 获取棋盘大小（13,15,19）
 	int getChessBoardSize();
 
-	// 获取指定位置是黑棋/白棋/空白
+	// 获取指定位置是黑棋/白棋/空白  空白0，白子-1，黑子1
 	int getChessData(ChessPos* pos);
 	int getChessData(int row, int col);
 
