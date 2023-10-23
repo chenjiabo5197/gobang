@@ -2,6 +2,7 @@
 #include <graphics.h>
 #include <vector>
 #include "logger.h"
+#include <conio.h>
 
 
 typedef enum {
@@ -50,6 +51,9 @@ public:
 	// 自定义图形渲染，easyx图形库不支持背景透明的png格式图片，把透明背景渲染为黑色
 	void putImagePNG(int x, int y, IMAGE* picture);
 
+	// 判断胜负
+	bool checkWin();
+
 private:
 	// 棋盘尺寸
 	int chessBoardSize;
@@ -69,6 +73,7 @@ private:
 	// 表示下棋方，true黑棋方，false 白棋方
 	bool playerFlag;
 
+	// 最近的落子位置
 	ChessPos lastPos;
 
 	// 更新棋盘的棋子数据

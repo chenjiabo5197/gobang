@@ -188,6 +188,24 @@ int Chess::getChessData(int row, int col)
 
 bool Chess::checkOver()
 {
+	if (checkWin())
+	{
+		Sleep(1500);
+		if (!playerFlag)   // 黑棋赢，玩家赢
+		{
+			INFOLOG("Chess::checkOver||black win");
+			mciSendString("play res/不错.mp3", 0, 0, 0);
+			loadimage(0, "res/胜利.jpg");
+		}
+		else
+		{
+			INFOLOG("Chess::checkOver||white win");
+			mciSendString("play res/失败.mp3", 0, 0, 0);
+			loadimage(0, "res/失败.jpg");
+		}
+		_getch(); 
+		return true;
+	}
 	return false;
 }
 
@@ -225,6 +243,60 @@ void Chess::putImagePNG(int x, int y, IMAGE* picture)
 			}
 		}
 	}
+}
+
+bool Chess::checkWin()
+{
+	// 横竖左斜右斜四个方向，每种情况都根据当前落子向后遍历5个棋子，有一种符合就算赢
+	int row = lastPos.row;
+	int col = lastPos.col;
+
+	// 水平方向, 向左和右分别匹配4个子
+	for (int i = 0; i < 5; i++)
+	{
+		if (col - i >= 0 && col - i + 4 < chessBoardSize && chessMap[row][col - i] == chessMap[row][col - i + 1] && chessMap[row][col - i] == chessMap[row][col - i + 2] &&
+			chessMap[row][col - i] == chessMap[row][col - i + 3] && chessMap[row][col - i] == chessMap[row][col - i + 4])
+		{
+			DEBUGLOG("Chess::checkWin||calculate horizontal direction success||i={}||playFlag={}",i, playerFlag);
+			return true;
+		}
+	}
+
+	// 竖直方向 
+	for (int i = 0; i < 5; i++)
+	{
+		if (row - i >= 0 && row - i + 4 < chessBoardSize && chessMap[row - i][col] == chessMap[row - i + 1][col] && chessMap[row - i][col] == chessMap[row - i + 2][col] &&
+			chessMap[row - i][col] == chessMap[row - i + 3][col] && chessMap[row - i][col] == chessMap[row - i + 4][col])
+		{
+			DEBUGLOG("Chess::checkWin||calculate vertical direction success||i={}||playFlag={}", i, playerFlag);
+			return true;
+		}
+	}
+
+	// 左斜方向"/"
+	for (int i = 0; i < 5; i++)
+	{
+		if (row - i >= 0 && col - i >= 0 && row - i + 4 < chessBoardSize && col - i + 4 < chessBoardSize && chessMap[row - i][col - i] == chessMap[row - i + 1][col - i + 1] && chessMap[row - i][col - i] == chessMap[row - i + 2][col - i + 2] &&
+			chessMap[row - i][col - i] == chessMap[row - i + 3][col - i + 3] && chessMap[row - i][col - i] == chessMap[row - i + 4][col - i + 4])
+		{
+			DEBUGLOG("Chess::checkWin||calculate left oblique direction success||i={}||playFlag={}", i, playerFlag);
+			return true;
+		}
+	}
+
+	// 右斜方向 "\"
+	for (int i = 0; i < 5; i++)
+	{
+		if (col - i >= 0 && col - i + 4 < chessBoardSize && chessMap[row + i][col - i] == chessMap[row + i - 1][col - i + 1] && chessMap[row + i][col - i] == chessMap[row + i - 2][col - i + 2] &&
+			chessMap[row + i][col - i] == chessMap[row + i - 3][col - i + 3] && chessMap[row + i][col - i] == chessMap[row + i - 4][col - i + 4])
+		{
+			DEBUGLOG("Chess::checkWin||calculate right oblique direction success||i={}||playFlag={}", i, playerFlag);
+			return true;
+		}
+	}
+
+	return false;
+
 }
 
 void Chess::updateChessMap(ChessPos* pos)

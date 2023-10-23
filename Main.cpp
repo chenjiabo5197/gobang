@@ -10,7 +10,7 @@ void initLogger()
     LogConfig conf = {
         "trace",
         "logs/gobang.log",
-        5 * 1024 * 1024,
+        10 * 1024 * 1024,
         10
     };
     INITLOG(conf);
