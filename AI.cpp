@@ -20,10 +20,17 @@ void AI::init(Chess* chess)
 
 void AI::go()
 {
-	ChessPos pos = think();
-	Sleep(1000);
-	chess->chessDown(&pos, CHESS_WHITE);
-	DEBUGLOG("AI::go||AI chess down success");
+	try
+	{
+		ChessPos pos = think();
+		Sleep(1000);
+		chess->chessDown(&pos, CHESS_WHITE);
+		DEBUGLOG("AI::go||AI chess down success");
+	}
+	catch (const std::exception& e)
+	{
+		CRITICALLOG("AI::go||exception={}", e.what());
+	}
 }
 
 void AI::calculateScore()
@@ -58,22 +65,22 @@ void AI::calculateScore()
 					for (int i = 1; i <= 4; i++) {
 						int curRow = row + i * y;
 						int curCol = col + i * x;
-						DEBUGLOG("AI::calculateScore||start calculate black chess score||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
-							curRow, curCol, playerChessNum, AIChessNum, emptyNum);
+						/*DEBUGLOG("AI::calculateScore||start calculate black chess score||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
+							curRow, curCol, playerChessNum, AIChessNum, emptyNum);*/
 
 						if (curRow >= 0 && curRow < size &&
 							curCol >= 0 && curCol < size &&
 							chess->getChessData(curRow, curCol) == 1) {
 							playerChessNum++;
-							DEBUGLOG("AI::calculateScore||calculate black chess score||chessData(curRow, curCol)=1||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
-								curRow, curCol, playerChessNum, AIChessNum, emptyNum);
+							/*DEBUGLOG("AI::calculateScore||calculate black chess score||chessData(curRow, curCol)=1||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
+								curRow, curCol, playerChessNum, AIChessNum, emptyNum);*/
 						}
 						else if (curRow >= 0 && curRow < size &&
 							curCol >= 0 && curCol < size &&
 							chess->getChessData(curRow, curCol) == 0) {
 							emptyNum++;
-							DEBUGLOG("AI::calculateScore||calculate black chess score||chessData(curRow, curCol)=0||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
-								curRow, curCol, playerChessNum, AIChessNum, emptyNum);
+							/*DEBUGLOG("AI::calculateScore||calculate black chess score||chessData(curRow, curCol)=0||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
+								curRow, curCol, playerChessNum, AIChessNum, emptyNum);*/
 							break;
 						}
 						else {
@@ -85,22 +92,22 @@ void AI::calculateScore()
 					for (int i = 1; i <= 4; i++) {
 						int curRow = row - i * y;
 						int curCol = col - i * x;
-						DEBUGLOG("AI::calculateScore||start calculate black chess score||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
-							curRow, curCol, playerChessNum, AIChessNum, emptyNum);
+						/*DEBUGLOG("AI::calculateScore||start calculate black chess score||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
+							curRow, curCol, playerChessNum, AIChessNum, emptyNum);*/
 
 						if (curRow >= 0 && curRow < size &&
 							curCol >= 0 && curCol < size &&
 							chess->getChessData(curRow, curCol) == 1) {
 							playerChessNum++;
-							DEBUGLOG("AI::calculateScore||calculate black chess score||chessData(curRow, curCol)=1||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
-								curRow, curCol, playerChessNum, AIChessNum, emptyNum);
+							/*DEBUGLOG("AI::calculateScore||calculate black chess score||chessData(curRow, curCol)=1||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
+								curRow, curCol, playerChessNum, AIChessNum, emptyNum);*/
 						}
 						else if (curRow >= 0 && curRow < size &&
 							curCol >= 0 && curCol < size &&
 							chess->getChessData(curRow, curCol) == 0) {
 							emptyNum++;
-							DEBUGLOG("AI::calculateScore||calculate black chess score||chessData(curRow, curCol)=0||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
-								curRow, curCol, playerChessNum, AIChessNum, emptyNum);
+							/*DEBUGLOG("AI::calculateScore||calculate black chess score||chessData(curRow, curCol)=0||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
+								curRow, curCol, playerChessNum, AIChessNum, emptyNum);*/
 							break;
 						}
 						else {
@@ -150,22 +157,22 @@ void AI::calculateScore()
 					for (int i = 1; i <= 4; i++) {
 						int curRow = row + i * y;
 						int curCol = col + i * x;
-						DEBUGLOG("AI::calculateScore||start calculate white chess score||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
-							curRow, curCol, playerChessNum, AIChessNum, emptyNum);
+						/*DEBUGLOG("AI::calculateScore||start calculate white chess score||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
+							curRow, curCol, playerChessNum, AIChessNum, emptyNum);*/
 
 						if (curRow >= 0 && curRow < size &&
 							curCol >= 0 && curCol < size &&
 							chess->getChessData(curRow, curCol) == -1) {
 							AIChessNum++;
-							DEBUGLOG("AI::calculateScore||calculate white chess score||chessData(curRow, curCol)=-1||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
-								curRow, curCol, playerChessNum, AIChessNum, emptyNum);
+							/*DEBUGLOG("AI::calculateScore||calculate white chess score||chessData(curRow, curCol)=-1||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
+								curRow, curCol, playerChessNum, AIChessNum, emptyNum);*/
 						}
 						else if (curRow >= 0 && curRow < size &&
 							curCol >= 0 && curCol < size &&
 							chess->getChessData(curRow, curCol) == 0) {
 							emptyNum++;
-							DEBUGLOG("AI::calculateScore||calculate white chess score||chessData(curRow, curCol)=0||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
-								curRow, curCol, playerChessNum, AIChessNum, emptyNum);
+							/*DEBUGLOG("AI::calculateScore||calculate white chess score||chessData(curRow, curCol)=0||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
+								curRow, curCol, playerChessNum, AIChessNum, emptyNum);*/
 							break;
 						}
 						else {
@@ -183,15 +190,15 @@ void AI::calculateScore()
 							curCol >= 0 && curCol < size &&
 							chess->getChessData(curRow, curCol) == -1) {
 							AIChessNum++;
-							DEBUGLOG("AI::calculateScore||calculate white chess score||chessData(curRow, curCol)=-1||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
-								curRow, curCol, playerChessNum, AIChessNum, emptyNum);
+							/*DEBUGLOG("AI::calculateScore||calculate white chess score||chessData(curRow, curCol)=-1||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
+								curRow, curCol, playerChessNum, AIChessNum, emptyNum);*/
 						}
 						else if (curRow >= 0 && curRow < size &&
 							curCol >= 0 && curCol < size &&
 							chess->getChessData(curRow, curCol) == 0) {
 							emptyNum++;
-							DEBUGLOG("AI::calculateScore||calculate white chess score||chessData(curRow, curCol)=0||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
-								curRow, curCol, playerChessNum, AIChessNum, emptyNum);
+							/*DEBUGLOG("AI::calculateScore||calculate white chess score||chessData(curRow, curCol)=0||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
+								curRow, curCol, playerChessNum, AIChessNum, emptyNum);*/
 							break;
 						}
 						else {
