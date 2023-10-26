@@ -27,8 +27,16 @@ Chess::Chess(int chessBoardSize, int marginX, int marginY, float chessSize)
 
 void Chess::init()
 {
-	initgraph(897, 895);
-	loadimage(0, "res/棋盘2.jpg");
+	// 棋盘2的原始大小为897*895，按键大小为132*46
+	initgraph(1029, 895);
+	IMAGE chessBoardPicture, withDrawPicture, exitPicture;
+	loadimage(&chessBoardPicture, "res/棋盘2.jpg");
+	loadimage(&withDrawPicture, "res/withdraw.png");
+	loadimage(&exitPicture, "res/exit_game.png");
+
+	putimage(0, 0, &chessBoardPicture);
+	putimage(897, 200, &withDrawPicture);
+	putimage(897, 500, &exitPicture);
 
 	mciSendString("play res/start.wav", 0, 0, 0);  //需要修改字符集为多字符集
 

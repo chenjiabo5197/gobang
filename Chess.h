@@ -79,5 +79,9 @@ private:
 	// 更新棋盘的棋子数据
 	void updateChessMap(ChessPos* pos);
 
+	// 棋盘图片的尺寸，防止点击到棋盘的其他功能按键时误以为下棋导致数组越界
+	int chessBoardWidth;
+	int chessBoardHeight;
+
 };
 
