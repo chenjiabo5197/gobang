@@ -27,7 +27,7 @@ Chess::Chess(int chessBoardSize, int marginX, int marginY, float chessSize)
 
 void Chess::init()
 {
-	initgraph(897, 995);
+	initgraph(897, 895);
 	loadimage(0, "res/棋盘2.jpg");
 
 	mciSendString("play res/start.wav", 0, 0, 0);  //需要修改字符集为多字符集
