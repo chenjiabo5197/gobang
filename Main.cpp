@@ -29,7 +29,7 @@ int main()
 {
     initLogger();
 
-	Chess chess(13, 44, 43, 67.4);
+	Chess chess(897, 895, 13, 44, 43, 67.4);
 	Player player;
 	AI ai;
 	Management game(&player, &ai, &chess);

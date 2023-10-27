@@ -26,7 +26,7 @@ struct ChessPos {   // 棋子位置
 class Chess
 {
 public:
-	Chess(int chessBoardSize, int marginX, int marginY, float chessSize);
+	Chess(int chessBoardWidth, int chessBoardHeight, int chessBoardSize, int marginX, int marginY, float chessSize);
 
 	// 棋盘的初始化，加载棋盘的图片资源，初始化棋盘的相关数据
 	void init();
@@ -53,6 +53,10 @@ public:
 
 	// 判断胜负
 	bool checkWin();
+
+	// 获取棋盘的宽和高尺寸
+	int getChessBoardWidth();
+	int getChessBoardHieght();
 
 private:
 	// 棋盘尺寸

@@ -6,34 +6,39 @@ void Player::init(Chess* chess)
 	INFOLOG("Player::init||init player success");
 }
 
-void Player::go()
+bool Player::go()
 {
 	// 等待棋手有效落子
 	MOUSEMSG msg;
 	ChessPos pos;
-	try
+	while (1)
 	{
-		while (1)
+		msg = GetMouseMsg();
+		if (msg.uMsg == WM_LBUTTONDOWN)
 		{
-			msg = GetMouseMsg();
-			if (msg.uMsg == WM_LBUTTONDOWN)
+			DEBUGLOG("Player::go||mouse click||x={}||y={}", msg.x, msg.y);
+			if (msg.x >= 0 && msg.x <= chess->getChessBoardWidth() && msg.y >= 0 && msg.y <= chess->getChessBoardHieght())
 			{
-				DEBUGLOG("Player::go||mouse click||x={}||y={}", msg.x, msg.y);
+				if (chess->clickBoard(msg.x, msg.y, &pos))
+				{
+					INFOLOG("Player::go||valid mouse click chessboard||x={}||y={}", msg.x, msg.y);
+					// 落子
+					chess->chessDown(&pos, CHESS_BLACK);
+					DEBUGLOG("Player::go||Player chess down success");
+					break;
+				}
+				else
+				{
+					INFOLOG("Player::go||invalid mouse click chessboard||no space to put chess||x={}||y={}", msg.x, msg.y);
+					// break;
+				}
 			}
-
-			if (msg.uMsg == WM_LBUTTONDOWN && chess->clickBoard(msg.x, msg.y, &pos))
+			else
 			{
-				INFOLOG("Player::go||valid mouse click||x={}||y={}", msg.x, msg.y);
-				break;
+				INFOLOG("Player::go||select other function||x={}||y={}", msg.x, msg.y);
+				// break;
 			}
 		}
-
-		// 落子
-		chess->chessDown(&pos, CHESS_BLACK);
-		DEBUGLOG("Player::go||Player chess down success");
 	}
-	catch (const std::exception& e)
-	{
-		CRITICALLOG("Player::go||exception={}", e.what());
-	}
+	return false;
 }

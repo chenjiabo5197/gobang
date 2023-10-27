@@ -16,27 +16,20 @@ void Management::play()
 	chess->init();
 	while (1)
 	{
-		try
+		player->go();
+		if (chess->checkOver())
 		{
-			player->go();
-			if (chess->checkOver())
-			{
-				INFOLOG("Management::play||player win||init chess again");
-				chess->init();
-				continue;
-			}
-
-			ai->go();
-			if (chess->checkOver())
-			{
-				INFOLOG("Management::play||AI win||init chess again");
-				chess->init();
-				continue;
-			}
+			INFOLOG("Management::play||player win||init chess again");
+			chess->init();
+			continue;
 		}
-		catch (const std::exception& e)
+
+		ai->go();
+		if (chess->checkOver())
 		{
-			CRITICALLOG("Management::play||exception={}", e.what());
+			INFOLOG("Management::play||AI win||init chess again");
+			chess->init();
+			continue;
 		}
 	}
 }

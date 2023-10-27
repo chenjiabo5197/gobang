@@ -3,12 +3,14 @@
 #include <iostream>
 #pragma comment(lib, "winmm.lib")
 
-Chess::Chess(int chessBoardSize, int marginX, int marginY, float chessSize)
+Chess::Chess(int chessBoardWidth, int chessBoardHeight, int chessBoardSize, int marginX, int marginY, float chessSize)
 {
 	this->chessBoardSize = chessBoardSize;
 	this->margin_x = marginX;
 	this->margin_y = marginY;
 	this->chessSize = chessSize;
+	this->chessBoardWidth = chessBoardWidth;
+	this->chessBoardHeight = chessBoardHeight;
 	playerFlag = CHESS_BLACK;
 
 	// 初始化棋盘，棋盘每个位置都为0，表示空白
@@ -28,15 +30,15 @@ Chess::Chess(int chessBoardSize, int marginX, int marginY, float chessSize)
 void Chess::init()
 {
 	// 棋盘2的原始大小为897*895，按键大小为132*46
-	initgraph(1029, 895);
+	initgraph(1030, 895);
 	IMAGE chessBoardPicture, withDrawPicture, exitPicture;
 	loadimage(&chessBoardPicture, "res/棋盘2.jpg");
 	loadimage(&withDrawPicture, "res/withdraw.png");
 	loadimage(&exitPicture, "res/exit_game.png");
 
 	putimage(0, 0, &chessBoardPicture);
-	putimage(897, 200, &withDrawPicture);
-	putimage(897, 500, &exitPicture);
+	putimage(898, 200, &withDrawPicture);
+	putimage(898, 500, &exitPicture);
 
 	mciSendString("play res/start.wav", 0, 0, 0);  //需要修改字符集为多字符集
 
@@ -305,6 +307,16 @@ bool Chess::checkWin()
 
 	return false;
 
+}
+
+int Chess::getChessBoardWidth()
+{
+	return chessBoardWidth;
+}
+
+int Chess::getChessBoardHieght()
+{
+	return chessBoardHeight;
 }
 
 void Chess::updateChessMap(ChessPos* pos)
