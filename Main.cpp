@@ -8,7 +8,8 @@ void initLogger()
 {
     // 定义日志配置项
     LogConfig conf = {
-        "trace",
+        //"trace",
+        "info",
         "logs/gobang.log",
         100 * 1024 * 1024,
         10
@@ -35,8 +36,7 @@ int main()
 	Management game(&player, &ai, &chess);
 
 	game.play();
-
-	
+    GlobalVar::instance();
 
 	return 0;
 }

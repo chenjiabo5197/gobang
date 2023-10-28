@@ -16,6 +16,11 @@ void Management::play()
 	chess->init();
 	while (1)
 	{
+		if (GlobalVar::instance()->get_value("exit_game"))
+		{
+			INFOLOG("Management::play||player exit game");
+			break;
+		}
 		player->go();
 		if (chess->checkOver())
 		{
@@ -32,4 +37,5 @@ void Management::play()
 			continue;
 		}
 	}
+	INFOLOG("Management::play||game over");
 }

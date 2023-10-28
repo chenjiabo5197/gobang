@@ -3,6 +3,7 @@
 #include <vector>
 #include "logger.h"
 #include <conio.h>
+#include "GlobalVar.hpp"
 
 
 typedef enum {
@@ -10,13 +11,32 @@ typedef enum {
 	CHESS_BLACK = 1		// 黑方
 } chess_kind_type;
 
-// 鼠标点击时在棋盘格子的周围四个角，日志打印有问题，暂时先放弃
-typedef enum {   
+// 鼠标点击时在棋盘格子的周围四个角
+typedef enum {
+	COORD_DEFAULT = 0,		   // 初始位置
 	LEFTTOP = 1,           //左上     
 	RIGHTTOP = 2,          //右上
 	LEFTBOTTOM = 3,        //左下
 	RIGHTBOTTOM = 4        //右下
 } chess_coordinate;
+
+typedef enum {
+	MENU_DEFAULT = 0,
+	MAIN_MENU = 1,   // 选择开始游戏和退出游戏
+	PLAYER_NUM_MENU = 2,   // 选择单人游戏，双人游戏，网络对战
+	CHESSBOARD_MENU = 3,  // 对战中菜单，棋盘和退出游戏，悔棋
+	WIN_MENU = 4,   // 赢了，选择再来一局或者退出游戏
+	LOSE_MENU = 5   // 输了，选择再来一局或者退出游戏
+} menu_kind_type;
+
+// 每张加载的图片结构体
+struct LoadPicture {
+	IMAGE pictureName;   
+	int x;     // 图片放置的左上角x坐标
+	int y;     // 图片放置的左上角y坐标
+	int width;     // 图片的宽度
+	int height;     // 图片的高度
+};
 
 struct ChessPos {   // 棋子位置
 	int row;
@@ -58,6 +78,15 @@ public:
 	int getChessBoardWidth();
 	int getChessBoardHieght();
 
+	// 是否退出游戏  x,y为鼠标点击的位置
+	bool isExitGame(int x, int y);
+
+	// 是否悔棋  x,y为鼠标点击的位置
+	bool isWithDraw(int x, int y);
+
+	// 是否再来一局  x,y为鼠标点击的位置
+	bool isAgainGame(int x, int y);
+
 private:
 	// 棋盘尺寸
 	int chessBoardSize;
@@ -68,8 +97,7 @@ private:
 
 	float chessSize; // 棋盘方格大小
 
-	IMAGE chessBlackImg;
-	IMAGE chessWhiteImg;
+	LoadPicture chessBlack, chessWhite, chessBoard, exitGame, withDraw, againGame, onePlayer, twoPlayers, playerInternet, startGame, winGame, loseGame;
 
 	// 储存当前棋盘和棋子情况，空白0，白子-1，黑子1
 	std::vector<std::vector<int>> chessMap;
@@ -82,6 +110,9 @@ private:
 
 	// 更新棋盘的棋子数据
 	void updateChessMap(ChessPos* pos);
+
+	// 统一的绘图函数，根据menu_kind_type类型决定绘制哪种类型图
+	void drawGraph(menu_kind_type kind);
 
 	// 棋盘图片的尺寸，防止点击到棋盘的其他功能按键时误以为下棋导致数组越界
 	int chessBoardWidth;

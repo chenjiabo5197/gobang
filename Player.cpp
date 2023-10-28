@@ -6,7 +6,7 @@ void Player::init(Chess* chess)
 	INFOLOG("Player::init||init player success");
 }
 
-bool Player::go()
+void Player::go()
 {
 	// 等待棋手有效落子
 	MOUSEMSG msg;
@@ -36,9 +36,16 @@ bool Player::go()
 			else
 			{
 				INFOLOG("Player::go||select other function||x={}||y={}", msg.x, msg.y);
-				// break;
+				// 可以选择悔棋或者退出游戏
+				if (chess->isExitGame(msg.x, msg.y))
+				{
+					GlobalVar::instance()->set_value("exit_game", true);
+				}
+				if (chess->isWithDraw(msg.x, msg.y))
+				{
+
+				}
 			}
 		}
 	}
-	return false;
 }
