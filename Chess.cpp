@@ -13,38 +13,62 @@ Chess::Chess(int chessBoardWidth, int chessBoardHeight, int chessBoardSize, int 
 	this->chessBoardHeight = chessBoardHeight;
 
 	// 加载图片
-	loadimage(&this->chessBoard.pictureName, "res/棋盘2.jpg");
+	loadimage(&this->chessBoard.pictureFile, "res/棋盘2.jpg");
 	this->chessBoard.width = 897;
 	this->chessBoard.height = 895;
-	loadimage(&this->withDraw.pictureName, "res/withdraw.png");
+	this->chessBoard.name = "chessBoard";
+	this->chessBoard.isUse = false;
+	loadimage(&this->withDraw.pictureFile, "res/withdraw.png");
 	this->withDraw.width = 133;
 	this->withDraw.height = 46;
-	loadimage(&this->exitGame.pictureName, "res/exit_game.png");
+	this->withDraw.name = "withDraw";
+	this->withDraw.isUse = false;
+	loadimage(&this->exitGame.pictureFile, "res/exit_game.png");
 	this->exitGame.width = 131;
 	this->exitGame.height = 45;
-	loadimage(&this->againGame.pictureName, "res/again_game.png");
+	this->exitGame.name = "exitGame";
+	this->exitGame.isUse = false;
+	loadimage(&this->againGame.pictureFile, "res/again_game.png");
 	this->againGame.width = 132;
 	this->againGame.height = 46;
-	loadimage(&this->onePlayer.pictureName, "res/one_player.png");
+	this->againGame.name = "againGame";
+	this->againGame.isUse = false;
+	loadimage(&this->onePlayer.pictureFile, "res/one_player.png");
 	this->onePlayer.width = 132;
 	this->onePlayer.height = 46;
-	loadimage(&this->playerInternet.pictureName, "res/player_internet.png");
+	this->onePlayer.name = "onePlayer";
+	this->onePlayer.isUse = false;
+	loadimage(&this->playerInternet.pictureFile, "res/player_internet.png");
 	this->playerInternet.width = 131;
 	this->playerInternet.height = 45;
-	loadimage(&this->startGame.pictureName, "res/start_game.png");
+	this->playerInternet.name = "playerInternet";
+	this->playerInternet.isUse = false;
+	loadimage(&this->startGame.pictureFile, "res/start_game.png");
 	this->startGame.width = 132;
 	this->startGame.height = 46;
-	loadimage(&this->twoPlayers.pictureName, "res/two_players.png");
+	this->startGame.name = "startGame";
+	this->startGame.isUse = false;
+	loadimage(&this->twoPlayers.pictureFile, "res/two_players.png");
 	this->twoPlayers.width = 132;
 	this->twoPlayers.height = 47;
-	loadimage(&this->winGame.pictureName, "res/win.jpg");
-	this->winGame.width = 897;
-	this->winGame.height = 895;
-	loadimage(&this->loseGame.pictureName, "res/lose.jpg");
-	this->loseGame.width = 897;
-	this->loseGame.height = 895;
-	loadimage(&this->chessBlack.pictureName, "res/black.png", chessSize, chessSize, true);
-	loadimage(&this->chessWhite.pictureName, "res/white.png", chessSize, chessSize, true);
+	this->twoPlayers.name = "twoPlayers";
+	this->twoPlayers.isUse = false;
+	loadimage(&this->winGame.pictureFile, "res/win.jpg");
+	this->winGame.width = 895;
+	this->winGame.height = 625;
+	this->winGame.name = "winGame";
+	this->winGame.isUse = false;
+	loadimage(&this->loseGame.pictureFile, "res/lose.jpg");
+	this->loseGame.width = 895;
+	this->loseGame.height = 624;
+	this->loseGame.name = "loseGame";
+	this->loseGame.isUse = false;
+	loadimage(&this->chessBlack.pictureFile, "res/black.png", chessSize, chessSize, true);
+	this->chessBlack.name = "chessBlack";
+	this->chessBlack.isUse = false;
+	loadimage(&this->chessWhite.pictureFile, "res/white.png", chessSize, chessSize, true);
+	this->chessWhite.name = "chessWhite";
+	this->chessWhite.isUse = false;
 
 	playerFlag = CHESS_BLACK;
 
@@ -186,22 +210,25 @@ bool Chess::clickBoard(int x, int y, ChessPos* pos)
 
 void Chess::chessDown(ChessPos* pos, chess_kind_type kind)
 {
-	mciSendString("play res/down7.WAV", 0, 0, 0);
+	mciSendString("play res/chess_down.mp3", 0, 0, 0);
 	int x = margin_x + pos->row * chessSize - 0.5 * chessSize;
 	int y = margin_y + pos->col * chessSize - 0.5 * chessSize;
 
-	if (kind == CHESS_WHITE)
+	if (this->chessBoard.isUse)   // 判断是否在下棋页面
 	{
-		putImagePNG(x, y, &this->chessWhite.pictureName);
-		DEBUGLOG("Chess::chessDown||CHESS_WHITE||x={}||y={}", x, y);
+		if (kind == CHESS_WHITE)
+		{
+			putImagePNG(x, y, &this->chessWhite.pictureFile);
+			DEBUGLOG("Chess::chessDown||CHESS_WHITE||x={}||y={}", x, y);
+		}
+		else
+		{
+			putImagePNG(x, y, &this->chessBlack.pictureFile);
+			DEBUGLOG("Chess::chessDown||CHESS_BLACK||x={}||y={}", x, y);
+		}
+		// 更新棋盘数据
+		updateChessMap(pos);
 	}
-	else
-	{
-		putImagePNG(x, y, &this->chessBlack.pictureName);
-		DEBUGLOG("Chess::chessDown||CHESS_BLACK||x={}||y={}", x, y);
-	}
-	// 更新棋盘数据
-	updateChessMap(pos);
 }
 
 int Chess::getChessBoardSize()
@@ -227,20 +254,24 @@ bool Chess::checkOver()
 		if (!playerFlag)   // 黑棋赢，玩家赢
 		{
 			INFOLOG("Chess::checkOver||black win");
-			mciSendString("play res/不错.mp3", 0, 0, 0);
+			mciSendString("play res/clap.mp3", 0, 0, 0);
 			drawGraph(WIN_MENU);
-			MOUSEMSG msg = GetMouseMsg();
-			if (msg.uMsg == WM_LBUTTONDOWN)
+			while (1)
 			{
-				DEBUGLOG("Chess::checkOver||mouse click||x={}||y={}", msg.x, msg.y);
-				if (this->isExitGame(msg.x, msg.y))
+				MOUSEMSG msg = GetMouseMsg();
+				if (msg.uMsg == WM_LBUTTONDOWN)
 				{
+					DEBUGLOG("Chess::checkOver||mouse click||x={}||y={}", msg.x, msg.y);
+					if (this->isValidClick(msg.x, msg.y, this->exitGame))
+					{
 
-					GlobalVar::instance()->set_value("exit_game", true);
-				}
-				if (this->isAgainGame(msg.x, msg.y))
-				{
-					return true;
+						GlobalVar::instance()->set_value("exit_game", true);
+						return false;
+					}
+					if (this->isValidClick(msg.x, msg.y, this->againGame))
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -249,18 +280,22 @@ bool Chess::checkOver()
 			INFOLOG("Chess::checkOver||white win");
 			mciSendString("play res/失败.mp3", 0, 0, 0);
 			drawGraph(LOSE_MENU);
-			MOUSEMSG msg = GetMouseMsg();
-			if (msg.uMsg == WM_LBUTTONDOWN)
+			while (1)
 			{
-				DEBUGLOG("Chess::checkOver||mouse click||x={}||y={}", msg.x, msg.y);
-				if (this->isExitGame(msg.x, msg.y))
+				MOUSEMSG msg = GetMouseMsg();
+				if (msg.uMsg == WM_LBUTTONDOWN)
 				{
+					DEBUGLOG("Chess::checkOver||mouse click||x={}||y={}", msg.x, msg.y);
+					if (this->isValidClick(msg.x, msg.y, this->exitGame))
+					{
 
-					GlobalVar::instance()->set_value("exit_game", true);
-				}
-				if (this->isAgainGame(msg.x, msg.y))
-				{
-					return true;
+						GlobalVar::instance()->set_value("exit_game", true);
+						return false;
+					}
+					if (this->isValidClick(msg.x, msg.y, this->againGame))
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -368,37 +403,23 @@ int Chess::getChessBoardHieght()
 	return chessBoardHeight;
 }
 
-bool Chess::isExitGame(int x, int y)
+bool Chess::isValidClick(int x, int y, LoadPicture picture)
 {
-	if (x >= this->exitGame.x && x <= this->exitGame.x + this->exitGame.width && y >= this->exitGame.y && y <= this->exitGame.y + this->exitGame.height)
+	if (x >= picture.x && x <= picture.x + picture.width && y >= picture.y && y <= picture.y + picture.height && picture.isUse)
 	{
-		INFOLOG("Chess::isExitGame||exit game||x={}||y={}||leftX={}||rightX={}||smallY={}||bigY={}", x, y, this->exitGame.x,
-			this->exitGame.x + this->exitGame.width, this->exitGame.y, this->exitGame.y + this->exitGame.height);
+		mciSendString("play res/select.wav", 0, 0, 0);
+		INFOLOG("Chess::isValidClick||valid click||picture name={}||x={}||y={}||leftX={}||rightX={}||smallY={}||bigY={}", picture.name, x, y, picture.x,
+			picture.x + picture.width, picture.y, picture.y + picture.height);
 		return true;
 	}
 	return false;
 }
 
-bool Chess::isWithDraw(int x, int y)
+void Chess::playerWithDraw()
 {
-	if (x >= this->withDraw.x && x <= this->withDraw.x + this->withDraw.width && y >= this->withDraw.y && y <= this->withDraw.y + this->withDraw.height)
-	{
-		INFOLOG("Chess::isWithDraw||player withdraw||x={}||y={}||leftX={}||rightX={}||smallY={}||bigY={}", x, y, this->withDraw.x,
-			this->withDraw.x + this->withDraw.width, this->withDraw.y, this->withDraw.y + this->withDraw.height);
-		return true;
-	}
-	return false;
-}
+	// 删除棋子图片
 
-bool Chess::isAgainGame(int x, int y)
-{
-	if (x >= this->againGame.x && x <= this->againGame.x + this->againGame.width && y >= this->againGame.y && y <= this->againGame.y + this->againGame.height)
-	{
-		INFOLOG("Chess::isAgainGame||player select again game||x={}||y={}||leftX={}||rightX={}||smallY={}||bigY={}", x, y, this->againGame.x,
-			this->againGame.x + this->againGame.width, this->againGame.y, this->againGame.y + this->againGame.height);
-		return true;
-	}
-	return false;
+	// 更新棋盘数据
 }
 
 void Chess::updateChessMap(ChessPos* pos)
@@ -412,6 +433,7 @@ void Chess::updateChessMap(ChessPos* pos)
 // 在switch...case...结构中不能在case中定义新变量,除非将定义新变量的case用块{}包住，或者选择将你的新变量在switch之前
 void Chess::drawGraph(menu_kind_type kind)
 {
+	clearLastGraph();
 	switch (kind)
 	{
 	case MAIN_MENU:
@@ -431,15 +453,20 @@ void Chess::drawGraph(menu_kind_type kind)
 		// 图片的左上角坐标，用于定位
 		this->chessBoard.x = 0;
 		this->chessBoard.y = 0;
+		this->chessBoard.isUse = true;
 		this->withDraw.x = this->chessBoard.width + 1;
 		this->withDraw.y = 200;
+		this->withDraw.isUse = true;
 		this->exitGame.x = this->chessBoard.width + 1;
 		this->exitGame.y = 500;
+		this->exitGame.isUse = true;
 
-		putimage(this->chessBoard.x, this->chessBoard.y, &this->chessBoard.pictureName);
-		putimage(this->withDraw.x, this->withDraw.y, &this->withDraw.pictureName);
-		putimage(this->exitGame.x, this->exitGame.y, &this->exitGame.pictureName);
-
+		putimage(this->chessBoard.x, this->chessBoard.y, &this->chessBoard.pictureFile);
+		putimage(this->withDraw.x, this->withDraw.y, &this->withDraw.pictureFile);
+		putimage(this->exitGame.x, this->exitGame.y, &this->exitGame.pictureFile);
+		
+		INFOLOG("Chess::drawGraph||kind=CHESSBOARD_MENU||chessBoard.x={}||chessBoard.y={}||withDraw.x={}||withDraw.y={}||exitGame.x={}||exitGame.y={}", 
+			chessBoard.x, chessBoard.y, withDraw.x, withDraw.y, exitGame.x, exitGame.y);
 		break;
 	}
 	case WIN_MENU:
@@ -455,15 +482,20 @@ void Chess::drawGraph(menu_kind_type kind)
 		// 图片的左上角坐标，用于定位
 		this->winGame.x = 0;
 		this->winGame.y = 0;
+		this->winGame.isUse = true;
 		this->againGame.x = this->winGame.width + 1;
-		this->againGame.y = 200;
+		this->againGame.y = 150;
+		this->againGame.isUse = true;
 		this->exitGame.x = this->winGame.width + 1;
-		this->exitGame.y = 500;
+		this->exitGame.y = 350;
+		this->exitGame.isUse = true;
 
-		putimage(this->winGame.x, this->winGame.y, &this->winGame.pictureName);
-		putimage(this->againGame.x, this->againGame.y, &this->againGame.pictureName);
-		putimage(this->exitGame.x, this->exitGame.y, &this->exitGame.pictureName);
+		putimage(this->winGame.x, this->winGame.y, &this->winGame.pictureFile);
+		putimage(this->againGame.x, this->againGame.y, &this->againGame.pictureFile);
+		putimage(this->exitGame.x, this->exitGame.y, &this->exitGame.pictureFile);
 
+		INFOLOG("Chess::drawGraph||kind=WIN_MENU||winGame.x={}||winGame.y={}||againGame.x={}||againGame.y={}||exitGame.x={}||exitGame.y={}",
+			winGame.x, winGame.y, againGame.x, againGame.y, exitGame.x, exitGame.y);
 		break;
 	}
 	case LOSE_MENU:
@@ -479,19 +511,41 @@ void Chess::drawGraph(menu_kind_type kind)
 		// 图片的左上角坐标，用于定位
 		this->loseGame.x = 0;
 		this->loseGame.y = 0;
+		this->loseGame.isUse = true;
 		this->againGame.x = this->loseGame.width + 1;
-		this->againGame.y = 200;
+		this->againGame.y = 150;
+		this->againGame.isUse = true;
 		this->exitGame.x = this->loseGame.width + 1;
-		this->exitGame.y = 500;
+		this->exitGame.y = 350;
+		this->exitGame.isUse = true;
 
-		putimage(this->loseGame.x, this->loseGame.y, &this->loseGame.pictureName);
-		putimage(this->againGame.x, this->againGame.y, &this->againGame.pictureName);
-		putimage(this->exitGame.x, this->exitGame.y, &this->exitGame.pictureName);
+		putimage(this->loseGame.x, this->loseGame.y, &this->loseGame.pictureFile);
+		putimage(this->againGame.x, this->againGame.y, &this->againGame.pictureFile);
+		putimage(this->exitGame.x, this->exitGame.y, &this->exitGame.pictureFile);
 
+		INFOLOG("Chess::drawGraph||kind=LOSE_MENU||loseGame.x={}||loseGame.y={}||againGame.x={}||againGame.y={}||exitGame.x={}||exitGame.y={}",
+			loseGame.x, loseGame.y, againGame.x, againGame.y, exitGame.x, exitGame.y);
 		break;
 	}
 	default:
 		ERRORLOG("Chess::drawGraph||undefined menu_kind_type||kind={}", (int)kind);
 		break;
 	}
+}
+
+void Chess::clearLastGraph()
+{
+	closegraph();
+	this->chessBoard.isUse = false;
+	this->withDraw.isUse = false;
+	this->exitGame.isUse = false;
+	this->againGame.isUse = false;
+	this->onePlayer.isUse = false;
+	this->playerInternet.isUse = false;
+	this->startGame.isUse = false;
+	this->twoPlayers.isUse = false;
+	this->winGame.isUse = false;
+	this->loseGame.isUse = false;
+	this->chessBlack.isUse = false;
+	this->chessWhite.isUse = false;
 }

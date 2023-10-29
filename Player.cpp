@@ -37,11 +37,12 @@ void Player::go()
 			{
 				INFOLOG("Player::go||select other function||x={}||y={}", msg.x, msg.y);
 				// 可以选择悔棋或者退出游戏
-				if (chess->isExitGame(msg.x, msg.y))
+				if (chess->isValidClick(msg.x, msg.y, chess->exitGame))
 				{
 					GlobalVar::instance()->set_value("exit_game", true);
+					break;
 				}
-				if (chess->isWithDraw(msg.x, msg.y))
+				if (chess->isValidClick(msg.x, msg.y, chess->withDraw))
 				{
 
 				}

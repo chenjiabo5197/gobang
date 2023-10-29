@@ -2,6 +2,7 @@
 #include "Chess.h"
 #include "logger.h"
 #include <vector>
+#include "sstream"
 
 class AI
 {

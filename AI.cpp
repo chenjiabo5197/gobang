@@ -118,37 +118,37 @@ void AI::calculateScore()
 					if (playerChessNum == 1) { //连2
 						//CSDN  程序员Rock
 						scoreMap[row][col] += 10;
-						DEBUGLOG("AI::calculateScore||calculate black chess score||playerChessNum=1||row={}||col={}||scoreMap[row][col]={}",
-							row, col, scoreMap[row][col]);
+						/*DEBUGLOG("AI::calculateScore||calculate black chess score||playerChessNum=1||row={}||col={}||scoreMap[row][col]={}",
+							row, col, scoreMap[row][col]);*/
 					}
 					else if (playerChessNum == 2) {
 						if (emptyNum == 1) {
 							scoreMap[row][col] += 30;
-							DEBUGLOG("AI::calculateScore||calculate black chess score||playerChessNum=2||emptyNum=1||row={}||col={}||scoreMap[row][col]={}",
-								row, col, scoreMap[row][col]);
+							/*DEBUGLOG("AI::calculateScore||calculate black chess score||playerChessNum=2||emptyNum=1||row={}||col={}||scoreMap[row][col]={}",
+								row, col, scoreMap[row][col]);*/
 						}
 						else if (emptyNum == 2) {
 							scoreMap[row][col] += 40;
-							DEBUGLOG("AI::calculateScore||calculate black chess score||playerChessNum=2||emptyNum=2||row={}||col={}||scoreMap[row][col]={}",
-								row, col, scoreMap[row][col]);
+							/*DEBUGLOG("AI::calculateScore||calculate black chess score||playerChessNum=2||emptyNum=2||row={}||col={}||scoreMap[row][col]={}",
+								row, col, scoreMap[row][col]);*/
 						}
 					}
 					else if (playerChessNum == 3) {
 						if (emptyNum == 1) {
 							scoreMap[row][col] = 60;
-							DEBUGLOG("AI::calculateScore||calculate black chess score||playerChessNum=3||emptyNum=1||row={}||col={}||scoreMap[row][col]={}",
-								row, col, scoreMap[row][col]);
+							/*DEBUGLOG("AI::calculateScore||calculate black chess score||playerChessNum=3||emptyNum=1||row={}||col={}||scoreMap[row][col]={}",
+								row, col, scoreMap[row][col]);*/
 						}
 						else if (emptyNum == 2) {
 							scoreMap[row][col] = 5000; //200
-							DEBUGLOG("AI::calculateScore||calculate black chess score||playerChessNum=3||emptyNum=2||row={}||col={}||scoreMap[row][col]={}",
-								row, col, scoreMap[row][col]);
+							/*DEBUGLOG("AI::calculateScore||calculate black chess score||playerChessNum=3||emptyNum=2||row={}||col={}||scoreMap[row][col]={}",
+								row, col, scoreMap[row][col]);*/
 						}
 					}
 					else if (playerChessNum == 4) {
 						scoreMap[row][col] = 20000;
-						DEBUGLOG("AI::calculateScore||calculate black chess score||playerChessNum=4||row={}||col={}||scoreMap[row][col]={}",
-							row, col, scoreMap[row][col]);
+						/*DEBUGLOG("AI::calculateScore||calculate black chess score||playerChessNum=4||row={}||col={}||scoreMap[row][col]={}",
+							row, col, scoreMap[row][col]);*/
 					}
 
 					// 假设白棋在该位置落子，会构成什么棋型
@@ -183,8 +183,8 @@ void AI::calculateScore()
 					for (int i = 1; i <= 4; i++) {
 						int curRow = row - i * y;
 						int curCol = col - i * x;
-						DEBUGLOG("AI::calculateScore||start calculate white chess score||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
-							curRow, curCol, playerChessNum, AIChessNum, emptyNum);
+						/*DEBUGLOG("AI::calculateScore||start calculate white chess score||curRow={}||curCol={}||playerChessNum={}||AIChessNum={}||emptyNum={}",
+							curRow, curCol, playerChessNum, AIChessNum, emptyNum);*/
 
 						if (curRow >= 0 && curRow < size &&
 							curCol >= 0 && curCol < size &&
@@ -208,46 +208,56 @@ void AI::calculateScore()
 
 					if (AIChessNum == 0) {
 						scoreMap[row][col] += 5;
-						DEBUGLOG("AI::calculateScore||calculate white chess score||AIChessNum=0||row={}||col={}||scoreMap[row][col]={}",
-							row, col, scoreMap[row][col]);
+						/*DEBUGLOG("AI::calculateScore||calculate white chess score||AIChessNum=0||row={}||col={}||scoreMap[row][col]={}",
+							row, col, scoreMap[row][col]);*/
 					}
 					else if (AIChessNum == 1) {
 						scoreMap[row][col] += 10;
-						DEBUGLOG("AI::calculateScore||calculate white chess score||AIChessNum=1||row={}||col={}||scoreMap[row][col]={}",
-							row, col, scoreMap[row][col]);
+						/*DEBUGLOG("AI::calculateScore||calculate white chess score||AIChessNum=1||row={}||col={}||scoreMap[row][col]={}",
+							row, col, scoreMap[row][col]);*/
 					}
 					else if (AIChessNum == 2) {
 						if (emptyNum == 1) {
 							scoreMap[row][col] += 25;
-							DEBUGLOG("AI::calculateScore||calculate white chess score||AIChessNum=2||emptyNum=1||row={}||col={}||scoreMap[row][col]={}",
-								row, col, scoreMap[row][col]);
+							/*DEBUGLOG("AI::calculateScore||calculate white chess score||AIChessNum=2||emptyNum=1||row={}||col={}||scoreMap[row][col]={}",
+								row, col, scoreMap[row][col]);*/
 						}
 						else if (emptyNum == 2) {
 							scoreMap[row][col] += 50;
-							DEBUGLOG("AI::calculateScore||calculate white chess score||AIChessNum=2||emptyNum=2||row={}||col={}||scoreMap[row][col]={}",
-								row, col, scoreMap[row][col]);
+							/*DEBUGLOG("AI::calculateScore||calculate white chess score||AIChessNum=2||emptyNum=2||row={}||col={}||scoreMap[row][col]={}",
+								row, col, scoreMap[row][col]);*/
 						}
 					}
 					else if (AIChessNum == 3) {
 						if (emptyNum == 1) {
 							scoreMap[row][col] += 55;
-							DEBUGLOG("AI::calculateScore||calculate white chess score||AIChessNum=3||emptyNum=1||row={}||col={}||scoreMap[row][col]={}",
-								row, col, scoreMap[row][col]);
+							/*DEBUGLOG("AI::calculateScore||calculate white chess score||AIChessNum=3||emptyNum=1||row={}||col={}||scoreMap[row][col]={}",
+								row, col, scoreMap[row][col]);*/
 						}
 						else if (emptyNum == 2) {
 							scoreMap[row][col] += 10000;
-							DEBUGLOG("AI::calculateScore||calculate white chess score||AIChessNum=3||emptyNum=2||row={}||col={}||scoreMap[row][col]={}",
-								row, col, scoreMap[row][col]);
+							/*DEBUGLOG("AI::calculateScore||calculate white chess score||AIChessNum=3||emptyNum=2||row={}||col={}||scoreMap[row][col]={}",
+								row, col, scoreMap[row][col]);*/
 						}
 					}
 					else if (AIChessNum >= 4) {
 						scoreMap[row][col] += 30000;
-						DEBUGLOG("AI::calculateScore||calculate white chess score||AIChessNum>=4||row={}||col={}||scoreMap[row][col]={}",
-							row, col, scoreMap[row][col]);
+						/*DEBUGLOG("AI::calculateScore||calculate white chess score||AIChessNum>=4||row={}||col={}||scoreMap[row][col]={}",
+							row, col, scoreMap[row][col]);*/
 					}
 				}
 			}
 		}
+	}
+	// 打印计算的分数
+	for (int i = 0; i < scoreMap.size(); i++)
+	{
+		std::vector<int> temp = scoreMap[i];
+		std::stringstream ss;
+		std::string str;
+		std::copy(temp.begin(), temp.end(), std::ostream_iterator<int>(ss, ", "));
+		str = ss.str();
+		INFOLOG("AI::calculateScore||row={}||value={}", i, str);
 	}
 }
 

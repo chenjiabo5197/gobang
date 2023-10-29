@@ -8,8 +8,8 @@ void initLogger()
 {
     // 定义日志配置项
     LogConfig conf = {
-        //"trace",
-        "info",
+        "trace",
+        //"info",
         "logs/gobang.log",
         100 * 1024 * 1024,
         10

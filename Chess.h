@@ -31,7 +31,9 @@ typedef enum {
 
 // 每张加载的图片结构体
 struct LoadPicture {
-	IMAGE pictureName;   
+	IMAGE pictureFile;
+	std::string name;   // 图片名字，打印日志使用
+	bool isUse;		// 该图片是否正在展示中
 	int x;     // 图片放置的左上角x坐标
 	int y;     // 图片放置的左上角y坐标
 	int width;     // 图片的宽度
@@ -78,14 +80,22 @@ public:
 	int getChessBoardWidth();
 	int getChessBoardHieght();
 
-	// 是否退出游戏  x,y为鼠标点击的位置
-	bool isExitGame(int x, int y);
+	//// 是否退出游戏  x,y为鼠标点击的位置
+	//bool isExitGame(int x, int y);
 
-	// 是否悔棋  x,y为鼠标点击的位置
-	bool isWithDraw(int x, int y);
+	//// 是否悔棋  x,y为鼠标点击的位置
+	//bool isWithDraw(int x, int y);
 
-	// 是否再来一局  x,y为鼠标点击的位置
-	bool isAgainGame(int x, int y);
+	//// 是否再来一局  x,y为鼠标点击的位置
+	//bool isAgainGame(int x, int y);
+
+	LoadPicture chessBlack, chessWhite, chessBoard, exitGame, withDraw, againGame, onePlayer, twoPlayers, playerInternet, startGame, winGame, loseGame;
+
+	// 是否有效点击  x,y为鼠标点击的位置, picture为要点击的图片
+	bool isValidClick(int x, int y, LoadPicture picture);
+
+	// 悔棋
+	void playerWithDraw();
 
 private:
 	// 棋盘尺寸
@@ -96,8 +106,6 @@ private:
 	int margin_y;  // 49
 
 	float chessSize; // 棋盘方格大小
-
-	LoadPicture chessBlack, chessWhite, chessBoard, exitGame, withDraw, againGame, onePlayer, twoPlayers, playerInternet, startGame, winGame, loseGame;
 
 	// 储存当前棋盘和棋子情况，空白0，白子-1，黑子1
 	std::vector<std::vector<int>> chessMap;
@@ -117,6 +125,9 @@ private:
 	// 棋盘图片的尺寸，防止点击到棋盘的其他功能按键时误以为下棋导致数组越界
 	int chessBoardWidth;
 	int chessBoardHeight;
+
+	// 清楚上一次的graph数据，防止对下次点击造成影响
+	void clearLastGraph();
 
 };
 
