@@ -69,6 +69,16 @@ Chess::Chess(int chessBoardWidth, int chessBoardHeight, int chessBoardSize, int 
 	loadimage(&this->chessWhite.pictureFile, "res/white.png", chessSize, chessSize, true);
 	this->chessWhite.name = "chessWhite";
 	this->chessWhite.isUse = false;
+	loadimage(&this->curBlack.pictureFile, "res/black2.png", chessSize, chessSize, true);
+	this->curBlack.name = "curBlack";
+	this->curBlack.isUse = false;
+	loadimage(&this->curWhite.pictureFile, "res/white2.png", chessSize, chessSize, true);
+	this->curWhite.name = "curWhite";
+	this->curWhite.isUse = false;
+
+	// 初始化储存上一次黑白棋位置的参数
+	lastBlackPos.row = -1;
+	lastWhitePos.row = -1;
 
 	playerFlag = CHESS_BLACK;
 
@@ -208,9 +218,9 @@ bool Chess::clickBoard(int x, int y, ChessPos* pos)
 	return selectPos;
 }
 
-void Chess::chessDown(ChessPos* pos, chess_kind_type kind)
+// 当函数声明和函数定义分离时，参数的默认值只能出现在函数声明中，在函数定义的函数头中无需添加默认值
+void Chess::chessDown(ChessPos* pos, chess_kind_type kind, bool isRecord)
 {
-	mciSendString("play res/chess_down.mp3", 0, 0, 0);
 	int x = margin_x + pos->row * chessSize - 0.5 * chessSize;
 	int y = margin_y + pos->col * chessSize - 0.5 * chessSize;
 
@@ -218,17 +228,35 @@ void Chess::chessDown(ChessPos* pos, chess_kind_type kind)
 	{
 		if (kind == CHESS_WHITE)
 		{
-			putImagePNG(x, y, &this->chessWhite.pictureFile);
-			ChessData temp{ pos->row, pos->col, x, y, CHESS_WHITE };
-			this->chessBoardData.push_back(temp);
-			DEBUGLOG("Chess::chessDown||CHESS_WHITE||x={}||y={}", x, y);
+			if (this->lastWhitePos.row != -1)
+			{
+				putImagePNG(this->lastWhitePos.row, this->lastWhitePos.col, &this->chessWhite.pictureFile);   // 更新非最新的棋子图片
+			}
+			putImagePNG(x, y, &this->curWhite.pictureFile); 
+			if (isRecord)
+			{
+				ChessData temp2{ pos->row, pos->col, x, y, CHESS_WHITE };
+				this->chessBoardData.push_back(temp2);
+			}
+			ChessPos temp{ x, y };
+			this->lastWhitePos = temp;
+			DEBUGLOG("Chess::chessDown||CHESS_WHITE||x={}||y={}||row={}||col={}", x, y, pos->row, pos->col);
 		}
 		else
 		{
-			putImagePNG(x, y, &this->chessBlack.pictureFile);
-			ChessData temp{ pos->row, pos->col, x, y, CHESS_BLACK };
-			this->chessBoardData.push_back(temp);
-			DEBUGLOG("Chess::chessDown||CHESS_BLACK||x={}||y={}", x, y);
+			if (this->lastBlackPos.row != -1)
+			{
+				putImagePNG(this->lastBlackPos.row, this->lastBlackPos.col, &this->chessBlack.pictureFile);   // 更新非最新的棋子图片
+			}
+			putImagePNG(x, y, &this->curBlack.pictureFile);
+			if (isRecord)
+			{
+				ChessData temp2{ pos->row, pos->col, x, y, CHESS_BLACK };
+				this->chessBoardData.push_back(temp2);
+			}
+			ChessPos temp{ x, y };
+			this->lastBlackPos = temp;
+			DEBUGLOG("Chess::chessDown||CHESS_BLACK||x={}||y={}||row={}||col={}", x, y, pos->row, pos->col);
 		}
 		// 更新棋盘数据
 		updateChessMap(pos);
@@ -423,6 +451,9 @@ bool Chess::isValidClick(int x, int y, LoadPicture picture)
 
 void Chess::playerWithDraw()
 {
+	// 初始化黑白棋上次位置
+	this->lastBlackPos.row = -1;
+	this->lastWhitePos.row = -1;
 	// 判断棋盘上棋子数量
 	if (this->chessBoardData.size() <= 1)
 	{
@@ -445,17 +476,23 @@ void Chess::playerWithDraw()
 	drawGraph(CHESSBOARD_MENU);
 	for (std::vector<ChessData>::iterator it = this->chessBoardData.begin(); it != this->chessBoardData.end(); it++)
 	{
+		DEBUGLOG("Chess::chessDown222||CHESS_BLACK||x={}||y={}", it->pos.row, it->pos.col);
 		if (it->chessType == CHESS_WHITE)
 		{
-			putImagePNG(it->imagePos.row, it->imagePos.col, &this->chessWhite.pictureFile);
+			//putImagePNG(it->imagePos.row, it->imagePos.col, &this->chessWhite.pictureFile);
+			ChessPos temp{ it->pos.row, it->pos.col };
+			this->chessDown(&temp, CHESS_WHITE, false);
 			this->playerFlag = false;
 		}
 		else
 		{
-			putImagePNG(it->imagePos.row, it->imagePos.col, &this->chessBlack.pictureFile);
+			//putImagePNG(it->imagePos.row, it->imagePos.col, &this->chessBlack.pictureFile);
+			ChessPos temp{ it->pos.row, it->pos.col };
+			this->chessDown(&temp, CHESS_BLACK, false);
 			this->playerFlag = true;
 		}
 		// 更新棋盘数据
+		DEBUGLOG("Chess::chessDown111||CHESS_BLACK||x={}||y={}", it->pos.row, it->pos.col);
 		ChessPos temp{ it->pos.row, it->pos.col };
 		updateChessMap(&temp);
 	}

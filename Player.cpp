@@ -23,6 +23,7 @@ void Player::go()
 				{
 					INFOLOG("Player::go||valid mouse click chessboard||x={}||y={}", msg.x, msg.y);
 					// Âä×Ó
+					mciSendString("play res/chess_down.mp3", 0, 0, 0);
 					chess->chessDown(&pos, CHESS_BLACK);
 					DEBUGLOG("Player::go||Player chess down success");
 					break;

@@ -63,8 +63,8 @@ public:
 	// 如果是有效点击，把有效点击的位置(x,y)保存到参数pos中
 	bool clickBoard(int x, int y, ChessPos* pos);
 
-	// 在棋盘的指定位置pos，落子kind
-	void chessDown(ChessPos* pos, chess_kind_type kind);
+	// 在棋盘的指定位置pos，落子kind, isRecord表示是否要将棋子记录到chessBoardData中，默认需要记录，只有悔棋时下棋数据不用记录
+	void chessDown(ChessPos* pos, chess_kind_type kind, bool isRecord = true);
 
 	// 获取棋盘大小（13,15,19）
 	int getChessBoardSize();
@@ -95,7 +95,7 @@ public:
 	//// 是否再来一局  x,y为鼠标点击的位置
 	//bool isAgainGame(int x, int y);
 
-	LoadPicture chessBlack, chessWhite, chessBoard, exitGame, withDraw, againGame, onePlayer, twoPlayers, playerInternet, startGame, winGame, loseGame;
+	LoadPicture chessBlack, chessWhite, chessBoard, exitGame, withDraw, againGame, onePlayer, twoPlayers, playerInternet, startGame, winGame, loseGame, curBlack, curWhite;
 
 	// 是否有效点击  x,y为鼠标点击的位置, picture为要点击的图片
 	bool isValidClick(int x, int y, LoadPicture picture);
@@ -123,6 +123,9 @@ private:
 
 	// 最近的落子位置
 	ChessPos lastPos;
+
+	// 上一次的黑棋和白棋方位置,为了将最近的黑棋和白棋方图片换成一般图片使用
+	ChessPos lastBlackPos, lastWhitePos;
 
 	// 更新棋盘的棋子数据
 	void updateChessMap(ChessPos* pos);
