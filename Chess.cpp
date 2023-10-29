@@ -219,11 +219,15 @@ void Chess::chessDown(ChessPos* pos, chess_kind_type kind)
 		if (kind == CHESS_WHITE)
 		{
 			putImagePNG(x, y, &this->chessWhite.pictureFile);
+			ChessData temp{ pos->row, pos->col, x, y, CHESS_WHITE };
+			this->chessBoardData.push_back(temp);
 			DEBUGLOG("Chess::chessDown||CHESS_WHITE||x={}||y={}", x, y);
 		}
 		else
 		{
 			putImagePNG(x, y, &this->chessBlack.pictureFile);
+			ChessData temp{ pos->row, pos->col, x, y, CHESS_BLACK };
+			this->chessBoardData.push_back(temp);
 			DEBUGLOG("Chess::chessDown||CHESS_BLACK||x={}||y={}", x, y);
 		}
 		// 更新棋盘数据
@@ -256,6 +260,7 @@ bool Chess::checkOver()
 			INFOLOG("Chess::checkOver||black win");
 			mciSendString("play res/clap.mp3", 0, 0, 0);
 			drawGraph(WIN_MENU);
+			this->chessBoardData.clear();
 			while (1)
 			{
 				MOUSEMSG msg = GetMouseMsg();
@@ -280,6 +285,7 @@ bool Chess::checkOver()
 			INFOLOG("Chess::checkOver||white win");
 			mciSendString("play res/失败.mp3", 0, 0, 0);
 			drawGraph(LOSE_MENU);
+			this->chessBoardData.clear();
 			while (1)
 			{
 				MOUSEMSG msg = GetMouseMsg();
@@ -417,17 +423,50 @@ bool Chess::isValidClick(int x, int y, LoadPicture picture)
 
 void Chess::playerWithDraw()
 {
-	// 删除棋子图片
+	// 判断棋盘上棋子数量
+	if (this->chessBoardData.size() <= 1)
+	{
+		WARNLOG("Chess::playerWithDraw||chess nums small 1||can not withdraw");
+		return;
+	}
 
-	// 更新棋盘数据
+	// this->chessMap.clear();// 会删除vector的空间    // 先清空棋盘数据
+	for (int i = 0; i < chessBoardSize; i++)
+	{
+		for (int j = 0; j < chessBoardSize; j++)
+		{
+			chessMap[i][j] = 0;
+		}
+	}
+
+	// 删除棋子图片, 需要重新加载图片，easyx不能删除图片
+	this->chessBoardData.pop_back();
+	this->chessBoardData.pop_back();  //删除两个元素，因为玩家选择悔棋时，AI的棋子也需要撤销掉
+	drawGraph(CHESSBOARD_MENU);
+	for (std::vector<ChessData>::iterator it = this->chessBoardData.begin(); it != this->chessBoardData.end(); it++)
+	{
+		if (it->chessType == CHESS_WHITE)
+		{
+			putImagePNG(it->imagePos.row, it->imagePos.col, &this->chessWhite.pictureFile);
+			this->playerFlag = false;
+		}
+		else
+		{
+			putImagePNG(it->imagePos.row, it->imagePos.col, &this->chessBlack.pictureFile);
+			this->playerFlag = true;
+		}
+		// 更新棋盘数据
+		ChessPos temp{ it->pos.row, it->pos.col };
+		updateChessMap(&temp);
+	}
 }
 
 void Chess::updateChessMap(ChessPos* pos)
 {
+	DEBUGLOG("Chess::updateChessMap||playerFlag={}||pos->row={}||pos->col={}", !playerFlag, pos->row, pos->col);
 	lastPos = *pos;
 	chessMap[pos->row][pos->col] = playerFlag ? 1 : -1;  // 储存当前位置是黑棋还是白棋
 	playerFlag = !playerFlag;   // 更换下棋方
-	DEBUGLOG("Chess::updateChessMap||playerFlag={}||pos->row={}||pos->col={}", !playerFlag, pos->row, pos->col);
 }
 
 // 在switch...case...结构中不能在case中定义新变量,除非将定义新变量的case用块{}包住，或者选择将你的新变量在switch之前

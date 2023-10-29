@@ -45,6 +45,12 @@ struct ChessPos {   // 棋子位置
 	int col;
 };
 
+struct ChessData {    // 储存每一步棋子位置和棋子类型的结构体
+	ChessPos pos;        // 储存棋盘坐标的x，y数据
+	ChessPos imagePos;   // 储存每个棋子坐标的x，y数据
+	chess_kind_type chessType;
+};
+
 class Chess
 {
 public:
@@ -94,10 +100,12 @@ public:
 	// 是否有效点击  x,y为鼠标点击的位置, picture为要点击的图片
 	bool isValidClick(int x, int y, LoadPicture picture);
 
-	// 悔棋
+	// 悔棋,悔棋需要记录每一步的顺序和下棋位置
 	void playerWithDraw();
 
 private:
+	std::vector<ChessData> chessBoardData;
+
 	// 棋盘尺寸
 	int chessBoardSize;
 

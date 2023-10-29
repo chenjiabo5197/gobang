@@ -44,7 +44,7 @@ void Player::go()
 				}
 				if (chess->isValidClick(msg.x, msg.y, chess->withDraw))
 				{
-
+					chess->playerWithDraw();
 				}
 			}
 		}
