@@ -1,7 +1,7 @@
 # gobang
 
 #### 介绍
-用c++写的五子棋对战，本项目需要将编译字符集设置为多字符集，vs下设置Debug->Debug properties->Advanced->Character Set->Use Muiti-Byte Character Set
+用c++写的五子棋对战，基于easyX库，本项目需要将编译字符集设置为多字符集，vs下设置Debug->Debug properties->Advanced->Character Set->Use Muiti-Byte Character Set
 
 #### 软件架构
 软件架构说明
