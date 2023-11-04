@@ -140,11 +140,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
-    <ClInclude Include="Chess.h" />
-    <ClInclude Include="GlobalVar.hpp" />
+    <ClInclude Include="chess.h" />
+    <ClInclude Include="globalVar.hpp" />
     <ClInclude Include="logger.h" />
-    <ClInclude Include="Management.h" />
-    <ClInclude Include="Player.h" />
+    <ClInclude Include="management.h" />
+    <ClInclude Include="pictureDraw.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -152,11 +153,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AI.cpp" />
-    <ClCompile Include="Chess.cpp" />
+    <ClCompile Include="chess.cpp" />
     <ClCompile Include="logger.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Management.cpp" />
-    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="management.cpp" />
+    <ClCompile Include="pictureDraw.cpp" />
+    <ClCompile Include="player.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

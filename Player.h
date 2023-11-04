@@ -1,14 +1,14 @@
 #pragma once
 #include "Chess.h"
 #include "logger.h"
-#include "GlobalVar.hpp"
+#include "globalVar.hpp"
 
 class Player
 {
 public:
 	void init(Chess* chess);
 	
-	void go();
+	void go(int x, int y);
 private:
 	Chess* chess;    // 棋盘数据，对哪个棋盘下棋
 };

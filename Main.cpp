@@ -1,7 +1,8 @@
 #include <iostream>
-#include "Management.h"
+#include "management.h"
 #include "spdlog/spdlog.h"
 #include "logger.h"
+#include "pictureDraw.h"
 
 // 初始化日志
 void initLogger()
@@ -29,14 +30,16 @@ void initLogger()
 int main()
 {
     initLogger();
+    GlobalVar::instance();
 
-	Chess chess(897, 895, 13, 44, 43, 67.4);
+    PictureDraw pictureDraw(13, 44, 43, 67.4);
+
+	/*Chess chess(13, 44, 43, 67.4, &utils);
 	Player player;
-	AI ai;
-	Management game(&player, &ai, &chess);
+	AI ai;*/
+	Management game(&pictureDraw);
 
 	game.play();
-    GlobalVar::instance();
 
 	return 0;
 }

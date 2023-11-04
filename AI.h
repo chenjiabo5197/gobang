@@ -1,5 +1,5 @@
 #pragma once
-#include "Chess.h"
+#include "chess.h"
 #include "logger.h"
 #include <vector>
 #include "sstream"

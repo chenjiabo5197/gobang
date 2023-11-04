@@ -3,8 +3,8 @@
 #include <vector>
 #include "logger.h"
 #include <conio.h>
-#include "GlobalVar.hpp"
-
+#include "globalVar.hpp"
+#include "pictureDraw.h"
 
 typedef enum {
 	CHESS_WHITE = -1,   // 白方
@@ -20,29 +20,9 @@ typedef enum {
 	RIGHTBOTTOM = 4        //右下
 } chess_coordinate;
 
-typedef enum {
-	MENU_DEFAULT = 0,
-	MAIN_MENU = 1,   // 选择开始游戏和退出游戏
-	PLAYER_NUM_MENU = 2,   // 选择单人游戏，双人游戏，网络对战
-	CHESSBOARD_MENU = 3,  // 对战中菜单，棋盘和退出游戏，悔棋
-	WIN_MENU = 4,   // 赢了，选择再来一局或者退出游戏
-	LOSE_MENU = 5   // 输了，选择再来一局或者退出游戏
-} menu_kind_type;
-
-// 每张加载的图片结构体
-struct LoadPicture {
-	IMAGE pictureFile;
-	std::string name;   // 图片名字，打印日志使用
-	bool isUse;		// 该图片是否正在展示中
-	int x;     // 图片放置的左上角x坐标
-	int y;     // 图片放置的左上角y坐标
-	int width;     // 图片的宽度
-	int height;     // 图片的高度
-};
-
 struct ChessPos {   // 棋子位置
-	int row;
-	int col;
+	short row;
+	short col;
 };
 
 struct ChessData {    // 储存每一步棋子位置和棋子类型的结构体
@@ -54,7 +34,7 @@ struct ChessData {    // 储存每一步棋子位置和棋子类型的结构体
 class Chess
 {
 public:
-	Chess(int chessBoardWidth, int chessBoardHeight, int chessBoardSize, int marginX, int marginY, float chessSize);
+	Chess(int chessBoardSize, int marginX, int marginY, float chessSize, PictureDraw*);
 
 	// 棋盘的初始化，加载棋盘的图片资源，初始化棋盘的相关数据
 	void init();
@@ -82,10 +62,6 @@ public:
 	// 判断胜负
 	bool checkWin();
 
-	// 获取棋盘的宽和高尺寸
-	int getChessBoardWidth();
-	int getChessBoardHieght();
-
 	//// 是否退出游戏  x,y为鼠标点击的位置
 	//bool isExitGame(int x, int y);
 
@@ -95,15 +71,13 @@ public:
 	//// 是否再来一局  x,y为鼠标点击的位置
 	//bool isAgainGame(int x, int y);
 
-	LoadPicture chessBlack, chessWhite, chessBoard, exitGame, withDraw, againGame, onePlayer, twoPlayers, playerInternet, startGame, winGame, loseGame, curBlack, curWhite;
-
-	// 是否有效点击  x,y为鼠标点击的位置, picture为要点击的图片
-	bool isValidClick(int x, int y, LoadPicture picture);
-
 	// 悔棋,悔棋需要记录每一步的顺序和下棋位置
 	void playerWithDraw();
 
-private:
+private: 
+
+	PictureDraw* pictureDraw;
+
 	std::vector<ChessData> chessBoardData;
 
 	// 棋盘尺寸
@@ -129,16 +103,6 @@ private:
 
 	// 更新棋盘的棋子数据
 	void updateChessMap(ChessPos* pos);
-
-	// 统一的绘图函数，根据menu_kind_type类型决定绘制哪种类型图
-	void drawGraph(menu_kind_type kind);
-
-	// 棋盘图片的尺寸，防止点击到棋盘的其他功能按键时误以为下棋导致数组越界
-	int chessBoardWidth;
-	int chessBoardHeight;
-
-	// 清楚上一次的graph数据，防止对下次点击造成影响
-	void clearLastGraph();
 
 };
 

@@ -3,78 +3,13 @@
 #include <iostream>
 #pragma comment(lib, "winmm.lib")
 
-Chess::Chess(int chessBoardWidth, int chessBoardHeight, int chessBoardSize, int marginX, int marginY, float chessSize)
+Chess::Chess(int chessBoardSize, int marginX, int marginY, float chessSize, PictureDraw* pictureDraw)
 {
 	this->chessBoardSize = chessBoardSize;
 	this->margin_x = marginX;
 	this->margin_y = marginY;
 	this->chessSize = chessSize;
-	this->chessBoardWidth = chessBoardWidth;
-	this->chessBoardHeight = chessBoardHeight;
-
-	// 加载图片
-	loadimage(&this->chessBoard.pictureFile, "res/棋盘2.jpg");
-	this->chessBoard.width = 897;
-	this->chessBoard.height = 895;
-	this->chessBoard.name = "chessBoard";
-	this->chessBoard.isUse = false;
-	loadimage(&this->withDraw.pictureFile, "res/withdraw.png");
-	this->withDraw.width = 133;
-	this->withDraw.height = 46;
-	this->withDraw.name = "withDraw";
-	this->withDraw.isUse = false;
-	loadimage(&this->exitGame.pictureFile, "res/exit_game.png");
-	this->exitGame.width = 131;
-	this->exitGame.height = 45;
-	this->exitGame.name = "exitGame";
-	this->exitGame.isUse = false;
-	loadimage(&this->againGame.pictureFile, "res/again_game.png");
-	this->againGame.width = 132;
-	this->againGame.height = 46;
-	this->againGame.name = "againGame";
-	this->againGame.isUse = false;
-	loadimage(&this->onePlayer.pictureFile, "res/one_player.png");
-	this->onePlayer.width = 132;
-	this->onePlayer.height = 46;
-	this->onePlayer.name = "onePlayer";
-	this->onePlayer.isUse = false;
-	loadimage(&this->playerInternet.pictureFile, "res/player_internet.png");
-	this->playerInternet.width = 131;
-	this->playerInternet.height = 45;
-	this->playerInternet.name = "playerInternet";
-	this->playerInternet.isUse = false;
-	loadimage(&this->startGame.pictureFile, "res/start_game.png");
-	this->startGame.width = 132;
-	this->startGame.height = 46;
-	this->startGame.name = "startGame";
-	this->startGame.isUse = false;
-	loadimage(&this->twoPlayers.pictureFile, "res/two_players.png");
-	this->twoPlayers.width = 132;
-	this->twoPlayers.height = 47;
-	this->twoPlayers.name = "twoPlayers";
-	this->twoPlayers.isUse = false;
-	loadimage(&this->winGame.pictureFile, "res/win.jpg");
-	this->winGame.width = 895;
-	this->winGame.height = 625;
-	this->winGame.name = "winGame";
-	this->winGame.isUse = false;
-	loadimage(&this->loseGame.pictureFile, "res/lose.jpg");
-	this->loseGame.width = 895;
-	this->loseGame.height = 624;
-	this->loseGame.name = "loseGame";
-	this->loseGame.isUse = false;
-	loadimage(&this->chessBlack.pictureFile, "res/black.png", chessSize, chessSize, true);
-	this->chessBlack.name = "chessBlack";
-	this->chessBlack.isUse = false;
-	loadimage(&this->chessWhite.pictureFile, "res/white.png", chessSize, chessSize, true);
-	this->chessWhite.name = "chessWhite";
-	this->chessWhite.isUse = false;
-	loadimage(&this->curBlack.pictureFile, "res/black2.png", chessSize, chessSize, true);
-	this->curBlack.name = "curBlack";
-	this->curBlack.isUse = false;
-	loadimage(&this->curWhite.pictureFile, "res/white2.png", chessSize, chessSize, true);
-	this->curWhite.name = "curWhite";
-	this->curWhite.isUse = false;
+	this->pictureDraw = pictureDraw;
 
 	// 初始化储存上一次黑白棋位置的参数
 	lastBlackPos.row = -1;
@@ -98,8 +33,6 @@ Chess::Chess(int chessBoardWidth, int chessBoardHeight, int chessBoardSize, int 
 
 void Chess::init()
 {
-	drawGraph(CHESSBOARD_MENU);
-	
 	mciSendString("play res/start.wav", 0, 0, 0);  //需要修改字符集为多字符集
 
 	for (int i = 0; i < chessMap.size(); i++)
@@ -287,7 +220,7 @@ bool Chess::checkOver()
 		{
 			INFOLOG("Chess::checkOver||black win");
 			mciSendString("play res/clap.mp3", 0, 0, 0);
-			drawGraph(WIN_MENU);
+			GlobalVar::instance()->setResultFlag(PLAYER_WIN);
 			this->chessBoardData.clear();
 			while (1)
 			{
@@ -427,28 +360,6 @@ bool Chess::checkWin()
 
 }
 
-int Chess::getChessBoardWidth()
-{
-	return chessBoardWidth;
-}
-
-int Chess::getChessBoardHieght()
-{
-	return chessBoardHeight;
-}
-
-bool Chess::isValidClick(int x, int y, LoadPicture picture)
-{
-	if (x >= picture.x && x <= picture.x + picture.width && y >= picture.y && y <= picture.y + picture.height && picture.isUse)
-	{
-		mciSendString("play res/select.wav", 0, 0, 0);
-		INFOLOG("Chess::isValidClick||valid click||picture name={}||x={}||y={}||leftX={}||rightX={}||smallY={}||bigY={}", picture.name, x, y, picture.x,
-			picture.x + picture.width, picture.y, picture.y + picture.height);
-		return true;
-	}
-	return false;
-}
-
 void Chess::playerWithDraw()
 {
 	// 初始化黑白棋上次位置
@@ -473,7 +384,7 @@ void Chess::playerWithDraw()
 	// 删除棋子图片, 需要重新加载图片，easyx不能删除图片
 	this->chessBoardData.pop_back();
 	this->chessBoardData.pop_back();  //删除两个元素，因为玩家选择悔棋时，AI的棋子也需要撤销掉
-	drawGraph(CHESSBOARD_MENU);
+	//drawGraph(CHESSBOARD_MENU);
 	for (std::vector<ChessData>::iterator it = this->chessBoardData.begin(); it != this->chessBoardData.end(); it++)
 	{
 		DEBUGLOG("Chess::chessDown222||CHESS_BLACK||x={}||y={}", it->pos.row, it->pos.col);
@@ -481,14 +392,14 @@ void Chess::playerWithDraw()
 		{
 			//putImagePNG(it->imagePos.row, it->imagePos.col, &this->chessWhite.pictureFile);
 			ChessPos temp{ it->pos.row, it->pos.col };
-			this->chessDown(&temp, CHESS_WHITE, false);
+			//this->chessDown(&temp, CHESS_WHITE, false);
 			this->playerFlag = false;
 		}
 		else
 		{
 			//putImagePNG(it->imagePos.row, it->imagePos.col, &this->chessBlack.pictureFile);
 			ChessPos temp{ it->pos.row, it->pos.col };
-			this->chessDown(&temp, CHESS_BLACK, false);
+			//this->chessDown(&temp, CHESS_BLACK, false);
 			this->playerFlag = true;
 		}
 		// 更新棋盘数据
@@ -506,122 +417,4 @@ void Chess::updateChessMap(ChessPos* pos)
 	playerFlag = !playerFlag;   // 更换下棋方
 }
 
-// 在switch...case...结构中不能在case中定义新变量,除非将定义新变量的case用块{}包住，或者选择将你的新变量在switch之前
-void Chess::drawGraph(menu_kind_type kind)
-{
-	clearLastGraph();
-	switch (kind)
-	{
-	case MAIN_MENU:
-		break;
-	case PLAYER_NUM_MENU:
-		break;
-	case CHESSBOARD_MENU:
-	{  
-		// 取按键宽度的最大值+棋盘宽度 +1是为了留一点余量
-		int graphWidth = max(this->withDraw.width, this->exitGame.width) + this->chessBoard.width + 1;
-		int graphHeight = this->chessBoard.height;
-		initgraph(graphWidth, graphHeight);
-		// 设置背景色为白色
-		setbkcolor(WHITE);
-		cleardevice();  // 使用当前背景色清空绘图设备
 
-		// 图片的左上角坐标，用于定位
-		this->chessBoard.x = 0;
-		this->chessBoard.y = 0;
-		this->chessBoard.isUse = true;
-		this->withDraw.x = this->chessBoard.width + 1;
-		this->withDraw.y = 200;
-		this->withDraw.isUse = true;
-		this->exitGame.x = this->chessBoard.width + 1;
-		this->exitGame.y = 500;
-		this->exitGame.isUse = true;
-
-		putimage(this->chessBoard.x, this->chessBoard.y, &this->chessBoard.pictureFile);
-		putimage(this->withDraw.x, this->withDraw.y, &this->withDraw.pictureFile);
-		putimage(this->exitGame.x, this->exitGame.y, &this->exitGame.pictureFile);
-		
-		INFOLOG("Chess::drawGraph||kind=CHESSBOARD_MENU||chessBoard.x={}||chessBoard.y={}||withDraw.x={}||withDraw.y={}||exitGame.x={}||exitGame.y={}", 
-			chessBoard.x, chessBoard.y, withDraw.x, withDraw.y, exitGame.x, exitGame.y);
-		break;
-	}
-	case WIN_MENU:
-	{
-		// 取按键宽度的最大值+图片宽度 +1是为了留一点余量
-		int graphWidth = max(this->againGame.width, this->exitGame.width) + this->winGame.width + 1;
-		int graphHeight = this->winGame.height;
-		initgraph(graphWidth, graphHeight);
-		// 设置背景色为白色
-		setbkcolor(WHITE);
-		cleardevice();  // 使用当前背景色清空绘图设备
-
-		// 图片的左上角坐标，用于定位
-		this->winGame.x = 0;
-		this->winGame.y = 0;
-		this->winGame.isUse = true;
-		this->againGame.x = this->winGame.width + 1;
-		this->againGame.y = 150;
-		this->againGame.isUse = true;
-		this->exitGame.x = this->winGame.width + 1;
-		this->exitGame.y = 350;
-		this->exitGame.isUse = true;
-
-		putimage(this->winGame.x, this->winGame.y, &this->winGame.pictureFile);
-		putimage(this->againGame.x, this->againGame.y, &this->againGame.pictureFile);
-		putimage(this->exitGame.x, this->exitGame.y, &this->exitGame.pictureFile);
-
-		INFOLOG("Chess::drawGraph||kind=WIN_MENU||winGame.x={}||winGame.y={}||againGame.x={}||againGame.y={}||exitGame.x={}||exitGame.y={}",
-			winGame.x, winGame.y, againGame.x, againGame.y, exitGame.x, exitGame.y);
-		break;
-	}
-	case LOSE_MENU:
-	{
-		// 取按键宽度的最大值+图片宽度 +1是为了留一点余量
-		int graphWidth = max(this->againGame.width, this->exitGame.width) + this->loseGame.width + 1;
-		int graphHeight = this->loseGame.height;
-		initgraph(graphWidth, graphHeight);
-		// 设置背景色为白色
-		setbkcolor(WHITE);
-		cleardevice();  // 使用当前背景色清空绘图设备
-
-		// 图片的左上角坐标，用于定位
-		this->loseGame.x = 0;
-		this->loseGame.y = 0;
-		this->loseGame.isUse = true;
-		this->againGame.x = this->loseGame.width + 1;
-		this->againGame.y = 150;
-		this->againGame.isUse = true;
-		this->exitGame.x = this->loseGame.width + 1;
-		this->exitGame.y = 350;
-		this->exitGame.isUse = true;
-
-		putimage(this->loseGame.x, this->loseGame.y, &this->loseGame.pictureFile);
-		putimage(this->againGame.x, this->againGame.y, &this->againGame.pictureFile);
-		putimage(this->exitGame.x, this->exitGame.y, &this->exitGame.pictureFile);
-
-		INFOLOG("Chess::drawGraph||kind=LOSE_MENU||loseGame.x={}||loseGame.y={}||againGame.x={}||againGame.y={}||exitGame.x={}||exitGame.y={}",
-			loseGame.x, loseGame.y, againGame.x, againGame.y, exitGame.x, exitGame.y);
-		break;
-	}
-	default:
-		ERRORLOG("Chess::drawGraph||undefined menu_kind_type||kind={}", (int)kind);
-		break;
-	}
-}
-
-void Chess::clearLastGraph()
-{
-	closegraph();
-	this->chessBoard.isUse = false;
-	this->withDraw.isUse = false;
-	this->exitGame.isUse = false;
-	this->againGame.isUse = false;
-	this->onePlayer.isUse = false;
-	this->playerInternet.isUse = false;
-	this->startGame.isUse = false;
-	this->twoPlayers.isUse = false;
-	this->winGame.isUse = false;
-	this->loseGame.isUse = false;
-	this->chessBlack.isUse = false;
-	this->chessWhite.isUse = false;
-}
