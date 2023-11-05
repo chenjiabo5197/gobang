@@ -26,6 +26,9 @@
 3.  提交代码
 4.  新建 Pull Request
 
+#### 疑问
+1.  AI，player，chess的初始化必须要在main中完成，在management的构造函数中进行初始化不行？？
+
 
 #### 特技
 

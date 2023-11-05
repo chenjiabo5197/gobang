@@ -8,7 +8,7 @@ class Player
 public:
 	void init(Chess* chess);
 	
-	void go(int x, int y);
+	bool go(int x, int y);
 private:
 	Chess* chess;    // 棋盘数据，对哪个棋盘下棋
 };

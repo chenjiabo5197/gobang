@@ -34,10 +34,10 @@ int main()
 
     PictureDraw pictureDraw(13, 44, 43, 67.4);
 
-	/*Chess chess(13, 44, 43, 67.4, &utils);
+	Chess chess(13, 44, 43, 67.4, &pictureDraw);
 	Player player;
-	AI ai;*/
-	Management game(&pictureDraw);
+	AI ai;
+	Management game(&player, &ai, &chess, &pictureDraw);
 
 	game.play();
 

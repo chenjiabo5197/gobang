@@ -202,7 +202,7 @@ void PictureDraw::drawGraph(menu_kind_type kind)
 	case WIN_MENU:
 	{
 		// 取按键宽度的最大值+图片宽度 +1是为了留一点余量
-		int graphWidth = max(this->againGamePicture.width, this->exitGamePicture.width) + this->winGamePicture.width + 1;
+		int graphWidth = max(this->againGamePicture.width, this->backwardMenu.width) + this->winGamePicture.width + 1;
 		int graphHeight = this->winGamePicture.height;
 		initgraph(graphWidth, graphHeight);
 		// 设置背景色为白色
@@ -216,22 +216,22 @@ void PictureDraw::drawGraph(menu_kind_type kind)
 		this->againGamePicture.x = this->winGamePicture.width + 1;
 		this->againGamePicture.y = 150;
 		this->againGamePicture.isUse = true;
-		this->exitGamePicture.x = this->winGamePicture.width + 1;
-		this->exitGamePicture.y = 350;
-		this->exitGamePicture.isUse = true;
+		this->backwardMenu.x = this->winGamePicture.width + 1;
+		this->backwardMenu.y = 350;
+		this->backwardMenu.isUse = true;
 
 		putimage(this->winGamePicture.x, this->winGamePicture.y, &this->winGamePicture.pictureFile);
 		putimage(this->againGamePicture.x, this->againGamePicture.y, &this->againGamePicture.pictureFile);
-		putimage(this->exitGamePicture.x, this->exitGamePicture.y, &this->exitGamePicture.pictureFile);
+		putimage(this->backwardMenu.x, this->backwardMenu.y, &this->backwardMenu.pictureFile);
 
-		INFOLOG("PictureDraw::drawGraph||kind=WIN_MENU||winGamePicture.x={}||winGamePicture.y={}||againGamePicture.x={}||againGamePicture.y={}||exitGamePicture.x={}||exitGamePicture.y={}",
-			winGamePicture.x, winGamePicture.y, againGamePicture.x, againGamePicture.y, exitGamePicture.x, exitGamePicture.y);
+		INFOLOG("PictureDraw::drawGraph||kind=WIN_MENU||winGamePicture.x={}||winGamePicture.y={}||againGamePicture.x={}||againGamePicture.y={}||backwardMenu.x={}||backwardMenu.y={}",
+			winGamePicture.x, winGamePicture.y, againGamePicture.x, againGamePicture.y, backwardMenu.x, backwardMenu.y);
 		break;
 	}
 	case LOSE_MENU:
 	{
 		// 取按键宽度的最大值+图片宽度 +1是为了留一点余量
-		int graphWidth = max(this->againGamePicture.width, this->exitGamePicture.width) + this->loseGamePicture.width + 1;
+		int graphWidth = max(this->againGamePicture.width, this->backwardMenu.width) + this->loseGamePicture.width + 1;
 		int graphHeight = this->loseGamePicture.height;
 		initgraph(graphWidth, graphHeight);
 		// 设置背景色为白色
@@ -245,16 +245,16 @@ void PictureDraw::drawGraph(menu_kind_type kind)
 		this->againGamePicture.x = this->loseGamePicture.width + 1;
 		this->againGamePicture.y = 150;
 		this->againGamePicture.isUse = true;
-		this->exitGamePicture.x = this->loseGamePicture.width + 1;
-		this->exitGamePicture.y = 350;
-		this->exitGamePicture.isUse = true;
+		this->backwardMenu.x = this->loseGamePicture.width + 1;
+		this->backwardMenu.y = 350;
+		this->backwardMenu.isUse = true;
 
 		putimage(this->loseGamePicture.x, this->loseGamePicture.y, &this->loseGamePicture.pictureFile);
 		putimage(this->againGamePicture.x, this->againGamePicture.y, &this->againGamePicture.pictureFile);
-		putimage(this->exitGamePicture.x, this->exitGamePicture.y, &this->exitGamePicture.pictureFile);
+		putimage(this->backwardMenu.x, this->backwardMenu.y, &this->backwardMenu.pictureFile);
 
-		INFOLOG("PictureDraw::drawGraph||kind=LOSE_MENU||loseGamePicture.x={}||loseGamePicture.y={}||againGamePicture.x={}||againGamePicture.y={}||exitGamePicture.x={}||exitGamePicture.y={}",
-			loseGamePicture.x, loseGamePicture.y, againGamePicture.x, againGamePicture.y, exitGamePicture.x, exitGamePicture.y);
+		INFOLOG("PictureDraw::drawGraph||kind=LOSE_MENU||loseGamePicture.x={}||loseGamePicture.y={}||againGamePicture.x={}||againGamePicture.y={}||backwardMenu.x={}||backwardMenu.y={}",
+			loseGamePicture.x, loseGamePicture.y, againGamePicture.x, againGamePicture.y, backwardMenu.x, backwardMenu.y);
 		break;
 	}
 	default:

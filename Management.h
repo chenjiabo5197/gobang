@@ -9,7 +9,7 @@
 class Management
 {
 public:
-	Management(PictureDraw*);
+	Management(Player*, AI*, Chess*, PictureDraw*);
 	void play();
 
 private:
@@ -26,6 +26,9 @@ private:
 
 	// 单人游戏初始化对象，AI，player，chess
 	void onePlayerInit();
+
+	// 游戏结束，根据全局变量决定展示的成功还是失败页面，并接受再来一局还是退出到主菜单
+	bool isAgainGame();
 };
 
 

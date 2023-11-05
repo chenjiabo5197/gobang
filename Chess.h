@@ -21,8 +21,8 @@ typedef enum {
 } chess_coordinate;
 
 struct ChessPos {   // 棋子位置
-	short row;
-	short col;
+	int row;
+	int col;
 };
 
 struct ChessData {    // 储存每一步棋子位置和棋子类型的结构体
@@ -78,6 +78,7 @@ private:
 
 	PictureDraw* pictureDraw;
 
+	// 储存每一步的下棋数据
 	std::vector<ChessData> chessBoardData;
 
 	// 棋盘尺寸

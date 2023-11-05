@@ -20,18 +20,11 @@ void AI::init(Chess* chess)
 
 void AI::go()
 {
-	try
-	{
-		ChessPos pos = think();
-		Sleep(1000);
-		mciSendString("play res/chess_down.mp3", 0, 0, 0);
-		// chess->chessDown(&pos, CHESS_WHITE);
-		DEBUGLOG("AI::go||AI chess down success");
-	}
-	catch (const std::exception& e)
-	{
-		CRITICALLOG("AI::go||exception={}", e.what());
-	}
+	ChessPos pos = think();
+	Sleep(1000);
+	mciSendString("play res/chess_down.mp3", 0, 0, 0);
+	this->chess->chessDown(&pos, CHESS_WHITE);
+	DEBUGLOG("AI::go||AI chess down success");
 }
 
 void AI::calculateScore()

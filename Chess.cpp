@@ -11,10 +11,6 @@ Chess::Chess(int chessBoardSize, int marginX, int marginY, float chessSize, Pict
 	this->chessSize = chessSize;
 	this->pictureDraw = pictureDraw;
 
-	// 初始化储存上一次黑白棋位置的参数
-	lastBlackPos.row = -1;
-	lastWhitePos.row = -1;
-
 	playerFlag = CHESS_BLACK;
 
 	// 初始化棋盘，棋盘每个位置都为0，表示空白
@@ -34,7 +30,6 @@ Chess::Chess(int chessBoardSize, int marginX, int marginY, float chessSize, Pict
 void Chess::init()
 {
 	mciSendString("play res/start.wav", 0, 0, 0);  //需要修改字符集为多字符集
-
 	for (int i = 0; i < chessMap.size(); i++)
 	{
 		for (int j = 0; j < chessMap[i].size(); j++)
@@ -42,6 +37,10 @@ void Chess::init()
 			chessMap[i][j] = 0;
 		}
 	}
+	this->chessBoardData.clear();
+	// 初始化储存上一次黑白棋位置的参数
+	lastBlackPos.row = -1;
+	lastWhitePos.row = -1;
 
 	playerFlag = true;
 	INFOLOG("Chess::init||init chess success||graph.width={}||graph.height={}", 897, 895);
@@ -56,6 +55,9 @@ bool Chess::clickBoard(int x, int y, ChessPos* pos)
 	// 鼠标点击在棋盘上的行，列数(用鼠标坐标减去棋盘边缘再除每个方格大小)
 	int row = (x - margin_x) / chessSize;  // 列数
 	int col = (y - margin_y) / chessSize;  // 行数
+
+	DEBUGLOG("Chess::clickBoard||margin_x={}||margin_y={}||row={}||col={}||x={}||y={}",
+		margin_x, margin_y, row, col, x, y);
 
 	// easyx的坐标原点在左上角，y轴向下，x轴向右
 	// 鼠标点击坐标的方格左上角坐标
@@ -157,15 +159,15 @@ void Chess::chessDown(ChessPos* pos, chess_kind_type kind, bool isRecord)
 	int x = margin_x + pos->row * chessSize - 0.5 * chessSize;
 	int y = margin_y + pos->col * chessSize - 0.5 * chessSize;
 
-	if (this->chessBoard.isUse)   // 判断是否在下棋页面
+	if (this->pictureDraw->chessBoardPicture.isUse)   // 判断是否在下棋页面
 	{
 		if (kind == CHESS_WHITE)
 		{
 			if (this->lastWhitePos.row != -1)
 			{
-				putImagePNG(this->lastWhitePos.row, this->lastWhitePos.col, &this->chessWhite.pictureFile);   // 更新非最新的棋子图片
+				putImagePNG(this->lastWhitePos.row, this->lastWhitePos.col, &this->pictureDraw->chessWhitePicture.pictureFile);   // 更新非最新的棋子图片
 			}
-			putImagePNG(x, y, &this->curWhite.pictureFile); 
+			putImagePNG(x, y, &this->pictureDraw->curWhitePicture.pictureFile);
 			if (isRecord)
 			{
 				ChessData temp2{ pos->row, pos->col, x, y, CHESS_WHITE };
@@ -179,9 +181,9 @@ void Chess::chessDown(ChessPos* pos, chess_kind_type kind, bool isRecord)
 		{
 			if (this->lastBlackPos.row != -1)
 			{
-				putImagePNG(this->lastBlackPos.row, this->lastBlackPos.col, &this->chessBlack.pictureFile);   // 更新非最新的棋子图片
+				putImagePNG(this->lastBlackPos.row, this->lastBlackPos.col, &this->pictureDraw->chessBlackPicture.pictureFile);   // 更新非最新的棋子图片
 			}
-			putImagePNG(x, y, &this->curBlack.pictureFile);
+			putImagePNG(x, y, &this->pictureDraw->curBlackPicture.pictureFile);
 			if (isRecord)
 			{
 				ChessData temp2{ pos->row, pos->col, x, y, CHESS_BLACK };
@@ -219,52 +221,14 @@ bool Chess::checkOver()
 		if (!playerFlag)   // 黑棋赢，玩家赢
 		{
 			INFOLOG("Chess::checkOver||black win");
-			mciSendString("play res/clap.mp3", 0, 0, 0);
 			GlobalVar::instance()->setResultFlag(PLAYER_WIN);
-			this->chessBoardData.clear();
-			while (1)
-			{
-				MOUSEMSG msg = GetMouseMsg();
-				if (msg.uMsg == WM_LBUTTONDOWN)
-				{
-					DEBUGLOG("Chess::checkOver||mouse click||x={}||y={}", msg.x, msg.y);
-					if (this->isValidClick(msg.x, msg.y, this->exitGame))
-					{
-
-						GlobalVar::instance()->set_value("exit_game", true);
-						return false;
-					}
-					if (this->isValidClick(msg.x, msg.y, this->againGame))
-					{
-						return true;
-					}
-				}
-			}
+			return true;
 		}
 		else
 		{
 			INFOLOG("Chess::checkOver||white win");
-			mciSendString("play res/失败.mp3", 0, 0, 0);
-			drawGraph(LOSE_MENU);
-			this->chessBoardData.clear();
-			while (1)
-			{
-				MOUSEMSG msg = GetMouseMsg();
-				if (msg.uMsg == WM_LBUTTONDOWN)
-				{
-					DEBUGLOG("Chess::checkOver||mouse click||x={}||y={}", msg.x, msg.y);
-					if (this->isValidClick(msg.x, msg.y, this->exitGame))
-					{
-
-						GlobalVar::instance()->set_value("exit_game", true);
-						return false;
-					}
-					if (this->isValidClick(msg.x, msg.y, this->againGame))
-					{
-						return true;
-					}
-				}
-			}
+			GlobalVar::instance()->setResultFlag(PLAYER_LOSE);
+			return true;
 		}
 	}
 	return false;
@@ -384,7 +348,7 @@ void Chess::playerWithDraw()
 	// 删除棋子图片, 需要重新加载图片，easyx不能删除图片
 	this->chessBoardData.pop_back();
 	this->chessBoardData.pop_back();  //删除两个元素，因为玩家选择悔棋时，AI的棋子也需要撤销掉
-	//drawGraph(CHESSBOARD_MENU);
+	this->pictureDraw->drawGraph(CHESSBOARD_MENU);
 	for (std::vector<ChessData>::iterator it = this->chessBoardData.begin(); it != this->chessBoardData.end(); it++)
 	{
 		DEBUGLOG("Chess::chessDown222||CHESS_BLACK||x={}||y={}", it->pos.row, it->pos.col);
@@ -392,14 +356,14 @@ void Chess::playerWithDraw()
 		{
 			//putImagePNG(it->imagePos.row, it->imagePos.col, &this->chessWhite.pictureFile);
 			ChessPos temp{ it->pos.row, it->pos.col };
-			//this->chessDown(&temp, CHESS_WHITE, false);
+			this->chessDown(&temp, CHESS_WHITE, false);
 			this->playerFlag = false;
 		}
 		else
 		{
 			//putImagePNG(it->imagePos.row, it->imagePos.col, &this->chessBlack.pictureFile);
 			ChessPos temp{ it->pos.row, it->pos.col };
-			//this->chessDown(&temp, CHESS_BLACK, false);
+			this->chessDown(&temp, CHESS_BLACK, false);
 			this->playerFlag = true;
 		}
 		// 更新棋盘数据

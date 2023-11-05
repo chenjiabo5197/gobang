@@ -1,8 +1,13 @@
 #include "Management.h"
 
-Management::Management(PictureDraw* pictureDraw)
+Management::Management(Player* player, AI* ai, Chess* chess, PictureDraw* pictureDraw)
 {
+
 	this->pictureDraw = pictureDraw;
+
+	this->ai = ai;
+	this->player = player;
+	this->chess = chess;
 
 	INFOLOG("Management::Management||construct management success");
 }
@@ -93,30 +98,48 @@ void Management::onePlayerGame()
 			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->chessBoardPicture))
 			{
 				DEBUGLOG("Management::onePlayerGame||click to chess||x={}||y={}", msg.x, msg.y);
-				this->player->go(msg.x, msg.y);
+				// 判断点击的区域是否有效，可以下棋
+				if (this->player->go(msg.x, msg.y))  
+				{
+					if (chess->checkOver())
+					{
+						INFOLOG("Management::play||player win||init chess again");
+						if (this->isAgainGame())
+						{
+							this->pictureDraw->drawGraph(CHESSBOARD_MENU);
+							chess->init();
+							continue;
+						}
+						else
+						{
+							break;
+						}
+					}
+
+					ai->go();
+
+					if (chess->checkOver())
+					{
+						INFOLOG("Management::play||AI win||init chess again");
+						if (this->isAgainGame())
+						{
+							this->pictureDraw->drawGraph(CHESSBOARD_MENU);
+							chess->init();
+							continue;
+						}
+						else
+						{
+							break;
+						}
+					}
+				}
 			}
 
-			if (chess->checkOver())
-			{
-				INFOLOG("Management::play||player win||init chess again");
-				chess->init();
-				continue;
-			}
-
-			ai->go();
-
-			if (chess->checkOver())
-			{
-				INFOLOG("Management::play||AI win||init chess again");
-				chess->init();
-				continue;
-			}
-
-			
 			// 可以选择悔棋或者直接返回主菜单
 			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->withDrawPicture))
 			{
 				DEBUGLOG("Management::onePlayerGame||select withDraw");
+				this->chess->playerWithDraw();
 			}
 			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->backwardMenu))
 			{
@@ -131,46 +154,41 @@ void Management::onePlayerGame()
 
 void Management::onePlayerInit()
 {
-	Chess chess(13, 44, 43, 67.4, this->pictureDraw);
-	Player player;
-	AI ai;
-	this->ai = &ai;
-	this->player = &player;
-	this->chess = &chess;
+	this->ai->init(this->chess);
+	this->player->init(this->chess);
+	this->chess->init();
 }
 
-//void Management::play()
-//{
-//	chess->init();
-//	while (1)
-//	{
-//		player->go();
-//
-//		if (GlobalVar::instance()->get_value("exit_game"))
-//		{
-//			INFOLOG("Management::play||player exit game");
-//			break;
-//		}
-//
-//		if (chess->checkOver())
-//		{
-//			INFOLOG("Management::play||player win||init chess again");
-//			chess->init();
-//			continue;
-//		}
-//
-//		ai->go();
-//		if (chess->checkOver())
-//		{
-//			INFOLOG("Management::play||AI win||init chess again");
-//			chess->init();
-//			continue;
-//		}
-//		if (GlobalVar::instance()->get_value("exit_game"))
-//		{
-//			INFOLOG("Management::play||player exit game");
-//			break;
-//		}
-//	}
-//	INFOLOG("Management::play||game over");
-//}
+bool Management::isAgainGame()
+{
+	auto flag = GlobalVar::instance()->getResultFlag();
+	if (flag == PLAYER_WIN)   // 黑棋赢，玩家赢
+	{
+		mciSendString("play res/clap.mp3", 0, 0, 0);
+		this->pictureDraw->drawGraph(WIN_MENU);
+	}
+	else
+	{
+		mciSendString("play res/失败.mp3", 0, 0, 0);
+		this->pictureDraw->drawGraph(LOSE_MENU);
+	}
+	// 循环，接收选手选择
+	while (1)
+	{
+		MOUSEMSG msg = GetMouseMsg();
+		if (msg.uMsg == WM_LBUTTONDOWN)
+		{
+			DEBUGLOG("Management::isAgainGame||mouse click||x={}||y={}", msg.x, msg.y);
+			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->againGamePicture))
+			{
+				return true;
+			}
+			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->backwardMenu))
+			{
+
+				GlobalVar::instance()->setValue("exitGame", true);
+				return false;
+			}
+		}
+	}
+}
