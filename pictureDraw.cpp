@@ -13,6 +13,7 @@ PictureDraw::PictureDraw(int chessBoardSize, int marginX, int marginY, float che
 	this->withDrawPicture.height = 46;
 	this->withDrawPicture.name = "withDraw";
 	this->withDrawPicture.isUse = false;
+	this->clickSound.push_back("withDraw");
 	loadimage(&this->exitGamePicture.pictureFile, "res/exit_game.png");
 	this->exitGamePicture.width = 131;
 	this->exitGamePicture.height = 45;
@@ -23,26 +24,31 @@ PictureDraw::PictureDraw(int chessBoardSize, int marginX, int marginY, float che
 	this->againGamePicture.height = 46;
 	this->againGamePicture.name = "againGame";
 	this->againGamePicture.isUse = false;
+	this->clickSound.push_back("againGame");
 	loadimage(&this->onePlayerPicture.pictureFile, "res/one_player.png");
 	this->onePlayerPicture.width = 132;
 	this->onePlayerPicture.height = 46;
 	this->onePlayerPicture.name = "onePlayer";
 	this->onePlayerPicture.isUse = false;
+	this->clickSound.push_back("onePlayer");
 	loadimage(&this->playerInternetPicture.pictureFile, "res/player_internet.png");
 	this->playerInternetPicture.width = 131;
 	this->playerInternetPicture.height = 45;
 	this->playerInternetPicture.name = "playerInternet";
 	this->playerInternetPicture.isUse = false;
+	this->clickSound.push_back("playerInternet");
 	loadimage(&this->startGamePicture.pictureFile, "res/start_game.png");
 	this->startGamePicture.width = 132;
 	this->startGamePicture.height = 46;
 	this->startGamePicture.name = "startGame";
 	this->startGamePicture.isUse = false;
+	this->clickSound.push_back("startGame");
 	loadimage(&this->twoPlayersPicture.pictureFile, "res/two_players.png");
 	this->twoPlayersPicture.width = 132;
 	this->twoPlayersPicture.height = 47;
 	this->twoPlayersPicture.name = "twoPlayers";
 	this->twoPlayersPicture.isUse = false;
+	this->clickSound.push_back("twoPlayers");
 	loadimage(&this->winGamePicture.pictureFile, "res/win.jpg");
 	this->winGamePicture.width = 895;
 	this->winGamePicture.height = 625;
@@ -53,16 +59,23 @@ PictureDraw::PictureDraw(int chessBoardSize, int marginX, int marginY, float che
 	this->loseGamePicture.height = 624;
 	this->loseGamePicture.name = "loseGame";
 	this->loseGamePicture.isUse = false;
+	loadimage(&this->drawGamePicture.pictureFile, "res/draw.jpg");
+	this->drawGamePicture.width = 961;
+	this->drawGamePicture.height = 670;
+	this->drawGamePicture.name = "drawGame";
+	this->drawGamePicture.isUse = false;
 	loadimage(&this->bestScoresPicture.pictureFile, "res/best_scores.png");
 	this->bestScoresPicture.width = 131;
 	this->bestScoresPicture.height = 45;
 	this->bestScoresPicture.name = "bestScores";
 	this->bestScoresPicture.isUse = false;
+	this->clickSound.push_back("bestScores");
 	loadimage(&this->backwardMenu.pictureFile, "res/backward_menu.png");
 	this->backwardMenu.width = 165;
 	this->backwardMenu.height = 45;
 	this->backwardMenu.name = "backwardMenu";
 	this->backwardMenu.isUse = false;
+	this->clickSound.push_back("backwardMenu");
 	loadimage(&this->chessBlackPicture.pictureFile, "res/black.png", chessSize, chessSize, true);
 	this->chessBlackPicture.name = "chessBlack";
 	this->chessBlackPicture.isUse = false;
@@ -80,13 +93,18 @@ PictureDraw::PictureDraw(int chessBoardSize, int marginX, int marginY, float che
 	this->backgroudPicture.height = 895;
 	this->backgroudPicture.name = "backgroud";
 	this->backgroudPicture.isUse = false;
+	INFOLOG("PictureDraw::PictureDraw||load picture success!");
 }
 
 bool PictureDraw::isValidClick(int x, int y, LoadPicture picture)
 {
 	if (x >= picture.x && x <= picture.x + picture.width && y >= picture.y && y <= picture.y + picture.height && picture.isUse)
 	{
-		mciSendString("play res/select.wav", 0, 0, 0);
+		auto it = std::find(this->clickSound.begin(), this->clickSound.end(), picture.name);
+		if (it != this->clickSound.end())   // 在列表中的图片点击需要播放声音
+		{
+			mciSendString("play res/select.wav", 0, 0, 0);
+		}
 		INFOLOG("Chess::isValidClick||valid click||picture name={}||x={}||y={}||leftX={}||rightX={}||smallY={}||bigY={}", picture.name, x, y, picture.x,
 			picture.x + picture.width, picture.y, picture.y + picture.height);
 		return true;
@@ -255,6 +273,35 @@ void PictureDraw::drawGraph(menu_kind_type kind)
 
 		INFOLOG("PictureDraw::drawGraph||kind=LOSE_MENU||loseGamePicture.x={}||loseGamePicture.y={}||againGamePicture.x={}||againGamePicture.y={}||backwardMenu.x={}||backwardMenu.y={}",
 			loseGamePicture.x, loseGamePicture.y, againGamePicture.x, againGamePicture.y, backwardMenu.x, backwardMenu.y);
+		break;
+	}
+	case DRAW_MENU:
+	{
+		// 取按键宽度的最大值+图片宽度 +1是为了留一点余量
+		int graphWidth = max(this->againGamePicture.width, this->backwardMenu.width) + this->drawGamePicture.width + 1;
+		int graphHeight = this->drawGamePicture.height;
+		initgraph(graphWidth, graphHeight);
+		// 设置背景色为白色
+		setbkcolor(WHITE);
+		cleardevice();  // 使用当前背景色清空绘图设备
+
+		// 图片的左上角坐标，用于定位
+		this->drawGamePicture.x = 0;
+		this->drawGamePicture.y = 0;
+		this->drawGamePicture.isUse = true;
+		this->againGamePicture.x = this->drawGamePicture.width + 1;
+		this->againGamePicture.y = 150;
+		this->againGamePicture.isUse = true;
+		this->backwardMenu.x = this->drawGamePicture.width + 1;
+		this->backwardMenu.y = 350;
+		this->backwardMenu.isUse = true;
+
+		putimage(this->drawGamePicture.x, this->drawGamePicture.y, &this->drawGamePicture.pictureFile);
+		putimage(this->againGamePicture.x, this->againGamePicture.y, &this->againGamePicture.pictureFile);
+		putimage(this->backwardMenu.x, this->backwardMenu.y, &this->backwardMenu.pictureFile);
+
+		INFOLOG("PictureDraw::drawGraph||kind=LOSE_MENU||drawGamePicture.x={}||drawGamePicture.y={}||againGamePicture.x={}||againGamePicture.y={}||backwardMenu.x={}||backwardMenu.y={}",
+			drawGamePicture.x, drawGamePicture.y, againGamePicture.x, againGamePicture.y, backwardMenu.x, backwardMenu.y);
 		break;
 	}
 	default:

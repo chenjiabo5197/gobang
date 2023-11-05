@@ -9,11 +9,12 @@
 class Management
 {
 public:
-	Management(Player*, AI*, Chess*, PictureDraw*);
+	Management(Player*, Player*, AI*, Chess*, PictureDraw*);
 	void play();
 
 private:
-	Player* player;
+	Player* player1;
+	Player* player2;
 	AI* ai;
 	Chess* chess;
 	PictureDraw* pictureDraw;
@@ -29,6 +30,12 @@ private:
 
 	// 游戏结束，根据全局变量决定展示的成功还是失败页面，并接受再来一局还是退出到主菜单
 	bool isAgainGame();
+
+	// 双人对战
+	void twoPlayersGame();
+
+	// 双人对战初始化对象，player1, player2, chess
+	void twoPlayersInit();
 };
 
 

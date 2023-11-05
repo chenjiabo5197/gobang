@@ -231,6 +231,13 @@ bool Chess::checkOver()
 			return true;
 		}
 	}
+	// ÅÐ¶ÏÆåÅÌÊÇ·ñÂúÁË£¬13*13µÄÆåÅÌ£¬×î¶à169¿ÅÆå×Ó
+	if (this->chessBoardData.size() == 169)
+	{
+		INFOLOG("Chess::checkOver||result draw");
+		GlobalVar::instance()->setResultFlag(RESULT_DRAW);
+		return true;
+	}
 	return false;
 }
 

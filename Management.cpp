@@ -1,12 +1,13 @@
 #include "Management.h"
 
-Management::Management(Player* player, AI* ai, Chess* chess, PictureDraw* pictureDraw)
+Management::Management(Player* player1, Player* player2, AI* ai, Chess* chess, PictureDraw* pictureDraw)
 {
 
 	this->pictureDraw = pictureDraw;
 
 	this->ai = ai;
-	this->player = player;
+	this->player1 = player1;
+	this->player2 = player2;
 	this->chess = chess;
 
 	INFOLOG("Management::Management||construct management success");
@@ -66,6 +67,12 @@ void Management::chooseGame()
 			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->twoPlayersPicture))
 			{
 				DEBUGLOG("Management::chooseGame||select two player");
+				this->twoPlayersGame();
+				if (GlobalVar::instance()->getValue("exitGame"))
+				{
+					INFOLOG("Management::chooseGame||player return to MAIN_MENU");
+					break;
+				}
 			}
 			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->playerInternetPicture))
 			{
@@ -99,11 +106,11 @@ void Management::onePlayerGame()
 			{
 				DEBUGLOG("Management::onePlayerGame||click to chess||x={}||y={}", msg.x, msg.y);
 				// 判断点击的区域是否有效，可以下棋
-				if (this->player->go(msg.x, msg.y))  
+				if (this->player1->go(msg.x, msg.y))  
 				{
 					if (chess->checkOver())
 					{
-						INFOLOG("Management::play||player win||init chess again");
+						DEBUGLOG("Management::onePlayerGame||player game over");
 						if (this->isAgainGame())
 						{
 							this->pictureDraw->drawGraph(CHESSBOARD_MENU);
@@ -120,7 +127,7 @@ void Management::onePlayerGame()
 
 					if (chess->checkOver())
 					{
-						INFOLOG("Management::play||AI win||init chess again");
+						DEBUGLOG("Management::onePlayerGame||AI game over");
 						if (this->isAgainGame())
 						{
 							this->pictureDraw->drawGraph(CHESSBOARD_MENU);
@@ -154,9 +161,9 @@ void Management::onePlayerGame()
 
 void Management::onePlayerInit()
 {
-	this->ai->init(this->chess);
-	this->player->init(this->chess);
 	this->chess->init();
+	this->ai->init(this->chess);
+	this->player1->init(this->chess);
 }
 
 bool Management::isAgainGame()
@@ -167,10 +174,14 @@ bool Management::isAgainGame()
 		mciSendString("play res/clap.mp3", 0, 0, 0);
 		this->pictureDraw->drawGraph(WIN_MENU);
 	}
-	else
+	else if (flag == PLAYER_LOSE)
 	{
 		mciSendString("play res/失败.mp3", 0, 0, 0);
 		this->pictureDraw->drawGraph(LOSE_MENU);
+	}
+	else if (flag == RESULT_DRAW)
+	{
+		this->pictureDraw->drawGraph(DRAW_MENU);
 	}
 	// 循环，接收选手选择
 	while (1)
@@ -191,4 +202,109 @@ bool Management::isAgainGame()
 			}
 		}
 	}
+}
+
+void Management::twoPlayersGame()
+{
+	this->twoPlayersInit();
+	this->pictureDraw->drawGraph(CHESSBOARD_MENU);
+	MOUSEMSG msg;
+	while (true)
+	{
+		msg = GetMouseMsg();
+		if (msg.uMsg == WM_LBUTTONDOWN)
+		{
+			DEBUGLOG("Management::twoPlayersGame||mouse click||x={}||y={}", msg.x, msg.y);
+
+			// 判断点击区域是否在棋盘图片的尺寸内
+			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->chessBoardPicture))
+			{
+				DEBUGLOG("Management::twoPlayersGame||click to chess||x={}||y={}", msg.x, msg.y);
+				// 判断点击的区域是否有效，可以下棋
+				if (this->player1->go(msg.x, msg.y))
+				{
+					if (chess->checkOver())
+					{
+						DEBUGLOG("Management::twoPlayersGame||player game over");
+						if (this->isAgainGame())
+						{
+							this->pictureDraw->drawGraph(CHESSBOARD_MENU);
+							chess->init();
+							continue;
+						}
+						else
+						{
+							break;
+						}
+					}
+				}
+			}
+
+
+			// 可以选择悔棋或者直接返回主菜单
+			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->withDrawPicture))
+			{
+				DEBUGLOG("Management::twoPlayersGame||select withDraw");
+				this->chess->playerWithDraw();
+			}
+			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->backwardMenu))
+			{
+				DEBUGLOG("Management::twoPlayersGame||select backward main menu");
+				GlobalVar::instance()->setValue("exitGame", true);
+				break;
+			}
+		}
+
+		msg = GetMouseMsg();
+		if (msg.uMsg == WM_LBUTTONDOWN)
+		{
+			DEBUGLOG("Management::twoPlayersGame||mouse click||x={}||y={}", msg.x, msg.y);
+
+			// 判断点击区域是否在棋盘图片的尺寸内
+			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->chessBoardPicture))
+			{
+				DEBUGLOG("Management::twoPlayersGame||click to chess||x={}||y={}", msg.x, msg.y);
+				// 判断点击的区域是否有效，可以下棋
+				if (this->player2->go(msg.x, msg.y, CHESS_WHITE))
+				{
+					if (chess->checkOver())
+					{
+						DEBUGLOG("Management::twoPlayersGame||player game over");
+						if (this->isAgainGame())
+						{
+							this->pictureDraw->drawGraph(CHESSBOARD_MENU);
+							chess->init();
+							continue;
+						}
+						else
+						{
+							break;
+						}
+					}
+				}
+			}
+
+
+			// 可以选择悔棋或者直接返回主菜单
+			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->withDrawPicture))
+			{
+				DEBUGLOG("Management::twoPlayersGame||select withDraw");
+				this->chess->playerWithDraw();
+			}
+			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->backwardMenu))
+			{
+				DEBUGLOG("Management::twoPlayersGame||select backward main menu");
+				GlobalVar::instance()->setValue("exitGame", true);
+				break;
+			}
+		}
+	}
+	INFOLOG("Management::twoPlayersGame||return to MAIN_MENU");
+}
+
+void Management::twoPlayersInit()
+{
+	this->chess->init();
+	this->player1->init(this->chess);
+	this->player2->init(this->chess);
 }

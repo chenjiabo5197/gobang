@@ -6,7 +6,7 @@ void Player::init(Chess* chess)
 	INFOLOG("Player::init||init player success");
 }
 
-bool Player::go(int x, int y)
+bool Player::go(int x, int y, chess_kind_type kind)
 {
 	// 等待棋手有效落子
 	ChessPos pos;
@@ -15,7 +15,7 @@ bool Player::go(int x, int y)
 		INFOLOG("Player::go||valid mouse click chessboard||x={}||y={}", x, y);
 		// 落子
 		mciSendString("play res/chess_down.mp3", 0, 0, 0);
-		this->chess->chessDown(&pos, CHESS_BLACK);
+		this->chess->chessDown(&pos, kind);
 		DEBUGLOG("Player::go||Player chess down success");
 		return true;
 	}

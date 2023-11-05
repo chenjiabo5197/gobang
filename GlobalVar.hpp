@@ -5,7 +5,10 @@
 typedef enum {
     RESULT_FLAG_DEFAULT = 0,
     PLAYER_WIN = 1,      // 玩家赢 
-    PLAYER_LOSE = 2      // 玩家输
+    PLAYER_LOSE = 2,      // 玩家输
+    RESULT_DRAW = 3,      // 平局
+    BLACK_WIN = 4,      // 黑方胜
+    WHITE_WIN = 5      // 白方胜
 }result_flag;
 
 class GlobalVar {
