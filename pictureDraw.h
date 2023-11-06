@@ -23,7 +23,9 @@ typedef enum {
 	CHESSBOARD_MENU = 3,  // 对战中菜单，棋盘和退出游戏，悔棋
 	WIN_MENU = 4,   // 单人游戏赢了，选择再来一局或者退出游戏
 	LOSE_MENU = 5,   // 单人游戏输了，选择再来一局或者退出游戏
-	DRAW_MENU = 6     // 平局，棋盘落满棋子还未决出胜负
+	DRAW_MENU = 6,     // 平局，棋盘落满棋子还未决出胜负
+	BLACK_WIN_MENU = 7,     // 黑棋赢
+	WHITE_WIN_MENU = 8     // 白棋赢
 } menu_kind_type;
 
 class PictureDraw
@@ -32,7 +34,8 @@ public:
 	PictureDraw(int chessBoardSize, int marginX, int marginY, float chessSize);
 
 	LoadPicture chessBlackPicture, chessWhitePicture, chessBoardPicture, exitGamePicture, withDrawPicture, againGamePicture, onePlayerPicture, bestScoresPicture, drawGamePicture, 
-		twoPlayersPicture, playerInternetPicture, startGamePicture, winGamePicture, loseGamePicture, curBlackPicture, curWhitePicture, backgroudPicture, backwardMenu;
+		twoPlayersPicture, playerInternetPicture, startGamePicture, winGamePicture, loseGamePicture, curBlackPicture, curWhitePicture, backgroudPicture, backwardMenu,
+		whiteWinPicture, blackWinPicture;
 
 	// 是否有效点击  x,y为鼠标点击的位置, picture为要点击的图片
 	bool isValidClick(int x, int y, LoadPicture picture);

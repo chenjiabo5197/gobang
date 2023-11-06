@@ -1,9 +1,11 @@
 #include "Player.h"
 
-void Player::init(Chess* chess)
+void Player::init(Chess* chess, std::string playerName, chess_kind_type chessKind)
 {
 	this->chess = chess;
-	INFOLOG("Player::init||init player success");
+	this->playerName = playerName;
+	this->chessKind = chessKind;
+	INFOLOG("Player::init||init player success||player name={}||chess kind={}", playerName, (int)chessKind);
 }
 
 bool Player::go(int x, int y, chess_kind_type kind)

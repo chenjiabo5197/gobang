@@ -218,18 +218,37 @@ bool Chess::checkOver()
 	if (checkWin())
 	{
 		Sleep(1500);
-		if (!playerFlag)   // ºÚÆåÓ®£¬Íæ¼ÒÓ®
+		if (this->gameKind == ONE_PLAYER_GAME)
 		{
-			INFOLOG("Chess::checkOver||black win");
-			GlobalVar::instance()->setResultFlag(PLAYER_WIN);
-			return true;
+			if (!playerFlag)   // ºÚÆåÓ®£¬Íæ¼ÒÓ®
+			{
+				INFOLOG("Chess::checkOver||black win");
+				GlobalVar::instance()->setResultFlag(PLAYER_WIN);
+				return true;
+			}
+			else   // ºÚÆåÓ®£¬AIÓ®
+			{
+				INFOLOG("Chess::checkOver||white win");
+				GlobalVar::instance()->setResultFlag(PLAYER_LOSE);
+				return true;
+			}
 		}
-		else
+		else if (this->gameKind == TWO_PLAYERS_GAME)
 		{
-			INFOLOG("Chess::checkOver||white win");
-			GlobalVar::instance()->setResultFlag(PLAYER_LOSE);
-			return true;
+			if (!playerFlag)   // ºÚÆåÓ®
+			{
+				INFOLOG("Chess::checkOver||black win");
+				GlobalVar::instance()->setResultFlag(BLACK_WIN);
+				return true;
+			}
+			else   // °×ÆåÓ®
+			{
+				INFOLOG("Chess::checkOver||white win");
+				GlobalVar::instance()->setResultFlag(WHITE_WIN);
+				return true;
+			}
 		}
+		
 	}
 	// ÅÐ¶ÏÆåÅÌÊÇ·ñÂúÁË£¬13*13µÄÆåÅÌ£¬×î¶à169¿ÅÆå×Ó
 	if (this->chessBoardData.size() == 169)

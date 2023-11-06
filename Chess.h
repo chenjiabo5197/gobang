@@ -20,6 +20,13 @@ typedef enum {
 	RIGHTBOTTOM = 4        //右下
 } chess_coordinate;
 
+typedef enum {
+	GAME_KIND_DEFAULT = 0,
+	ONE_PLAYER_GAME = 1,    // 单人游戏
+	TWO_PLAYERS_GAME = 2,    // 双人游戏
+	PLAYER_INTERNET = 3    // 网络对战
+} game_kind;
+
 struct ChessPos {   // 棋子位置
 	int row;
 	int col;
@@ -34,6 +41,9 @@ struct ChessData {    // 储存每一步棋子位置和棋子类型的结构体
 class Chess
 {
 public:
+	// 当前棋盘的不同对战类型，单人、双人、网络
+	game_kind gameKind;
+
 	Chess(int chessBoardSize, int marginX, int marginY, float chessSize, PictureDraw*);
 
 	// 棋盘的初始化，加载棋盘的图片资源，初始化棋盘的相关数据
@@ -61,15 +71,6 @@ public:
 
 	// 判断胜负
 	bool checkWin();
-
-	//// 是否退出游戏  x,y为鼠标点击的位置
-	//bool isExitGame(int x, int y);
-
-	//// 是否悔棋  x,y为鼠标点击的位置
-	//bool isWithDraw(int x, int y);
-
-	//// 是否再来一局  x,y为鼠标点击的位置
-	//bool isAgainGame(int x, int y);
 
 	// 悔棋,悔棋需要记录每一步的顺序和下棋位置
 	void playerWithDraw();

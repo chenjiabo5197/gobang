@@ -36,6 +36,9 @@ private:
 
 	// 双人对战初始化对象，player1, player2, chess
 	void twoPlayersInit();
+
+	// 双人对战中，每个选手的下棋函数，传入棋手
+	bool oneOfTwoPlayer(Player*);
 };
 
 

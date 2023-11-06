@@ -93,6 +93,16 @@ PictureDraw::PictureDraw(int chessBoardSize, int marginX, int marginY, float che
 	this->backgroudPicture.height = 895;
 	this->backgroudPicture.name = "backgroud";
 	this->backgroudPicture.isUse = false;
+	loadimage(&this->blackWinPicture.pictureFile, "res/black_win.jpg");
+	this->blackWinPicture.width = 960;
+	this->blackWinPicture.height = 668;
+	this->blackWinPicture.name = "blackWin";
+	this->blackWinPicture.isUse = false;
+	loadimage(&this->whiteWinPicture.pictureFile, "res/white_win.jpg");
+	this->whiteWinPicture.width = 960;
+	this->whiteWinPicture.height = 669;
+	this->whiteWinPicture.name = "whiteWin";
+	this->whiteWinPicture.isUse = false;
 	INFOLOG("PictureDraw::PictureDraw||load picture success!");
 }
 
@@ -302,6 +312,64 @@ void PictureDraw::drawGraph(menu_kind_type kind)
 
 		INFOLOG("PictureDraw::drawGraph||kind=LOSE_MENU||drawGamePicture.x={}||drawGamePicture.y={}||againGamePicture.x={}||againGamePicture.y={}||backwardMenu.x={}||backwardMenu.y={}",
 			drawGamePicture.x, drawGamePicture.y, againGamePicture.x, againGamePicture.y, backwardMenu.x, backwardMenu.y);
+		break;
+	}
+	case BLACK_WIN_MENU:
+	{
+		// 取按键宽度的最大值+图片宽度 +1是为了留一点余量
+		int graphWidth = max(this->againGamePicture.width, this->backwardMenu.width) + this->blackWinPicture.width + 1;
+		int graphHeight = this->blackWinPicture.height;
+		initgraph(graphWidth, graphHeight);
+		// 设置背景色为白色
+		setbkcolor(WHITE);
+		cleardevice();  // 使用当前背景色清空绘图设备
+
+		// 图片的左上角坐标，用于定位
+		this->blackWinPicture.x = 0;
+		this->blackWinPicture.y = 0;
+		this->blackWinPicture.isUse = true;
+		this->againGamePicture.x = this->blackWinPicture.width + 1;
+		this->againGamePicture.y = 150;
+		this->againGamePicture.isUse = true;
+		this->backwardMenu.x = this->blackWinPicture.width + 1;
+		this->backwardMenu.y = 350;
+		this->backwardMenu.isUse = true;
+
+		putimage(this->blackWinPicture.x, this->blackWinPicture.y, &this->blackWinPicture.pictureFile);
+		putimage(this->againGamePicture.x, this->againGamePicture.y, &this->againGamePicture.pictureFile);
+		putimage(this->backwardMenu.x, this->backwardMenu.y, &this->backwardMenu.pictureFile);
+
+		INFOLOG("PictureDraw::drawGraph||kind=LOSE_MENU||blackWinPicture.x={}||blackWinPicture.y={}||againGamePicture.x={}||againGamePicture.y={}||backwardMenu.x={}||backwardMenu.y={}",
+			blackWinPicture.x, blackWinPicture.y, againGamePicture.x, againGamePicture.y, backwardMenu.x, backwardMenu.y);
+		break;
+	}
+	case WHITE_WIN_MENU:
+	{
+		// 取按键宽度的最大值+图片宽度 +1是为了留一点余量
+		int graphWidth = max(this->againGamePicture.width, this->backwardMenu.width) + this->whiteWinPicture.width + 1;
+		int graphHeight = this->whiteWinPicture.height;
+		initgraph(graphWidth, graphHeight);
+		// 设置背景色为白色
+		setbkcolor(WHITE);
+		cleardevice();  // 使用当前背景色清空绘图设备
+
+		// 图片的左上角坐标，用于定位
+		this->whiteWinPicture.x = 0;
+		this->whiteWinPicture.y = 0;
+		this->whiteWinPicture.isUse = true;
+		this->againGamePicture.x = this->whiteWinPicture.width + 1;
+		this->againGamePicture.y = 150;
+		this->againGamePicture.isUse = true;
+		this->backwardMenu.x = this->whiteWinPicture.width + 1;
+		this->backwardMenu.y = 350;
+		this->backwardMenu.isUse = true;
+
+		putimage(this->whiteWinPicture.x, this->whiteWinPicture.y, &this->whiteWinPicture.pictureFile);
+		putimage(this->againGamePicture.x, this->againGamePicture.y, &this->againGamePicture.pictureFile);
+		putimage(this->backwardMenu.x, this->backwardMenu.y, &this->backwardMenu.pictureFile);
+
+		INFOLOG("PictureDraw::drawGraph||kind=LOSE_MENU||whiteWinPicture.x={}||whiteWinPicture.y={}||againGamePicture.x={}||againGamePicture.y={}||backwardMenu.x={}||backwardMenu.y={}",
+			whiteWinPicture.x, whiteWinPicture.y, againGamePicture.x, againGamePicture.y, backwardMenu.x, backwardMenu.y);
 		break;
 	}
 	default:
