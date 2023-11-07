@@ -5,6 +5,10 @@
 #include "logger.h"
 #include "pictureDraw.h"
 #include "globalVar.hpp"
+#include <fstream>
+#include <vector>
+
+#define BESTSCORESFILE "bestScoresFile.csv"
 
 class Management
 {
@@ -19,8 +23,13 @@ private:
 	Chess* chess;
 	PictureDraw* pictureDraw;
 
+	// 储存排行榜中的数据，一个元素代表一行，中间用，分割
+	std::vector<std::string> bestScores;
+
 	// 选择游戏方式
 	void chooseGame();
+
+	void showBestScores();
 
 	// 单人游戏
 	void onePlayerGame();

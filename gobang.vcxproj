@@ -144,6 +144,7 @@
     <ClInclude Include="globalVar.hpp" />
     <ClInclude Include="logger.h" />
     <ClInclude Include="management.h" />
+    <ClInclude Include="myUtils.h" />
     <ClInclude Include="pictureDraw.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="resource.h" />
@@ -157,6 +158,7 @@
     <ClCompile Include="logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="management.cpp" />
+    <ClCompile Include="myUtils.cpp" />
     <ClCompile Include="pictureDraw.cpp" />
     <ClCompile Include="player.cpp" />
   </ItemGroup>

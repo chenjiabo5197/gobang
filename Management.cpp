@@ -32,6 +32,7 @@ void Management::play()
 			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->bestScoresPicture))
 			{
 				DEBUGLOG("Management::play||view best scores");
+				this->showBestScores();
 			}
 			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->exitGamePicture))
 			{
@@ -87,6 +88,10 @@ void Management::chooseGame()
 	}
 	this->pictureDraw->drawGraph(MAIN_MENU);
 	INFOLOG("Management::chooseGame||return to MAIN_MENU");
+}
+
+void Management::showBestScores()
+{
 }
 
 void Management::onePlayerGame()
