@@ -3,6 +3,9 @@
 #include <iostream>
 #pragma comment(lib, "winmm.lib")
 
+bool exitGame;
+result_flag resultFlag;
+
 Chess::Chess(int chessBoardSize, int marginX, int marginY, float chessSize, PictureDraw* pictureDraw)
 {
 	this->chessBoardSize = chessBoardSize;
@@ -10,6 +13,9 @@ Chess::Chess(int chessBoardSize, int marginX, int marginY, float chessSize, Pict
 	this->margin_y = marginY;
 	this->chessSize = chessSize;
 	this->pictureDraw = pictureDraw;
+
+	exitGame = false;
+	resultFlag = RESULT_FLAG_DEFAULT;
 
 	playerFlag = CHESS_BLACK;
 
@@ -223,13 +229,13 @@ bool Chess::checkOver()
 			if (!playerFlag)   // ºÚÆåÓ®£¬Íæ¼ÒÓ®
 			{
 				INFOLOG("Chess::checkOver||black win");
-				GlobalVar::instance()->setResultFlag(PLAYER_WIN);
+				resultFlag = PLAYER_WIN;
 				return true;
 			}
 			else   // ºÚÆåÓ®£¬AIÓ®
 			{
 				INFOLOG("Chess::checkOver||white win");
-				GlobalVar::instance()->setResultFlag(PLAYER_LOSE);
+				resultFlag = PLAYER_LOSE;
 				return true;
 			}
 		}
@@ -238,13 +244,13 @@ bool Chess::checkOver()
 			if (!playerFlag)   // ºÚÆåÓ®
 			{
 				INFOLOG("Chess::checkOver||black win");
-				GlobalVar::instance()->setResultFlag(BLACK_WIN);
+				resultFlag = BLACK_WIN;
 				return true;
 			}
 			else   // °×ÆåÓ®
 			{
 				INFOLOG("Chess::checkOver||white win");
-				GlobalVar::instance()->setResultFlag(WHITE_WIN);
+				resultFlag = WHITE_WIN;
 				return true;
 			}
 		}
@@ -254,7 +260,7 @@ bool Chess::checkOver()
 	if (this->chessBoardData.size() == 169)
 	{
 		INFOLOG("Chess::checkOver||result draw");
-		GlobalVar::instance()->setResultFlag(RESULT_DRAW);
+		resultFlag = RESULT_DRAW;
 		return true;
 	}
 	return false;

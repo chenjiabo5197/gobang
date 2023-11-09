@@ -30,7 +30,6 @@ void initLogger()
 int main()
 {
     initLogger();
-    GlobalVar::instance();
 
     PictureDraw pictureDraw(13, 44, 43, 67.4);
 

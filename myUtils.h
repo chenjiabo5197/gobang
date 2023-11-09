@@ -5,6 +5,9 @@
 #include <sstream>
 #include <chrono>
 
+#define BESTSCORESFILE "bestScoresFile.csv"
+#define MAXBESTSCORES 10
+
 // 储存排行榜数据的结构体
 struct BestScoreUser
 {
@@ -15,6 +18,11 @@ struct BestScoreUser
 
 class MyUtils
 {
+public:
+
+	// 储存排行榜信息
+	static std::vector<BestScoreUser> bestScores;
+
 	// 输入文件名，判断改文件存在且不为空
 	static bool isFileExistAndNotEmpty(std::string fileName);
 
@@ -23,5 +31,10 @@ class MyUtils
 
 	// 获取当前时间并返回string格式"%Y年%m月%d日%H时%M分%S秒"
 	static std::string getCurTime();
+
+	// 初始化，静态变量赋值
+	static void init();
+
+	static void updateBestScore(const BestScoreUser & user);
 };
 

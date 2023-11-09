@@ -41,6 +41,7 @@ bool MyUtils::saveVectorToCsv(std::vector<BestScoreUser> v, std::string fileName
 		ofs << it->userScore << ",";
 		ofs << it->curTime;
 		ofs << std::endl;
+		DEBUGLOG("MyUtils::saveVectorToCsv||write to {}||name={}||score={}||time={}", fileName, it->userName, it->userScore, it->curTime);
 	}
 	ofs.close();
 	INFOLOG("MyUtils::saveVectorToCsv||best scores save to file success||fileName={}", fileName);
@@ -49,14 +50,66 @@ bool MyUtils::saveVectorToCsv(std::vector<BestScoreUser> v, std::string fileName
 
 std::string MyUtils::getCurTime()
 {
-	auto curTime = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+	auto NowTime = std::chrono::system_clock::now();
+	time_t ticks = std::chrono::system_clock::to_time_t(NowTime);
+	struct tm* p_Time = new tm();
+	localtime_s(p_Time, &ticks);
 
-	// 转化为字符串
-	char timeStr[100];
+	char c_TimeStamp[64];
+	memset(c_TimeStamp, 0, sizeof(c_TimeStamp));
+	strftime(c_TimeStamp, sizeof(c_TimeStamp), "%Y-%m-%d %H:%M:%S", p_Time);
+	DEBUGLOG("MyUtils::getCurTime||get curTime success||time={}", c_TimeStamp);
+	return c_TimeStamp;
+}
 
-	std::strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", std::localtime(&curTime));
+void MyUtils::init()
+{
+	std::ifstream ifs;
+	// 文件不为空
+	if (MyUtils::isFileExistAndNotEmpty(BESTSCORESFILE))
+	{
+		std::string buf;
+		while (std::getline(ifs, buf))
+		{
+			BestScoreUser tempUser;
+			std::vector<std::string> tempString;
+			int start = 0;
+			int pos = -1;
+			while (true)
+			{
+				pos = buf.find(",", start);
+				if (pos == -1)
+				{
+					break;
+				}
+				tempString.push_back(buf.substr(start, pos - start));
+				start = pos + 1;
+			}
+			tempUser.userName = tempString[0];
+			tempUser.userScore = tempString[1];
+			tempUser.curTime = tempString[2];
+			MyUtils::bestScores.push_back(tempUser);
+		}
+	}
+	// 文件为空
+	else
+	{
+		MyUtils::bestScores.clear();
+	}
+}
 
-	DEBUGLOG("MyUtils::getCurTime||get curTime success||time={}", timeStr);
-
-	return timeStr;
+void MyUtils::updateBestScore(const BestScoreUser& user)
+{
+	std::vector<BestScoreUser>::iterator it = MyUtils::bestScores.begin();
+	for (; it != MyUtils::bestScores.end(); it++)
+	{
+		// 找到插入位置了
+		if (user.userScore < it->userScore) {
+			break;
+		}
+	}
+	MyUtils::bestScores.insert(it, user);
+	if (MyUtils::bestScores.size() > MAXBESTSCORES) {
+		MyUtils::bestScores.pop_back();
+	}
 }

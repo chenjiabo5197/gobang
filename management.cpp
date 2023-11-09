@@ -1,5 +1,8 @@
 #include "Management.h"
 
+extern bool exitGame;
+extern result_flag resultFlag;
+
 Management::Management(Player* player1, Player* player2, AI* ai, Chess* chess, PictureDraw* pictureDraw)
 {
 
@@ -59,7 +62,7 @@ void Management::chooseGame()
 			{
 				DEBUGLOG("Management::chooseGame||select one player");
 				this->onePlayerGame();
-				if (GlobalVar::instance()->getValue("exitGame"))
+				if (exitGame)
 				{
 					INFOLOG("Management::chooseGame||player return to MAIN_MENU");
 					break;
@@ -69,7 +72,7 @@ void Management::chooseGame()
 			{
 				DEBUGLOG("Management::chooseGame||select two player");
 				this->twoPlayersGame();
-				if (GlobalVar::instance()->getValue("exitGame"))
+				if (exitGame)
 				{
 					INFOLOG("Management::chooseGame||player return to MAIN_MENU");
 					break;
@@ -137,26 +140,25 @@ void Management::onePlayerInit()
 
 bool Management::isAgainGame()
 {
-	auto flag = GlobalVar::instance()->getResultFlag();
-	if (flag == PLAYER_WIN)   // ºÚÆåÓ®£¬Íæ¼ÒÓ®
+	if (resultFlag == PLAYER_WIN)   // ºÚÆåÓ®£¬Íæ¼ÒÓ®
 	{
 		mciSendString("play res/clap.mp3", 0, 0, 0);
 		this->pictureDraw->drawGraph(WIN_MENU);
 	}
-	else if (flag == PLAYER_LOSE)
+	else if (resultFlag == PLAYER_LOSE)
 	{
 		mciSendString("play res/Ê§°Ü.mp3", 0, 0, 0);
 		this->pictureDraw->drawGraph(LOSE_MENU);
 	}
-	else if (flag == RESULT_DRAW)
+	else if (resultFlag == RESULT_DRAW)
 	{
 		this->pictureDraw->drawGraph(DRAW_MENU);
 	}
-	else if (flag == BLACK_WIN)
+	else if (resultFlag == BLACK_WIN)
 	{
 		this->pictureDraw->drawGraph(BLACK_WIN_MENU);
 	}
-	else if (flag == WHITE_WIN)
+	else if (resultFlag == WHITE_WIN)
 	{
 		this->pictureDraw->drawGraph(WHITE_WIN_MENU);
 	}
@@ -174,7 +176,7 @@ bool Management::isAgainGame()
 			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->backwardMenu))
 			{
 
-				GlobalVar::instance()->setValue("exitGame", true);
+				exitGame = true;
 				return false;
 			}
 		}
@@ -260,7 +262,7 @@ bool Management::onePlayer(Player* player)
 			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->backwardMenu))
 			{
 				DEBUGLOG("Management::onePlayer||{} select backward main menu", player->playerName);
-				GlobalVar::instance()->setValue("exitGame", true);
+				exitGame = true;
 				return false;
 			}
 		}

@@ -3,8 +3,16 @@
 #include <vector>
 #include "logger.h"
 #include <conio.h>
-#include "globalVar.hpp"
 #include "pictureDraw.h"
+
+typedef enum {
+	RESULT_FLAG_DEFAULT = 0,
+	PLAYER_WIN = 1,      // 玩家赢 
+	PLAYER_LOSE = 2,      // 玩家输
+	RESULT_DRAW = 3,      // 平局
+	BLACK_WIN = 4,      // 黑方胜
+	WHITE_WIN = 5      // 白方胜
+}result_flag;
 
 typedef enum {
 	CHESS_WHITE = -1,   // 白方
@@ -37,6 +45,9 @@ struct ChessData {    // 储存每一步棋子位置和棋子类型的结构体
 	ChessPos imagePos;   // 储存每个棋子坐标的x，y数据
 	chess_kind_type chessType;
 };
+
+extern bool exitGame;  // 是否退出游戏，true退出，false不退出
+extern result_flag resultFlag;  // 游戏结果
 
 class Chess
 {

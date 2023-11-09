@@ -4,11 +4,8 @@
 #include "player.h"
 #include "logger.h"
 #include "pictureDraw.h"
-#include "globalVar.hpp"
 #include <fstream>
 #include <vector>
-
-#define BESTSCORESFILE "bestScoresFile.csv"
 
 class Management
 {

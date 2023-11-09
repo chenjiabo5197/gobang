@@ -1,7 +1,8 @@
 #pragma once
 #include "Chess.h"
 #include "logger.h"
-#include "globalVar.hpp"
+#include "myUtils.h"
+#include <vector>
 
 class Player
 {
@@ -13,6 +14,8 @@ public:
 	void init(Chess* chess, std::string playerName, chess_kind_type chessKind = CHESS_BLACK);
 	
 	bool go(int x, int y, chess_kind_type kind = CHESS_BLACK);
+
+	std::vector<BestScoreUser> bestScores;
 private:
 	Chess* chess;    // 棋盘数据，对哪个棋盘下棋
 };
