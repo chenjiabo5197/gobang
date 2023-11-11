@@ -5,7 +5,14 @@ void Player::init(Chess* chess, std::string playerName, chess_kind_type chessKin
 	this->chess = chess;
 	this->playerName = playerName;
 	this->chessKind = chessKind;
+	this->chessNum = 0;
 	INFOLOG("Player::init||init player success||player name={}||chess kind={}", playerName, (int)chessKind);
+}
+
+void Player::resetPlayer()
+{
+	this->chessNum = 0;
+	INFOLOG("Player::resetPlayer||reset player success");
 }
 
 bool Player::go(int x, int y, chess_kind_type kind)
@@ -18,6 +25,7 @@ bool Player::go(int x, int y, chess_kind_type kind)
 		// Âä×Ó
 		mciSendString("play res/chess_down.mp3", 0, 0, 0);
 		this->chess->chessDown(&pos, kind);
+		this->chessNum++;
 		DEBUGLOG("Player::go||Player chess down success");
 		return true;
 	}

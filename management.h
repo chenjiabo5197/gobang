@@ -6,12 +6,15 @@
 #include "pictureDraw.h"
 #include <fstream>
 #include <vector>
+#include "myUtils.h"
 
 class Management
 {
 public:
 	Management(Player*, Player*, AI*, Chess*, PictureDraw*);
 	void play();
+
+	~Management();
 
 private:
 	Player* player1;
@@ -20,8 +23,11 @@ private:
 	Chess* chess;
 	PictureDraw* pictureDraw;
 
-	// 储存排行榜中的数据，一个元素代表一行，中间用，分割
-	std::vector<std::string> bestScores;
+	// 根据bestScores是否被修改过判断，是否需要更新排行榜文件
+	bool isUpdateBestScoreFile;
+
+	// 储存排行榜信息
+	std::vector<BestScoreUser> bestScores;
 
 	// 选择游戏方式
 	void chooseGame();

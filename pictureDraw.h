@@ -4,6 +4,8 @@
 #include "logger.h"
 #include <vector>
 #include <algorithm>
+#include "myUtils.h"
+#pragma comment(lib, "Winmm.lib")
 
 // 每张加载的图片结构体
 struct LoadPicture {
@@ -25,7 +27,8 @@ typedef enum {
 	LOSE_MENU = 5,   // 单人游戏输了，选择再来一局或者退出游戏
 	DRAW_MENU = 6,     // 平局，棋盘落满棋子还未决出胜负
 	BLACK_WIN_MENU = 7,     // 黑棋赢
-	WHITE_WIN_MENU = 8     // 白棋赢
+	WHITE_WIN_MENU = 8,     // 白棋赢
+	BEST_SCORE_MENU = 9     // 输出排行榜分数
 } menu_kind_type;
 
 class PictureDraw
@@ -42,6 +45,12 @@ public:
 
 	// 统一的绘图函数，根据menu_kind_type类型决定绘制哪种类型图
 	void drawGraph(menu_kind_type kind);
+
+	// 绘制排行榜
+	void drawText(std::vector<BestScoreUser> bestScores);
+
+	// 创建一个输入框，获取输入文字
+	std::string getInputString();
 private:
 	// 点击声音，图片名字在这个列表中的图片点击后需要有点击声音
 	std::vector<std::string> clickSound;

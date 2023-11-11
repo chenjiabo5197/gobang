@@ -25,11 +25,11 @@ bool MyUtils::isFileExistAndNotEmpty(std::string fileName)
 	return true;
 }
 
-bool MyUtils::saveVectorToCsv(std::vector<BestScoreUser> v, std::string fileName)
+bool MyUtils::saveVectorToCsv(std::vector<BestScoreUser> v)
 {
 	std::ofstream ofs;
 	// 覆盖写入，默认此时程序中维护的为最新的，因为需要考虑更新排行榜，排行榜数量最大为5个
-	ofs.open(fileName, std::ios::out);
+	ofs.open(BESTSCORESFILE, std::ios::out);
 	if (!ofs.is_open())
 	{
 		ERRORLOG("MyUtils::saveVectorToCsv||open file fail");
@@ -39,12 +39,12 @@ bool MyUtils::saveVectorToCsv(std::vector<BestScoreUser> v, std::string fileName
 	{
 		ofs << it->userName << ",";
 		ofs << it->userScore << ",";
-		ofs << it->curTime;
+		ofs << it->curTime << ",";
 		ofs << std::endl;
-		DEBUGLOG("MyUtils::saveVectorToCsv||write to {}||name={}||score={}||time={}", fileName, it->userName, it->userScore, it->curTime);
+		DEBUGLOG("MyUtils::saveVectorToCsv||write to {}||name={}||score={}||time={}", BESTSCORESFILE, it->userName, it->userScore, it->curTime);
 	}
 	ofs.close();
-	INFOLOG("MyUtils::saveVectorToCsv||best scores save to file success||fileName={}", fileName);
+	INFOLOG("MyUtils::saveVectorToCsv||best scores save to file success||fileName={}", BESTSCORESFILE);
 	return true;
 }
 
@@ -62,13 +62,16 @@ std::string MyUtils::getCurTime()
 	return c_TimeStamp;
 }
 
-void MyUtils::init()
+std::vector<BestScoreUser> MyUtils::initBestScores()
 {
+	std::vector<BestScoreUser> tempScore;
 	std::ifstream ifs;
+	std::string str;
 	// 文件不为空
 	if (MyUtils::isFileExistAndNotEmpty(BESTSCORESFILE))
 	{
 		std::string buf;
+		ifs.open(BESTSCORESFILE, std::ios::in);
 		while (std::getline(ifs, buf))
 		{
 			BestScoreUser tempUser;
@@ -82,34 +85,55 @@ void MyUtils::init()
 				{
 					break;
 				}
+				// DEBUGLOG("MyUtils::initBestScores||temp={}||buf={}||start={}||pos={}||len={}", buf.substr(start, pos - start), buf, start, pos, buf.size());
 				tempString.push_back(buf.substr(start, pos - start));
 				start = pos + 1;
 			}
 			tempUser.userName = tempString[0];
 			tempUser.userScore = tempString[1];
 			tempUser.curTime = tempString[2];
-			MyUtils::bestScores.push_back(tempUser);
+			DEBUGLOG("MyUtils::initBestScores||name={}||score={}||time={}", tempUser.userName, tempUser.userScore, tempUser.curTime);
+			str += "{" + tempUser.userName + ", " + tempUser.userScore + ", " + tempUser.curTime + "}, ";
+			tempScore.push_back(tempUser);
 		}
 	}
 	// 文件为空
 	else
 	{
-		MyUtils::bestScores.clear();
+		tempScore.clear();
+		WARNLOG("MyUtils::initBestScores||{} is empty or not exist", BESTSCORESFILE);
 	}
+	ifs.close();
+	INFOLOG("MyUtils::initBestScores||init best scores success||BestScoreUser={}", str);
+	return tempScore;
 }
 
-void MyUtils::updateBestScore(const BestScoreUser& user)
+void MyUtils::updateBestScore(std::vector<BestScoreUser> & bestScores, const BestScoreUser& user)
 {
-	std::vector<BestScoreUser>::iterator it = MyUtils::bestScores.begin();
-	for (; it != MyUtils::bestScores.end(); it++)
+	std::vector<BestScoreUser>::iterator it = bestScores.begin();
+	int index = 0;
+	for (; it != bestScores.end(); it++, index++)
 	{
 		// 找到插入位置了
 		if (user.userScore < it->userScore) {
+			DEBUGLOG("MyUtils::updateBestScore||find insert position||index={}", index);
 			break;
 		}
 	}
-	MyUtils::bestScores.insert(it, user);
-	if (MyUtils::bestScores.size() > MAXBESTSCORES) {
-		MyUtils::bestScores.pop_back();
+	bestScores.insert(it, user);
+	if (bestScores.size() > MAXBESTSCORES) {
+		std::string lastItem = bestScores.back().userName + ", " + bestScores.back().userScore + ", " + bestScores.back().curTime;
+		DEBUGLOG("MyUtils::updateBestScore||bestScore.size() over{}||pop={}", MAXBESTSCORES, lastItem);
+		bestScores.pop_back();
 	}
+	INFOLOG("MyUtils::updateBestScore||updateBestScore success");
+}
+
+BestScoreUser MyUtils::getIBestScoreUser(std::string userName, int chessNum)
+{
+	BestScoreUser temp;
+	temp.userName = userName;
+	temp.userScore = std::to_string(chessNum);
+	temp.curTime = MyUtils::getCurTime();
+	return temp;
 }

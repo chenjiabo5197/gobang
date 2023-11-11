@@ -7,11 +7,14 @@ Management::Management(Player* player1, Player* player2, AI* ai, Chess* chess, P
 {
 
 	this->pictureDraw = pictureDraw;
+	this->bestScores = MyUtils::initBestScores();
 
 	this->ai = ai;
 	this->player1 = player1;
 	this->player2 = player2;
 	this->chess = chess;
+
+	this->isUpdateBestScoreFile = false;
 
 	INFOLOG("Management::Management||construct management success");
 }
@@ -45,6 +48,16 @@ void Management::play()
 		}
 	}
 	INFOLOG("Management::play||game over");
+}
+
+Management::~Management()
+{
+	if (this->isUpdateBestScoreFile)
+	{
+		MyUtils::saveVectorToCsv(this->bestScores);
+		DEBUGLOG("Management::~Management||isUpdateBestScoreFile=true||update bestScoresFile.csv success!");
+	}
+	DEBUGLOG("Management::~Management");
 }
 
 void Management::chooseGame()
@@ -95,6 +108,24 @@ void Management::chooseGame()
 
 void Management::showBestScores()
 {
+	this->pictureDraw->drawGraph(BEST_SCORE_MENU);
+	this->pictureDraw->drawText(this->bestScores);
+	MOUSEMSG msg;
+	while (true)
+	{
+		msg = GetMouseMsg();
+		if (msg.uMsg == WM_LBUTTONDOWN)
+		{
+			DEBUGLOG("Management::showBestScores||mouse click||x={}||y={}", msg.x, msg.y);
+			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->backwardMenu))
+			{
+				DEBUGLOG("Management::showBestScores||select backward main menu");
+				break;
+			}
+		}
+	}
+	this->pictureDraw->drawGraph(MAIN_MENU);
+	INFOLOG("Management::showBestScores||return to MAIN_MENU");
 }
 
 void Management::onePlayerGame()
@@ -235,10 +266,16 @@ bool Management::onePlayer(Player* player)
 				{
 					if (chess->checkOver())
 					{
-						DEBUGLOG("Management::onePlayer||player game over");
+						DEBUGLOG("Management::onePlayer||player win||chessNum={}", player->chessNum);
+						// 单人游戏，且此时玩家的棋子数量小于排行榜中最大值
+						if (this->chess->gameKind == ONE_PLAYER_GAME && player->chessNum < std::stoi(this->bestScores.back().userScore))
+						{
+							MyUtils::updateBestScore(this->bestScores, MyUtils::getIBestScoreUser(this->pictureDraw->getInputString(), player->chessNum));
+						}
 						if (this->isAgainGame())
 						{
 							this->pictureDraw->drawGraph(CHESSBOARD_MENU);
+							player->resetPlayer();
 							chess->init();
 							continue;
 						}

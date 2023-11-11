@@ -372,10 +372,60 @@ void PictureDraw::drawGraph(menu_kind_type kind)
 			whiteWinPicture.x, whiteWinPicture.y, againGamePicture.x, againGamePicture.y, backwardMenu.x, backwardMenu.y);
 		break;
 	}
+	case BEST_SCORE_MENU:
+	{
+		initgraph(300, 480);
+		// 设置背景色为白色
+		setbkcolor(WHITE);
+		cleardevice();  // 使用当前背景色清空绘图设备
+
+		// 图片的左上角坐标，用于定位
+		this->backwardMenu.x = 140;
+		this->backwardMenu.y = 430;
+		this->backwardMenu.isUse = true;
+
+		putimage(this->backwardMenu.x, this->backwardMenu.y, &this->backwardMenu.pictureFile);
+
+		INFOLOG("PictureDraw::drawGraph||kind=BEST_SCORE_MENU||backwardMenu.x={}||backwardMenu.y={}", backwardMenu.x, backwardMenu.y);
+		break;
+	}
 	default:
 		ERRORLOG("PictureDraw::drawGraph||undefined menu_kind_type||kind={}", (int)kind);
 		break;
 	}
+}
+
+void PictureDraw::drawText(std::vector<BestScoreUser> bestScores)
+{
+	settextcolor(BLACK);
+	if (bestScores.size() > 0)
+	{
+		outtextxy(10, 20, "姓名,  分数,  时间");
+		int index = 2;
+		for (std::vector<BestScoreUser>::iterator it = bestScores.begin(); it != bestScores.end(); it++, index++)
+		{
+			std::string  str = it->userName + ",  " + it->userScore + ",  " + it->curTime;
+			DEBUGLOG("drawText||str={}||index={}", str, index);
+			char* ch = new char[str.size() + 1];
+			strcpy_s(ch, str.size()+1, str.c_str());
+			outtextxy(10, 20 * index, ch);
+		}
+	}
+	else
+	{
+		WARNLOG("PictureDraw::drawText||bestScores.size() == 0");
+	}
+}
+
+std::string PictureDraw::getInputString()
+{
+	initgraph(400, 300);
+	char str[20];
+	InputBox(str, 20, "你已进入排行榜，请输入姓名");
+	outtextxy(100, 150, str);
+	std::string result = str;
+	DEBUGLOG("PictureDraw::getInputString||input={}", result);
+	return result;
 }
 
 void PictureDraw::clearLastGraph()

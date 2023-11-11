@@ -33,9 +33,6 @@
     <ClInclude Include="logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="globalVar.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="pictureDraw.h">
       <Filter>Header Files</Filter>
     </ClInclude>

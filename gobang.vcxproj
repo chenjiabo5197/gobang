@@ -141,7 +141,6 @@
   <ItemGroup>
     <ClInclude Include="AI.h" />
     <ClInclude Include="chess.h" />
-    <ClInclude Include="globalVar.hpp" />
     <ClInclude Include="logger.h" />
     <ClInclude Include="management.h" />
     <ClInclude Include="myUtils.h" />

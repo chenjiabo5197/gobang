@@ -52,6 +52,7 @@ extern result_flag resultFlag;  // 游戏结果
 class Chess
 {
 public:
+
 	// 当前棋盘的不同对战类型，单人、双人、网络
 	game_kind gameKind;
 
