@@ -352,7 +352,7 @@ bool Chess::checkWin()
 		}
 	}
 
-	return true;
+	return false;
 
 }
 
