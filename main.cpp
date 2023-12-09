@@ -4,10 +4,10 @@
 #include "logger.h"
 #include "pictureDraw.h"
 
-// ³õÊ¼»¯ÈÕÖ¾
+// åˆå§‹åŒ–æ—¥å¿—
 void initLogger()
 {
-    // ¶¨ÒåÈÕÖ¾ÅäÖÃÏî
+    // å®šä¹‰æ—¥å¿—é…ç½®é¡¹
     LogConfig conf = {
         "trace",
         //"info",
@@ -17,7 +17,7 @@ void initLogger()
     };
     INITLOG(conf);
     INFOLOG("init logger success!");
-    // ÈÕÖ¾³õÊ¼¼¶±ğÎªtrace,Ğ´ÈÕÖ¾µÄdemo
+    // æ—¥å¿—åˆå§‹çº§åˆ«ä¸ºtrace,å†™æ—¥å¿—çš„demo
     /*TRACELOG("current log level is {}", GETLOGLEVEL());
     TRACELOG("this is trace log");
     DEBUGLOG("this is debug log");

@@ -6,7 +6,7 @@ bool MyUtils::isFileExistAndNotEmpty(std::string fileName)
 	ifs.open(fileName, std::ios::in);
 	if (!ifs.is_open())
 	{
-		// ÎÄ¼ş²»´æÔÚ
+		// æ–‡ä»¶ä¸å­˜åœ¨
 		ifs.close();
 		WARNLOG("MyUtils::isFileExistAndNotEmpty||no such file||fileName={}", fileName);
 		return false;
@@ -15,7 +15,7 @@ bool MyUtils::isFileExistAndNotEmpty(std::string fileName)
 	ifs >> ch;
 	if (ifs.eof())
 	{
-		// ÎÄ¼şÎª¿Õ
+		// æ–‡ä»¶ä¸ºç©º
 		ifs.close();
 		WARNLOG("MyUtils::isFileExistAndNotEmpty||file is empty||fileName={}", fileName);
 		return false;
@@ -28,7 +28,7 @@ bool MyUtils::isFileExistAndNotEmpty(std::string fileName)
 bool MyUtils::saveVectorToCsv(std::vector<BestScoreUser> v)
 {
 	std::ofstream ofs;
-	// ¸²¸ÇĞ´Èë£¬Ä¬ÈÏ´ËÊ±³ÌĞòÖĞÎ¬»¤µÄÎª×îĞÂµÄ£¬ÒòÎªĞèÒª¿¼ÂÇ¸üĞÂÅÅĞĞ°ñ£¬ÅÅĞĞ°ñÊıÁ¿×î´óÎª5¸ö
+	// è¦†ç›–å†™å…¥ï¼Œé»˜è®¤æ­¤æ—¶ç¨‹åºä¸­ç»´æŠ¤çš„ä¸ºæœ€æ–°çš„ï¼Œå› ä¸ºéœ€è¦è€ƒè™‘æ›´æ–°æ’è¡Œæ¦œï¼Œæ’è¡Œæ¦œæ•°é‡æœ€å¤§ä¸º5ä¸ª
 	ofs.open(BESTSCORESFILE, std::ios::out);
 	if (!ofs.is_open())
 	{
@@ -67,7 +67,7 @@ std::vector<BestScoreUser> MyUtils::initBestScores()
 	std::vector<BestScoreUser> tempScore;
 	std::ifstream ifs;
 	std::string str;
-	// ÎÄ¼ş²»Îª¿Õ
+	// æ–‡ä»¶ä¸ä¸ºç©º
 	if (MyUtils::isFileExistAndNotEmpty(BESTSCORESFILE))
 	{
 		std::string buf;
@@ -97,7 +97,7 @@ std::vector<BestScoreUser> MyUtils::initBestScores()
 			tempScore.push_back(tempUser);
 		}
 	}
-	// ÎÄ¼şÎª¿Õ
+	// æ–‡ä»¶ä¸ºç©º
 	else
 	{
 		tempScore.clear();
@@ -114,7 +114,7 @@ void MyUtils::updateBestScore(std::vector<BestScoreUser> & bestScores, const Bes
 	int index = 0;
 	for (; it != bestScores.end(); it++, index++)
 	{
-		// ÕÒµ½²åÈëÎ»ÖÃÁË
+		// æ‰¾åˆ°æ’å…¥ä½ç½®äº†
 		if (user.userScore < it->userScore) {
 			DEBUGLOG("MyUtils::updateBestScore||find insert position||index={}", index);
 			break;

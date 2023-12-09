@@ -2,22 +2,22 @@
 #include "logger.h"
 
 void Logger::Init(const LogConfig& conf) {
-    //自定义的sink
+    //鑷畾涔夌殑sink
     loggerPtr = spdlog::rotating_logger_mt("base_logger", conf.path.c_str(), conf.size, conf.count);
-    //设置格式
-    //参见文档 https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
-    //[%Y-%m-%d %H:%M:%S.%e] 时间
-    //[%l] 日志级别
-    //[%t] 线程
-    //[%s] 文件
-    //[%#] 行号
-    //[%!] 函数
-    //[%v] 实际文本
+    //璁剧疆鏍煎紡
+    //鍙傝鏂囨。 https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
+    //[%Y-%m-%d %H:%M:%S.%e] 鏃堕棿
+    //[%l] 鏃ュ織绾у埆
+    //[%t] 绾跨▼
+    //[%s] 鏂囦欢
+    //[%#] 琛屽彿
+    //[%!] 鍑芥暟
+    //[%v] 瀹為檯鏂囨湰
     loggerPtr->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] [thread %t] [%s %!:%#] %v");
 
-    // 设置日志级别
+    // 璁剧疆鏃ュ織绾у埆
     loggerPtr->set_level(spdlog::level::from_str(conf.level));
-    // 设置刷新日志的日志级别，当出现level或更高级别日志时，立刻刷新日志到  disk
+    // 璁剧疆鍒锋柊鏃ュ織鐨勬棩蹇楃骇鍒紝褰撳嚭鐜發evel鎴栨洿楂樼骇鍒棩蹇楁椂锛岀珛鍒诲埛鏂版棩蹇楀埌  disk
     loggerPtr->flush_on(spdlog::level::from_str(conf.level));
 }
 

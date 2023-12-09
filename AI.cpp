@@ -8,7 +8,7 @@ void AI::init(Chess* chess)
 	for (int i = 0; i < size; i++)
 	{
 		std::vector<int> row;
-		// ·½ÆåÅÌ£¬±éÀú¿ÉÒÔ¶¼Ê¹ÓÃsize
+		// æ–¹æ£‹ç›˜ï¼Œéå†å¯ä»¥éƒ½ä½¿ç”¨size
 		for (int j = 0; j < size; j++)
 		{
 			row.push_back(0);
@@ -29,11 +29,11 @@ void AI::go()
 
 void AI::calculateScore()
 {
-	int playerChessNum = 0; //ÆåÊÖ·½£¨ºÚÆå£©¶àÉÙ¸öÁ¬ĞøµÄÆå×Ó
-	int AIChessNum = 0; //AI·½£¨°×Æå£©Á¬ĞøÓĞ¶àÉÙ¸öÁ¬ĞøµÄÆå×Ó
-	int emptyNum = 0; // ¸Ã·½ÏòÉÏ¿Õ°×Î»µÄ¸öÊı
+	int playerChessNum = 0; //æ£‹æ‰‹æ–¹ï¼ˆé»‘æ£‹ï¼‰å¤šå°‘ä¸ªè¿ç»­çš„æ£‹å­
+	int AIChessNum = 0; //AIæ–¹ï¼ˆç™½æ£‹ï¼‰è¿ç»­æœ‰å¤šå°‘ä¸ªè¿ç»­çš„æ£‹å­
+	int emptyNum = 0; // è¯¥æ–¹å‘ä¸Šç©ºç™½ä½çš„ä¸ªæ•°
 
-	// ÆÀ·ÖÏòÁ¿Êı×éÇåÁã
+	// è¯„åˆ†å‘é‡æ•°ç»„æ¸…é›¶
 	for (int i = 0; i < scoreMap.size(); i++) {
 		for (int j = 0; j < scoreMap[i].size(); j++) {
 			scoreMap[i][j] = 0;
@@ -43,19 +43,19 @@ void AI::calculateScore()
 	int size = chess->getChessBoardSize();
 	for (int row = 0; row < size; row++) {
 		for (int col = 0; col < size; col++) {
-			//¶ÔÃ¿¸öµã½øĞĞ¼ÆËã
+			//å¯¹æ¯ä¸ªç‚¹è¿›è¡Œè®¡ç®—
 			if (chess->getChessData(row, col)) continue;
 
-			for (int y = -1; y <= 0; y++) {        //YµÄ·¶Î§»¹ÊÇ-1£¬ 0
-				for (int x = -1; x <= 1; x++) {    //XµÄ·¶Î§ÊÇ -1,0,1
+			for (int y = -1; y <= 0; y++) {        //Yçš„èŒƒå›´è¿˜æ˜¯-1ï¼Œ 0
+				for (int x = -1; x <= 1; x++) {    //Xçš„èŒƒå›´æ˜¯ -1,0,1
 					if (y == 0 && x == 0) continue;
-					if (y == 0 && x != 1) continue; //µ±y=0Ê±£¬½öÔÊĞíx=1
+					if (y == 0 && x != 1) continue; //å½“y=0æ—¶ï¼Œä»…å…è®¸x=1
 
 					playerChessNum = 0;
 					AIChessNum = 0;
 					emptyNum = 0;
 
-					// ¼ÙÉèºÚÆåÔÚ¸ÃÎ»ÖÃÂä×Ó£¬»á¹¹³ÉÊ²Ã´ÆåĞÍ
+					// å‡è®¾é»‘æ£‹åœ¨è¯¥ä½ç½®è½å­ï¼Œä¼šæ„æˆä»€ä¹ˆæ£‹å‹
 					for (int i = 1; i <= 4; i++) {
 						int curRow = row + i * y;
 						int curCol = col + i * x;
@@ -82,7 +82,7 @@ void AI::calculateScore()
 						}
 					}
 
-					// ·´Ïò¼ÌĞø¼ÆËã
+					// åå‘ç»§ç»­è®¡ç®—
 					for (int i = 1; i <= 4; i++) {
 						int curRow = row - i * y;
 						int curCol = col - i * x;
@@ -109,8 +109,8 @@ void AI::calculateScore()
 						}
 					}
 
-					if (playerChessNum == 1) { //Á¬2
-						//CSDN  ³ÌĞòÔ±Rock
+					if (playerChessNum == 1) { //è¿2
+						//CSDN  ç¨‹åºå‘˜Rock
 						scoreMap[row][col] += 10;
 						/*DEBUGLOG("AI::calculateScore||calculate black chess score||playerChessNum=1||row={}||col={}||scoreMap[row][col]={}",
 							row, col, scoreMap[row][col]);*/
@@ -145,7 +145,7 @@ void AI::calculateScore()
 							row, col, scoreMap[row][col]);*/
 					}
 
-					// ¼ÙÉè°×ÆåÔÚ¸ÃÎ»ÖÃÂä×Ó£¬»á¹¹³ÉÊ²Ã´ÆåĞÍ
+					// å‡è®¾ç™½æ£‹åœ¨è¯¥ä½ç½®è½å­ï¼Œä¼šæ„æˆä»€ä¹ˆæ£‹å‹
 					emptyNum = 0;
 
 					for (int i = 1; i <= 4; i++) {
@@ -243,7 +243,7 @@ void AI::calculateScore()
 			}
 		}
 	}
-	// ´òÓ¡¼ÆËãµÄ·ÖÊı
+	// æ‰“å°è®¡ç®—çš„åˆ†æ•°
 	for (int i = 0; i < scoreMap.size(); i++)
 	{
 		std::vector<int> temp = scoreMap[i];
@@ -257,10 +257,10 @@ void AI::calculateScore()
 
 ChessPos AI::think()
 {
-	// ¼ÆËãÆÀ·Ö
+	// è®¡ç®—è¯„åˆ†
 	calculateScore();
 
-	// ´ÓÆÀ·ÖÖĞÕÒ³ö×î´ó·ÖÊıµÄÎ»ÖÃ
+	// ä»è¯„åˆ†ä¸­æ‰¾å‡ºæœ€å¤§åˆ†æ•°çš„ä½ç½®
 	int maxScore = 0;
 
 	std::vector<ChessPos> maxPoints;
@@ -271,17 +271,17 @@ ChessPos AI::think()
 	{
 		for (int col = 0; col < size; col++)
 		{
-			// ´ËÎ»ÖÃÎª¿Õ
+			// æ­¤ä½ç½®ä¸ºç©º
 			if (chess->getChessData(row, col) == 0)
 			{
-				// ×î´óµÄ·ÖÊıºÍ×ø±ê
+				// æœ€å¤§çš„åˆ†æ•°å’Œåæ ‡
 				if (scoreMap[row][col] > maxScore)
 				{
 					maxScore = scoreMap[row][col];
 					maxPoints.clear();
 					maxPoints.push_back(ChessPos{ row, col });
 				}
-				// ÓĞ¶à¸ö×î´óµÄÊı£¬ÏÈ´æÆğÀ´
+				// æœ‰å¤šä¸ªæœ€å¤§çš„æ•°ï¼Œå…ˆå­˜èµ·æ¥
 				else if (scoreMap[row][col] == maxScore)
 				{
 					maxPoints.push_back(ChessPos{ row, col });
@@ -290,7 +290,7 @@ ChessPos AI::think()
 		}
 	}
 
-	//Ëæ»úÂä×Ó£¬¶à¸öµã 
+	//éšæœºè½å­ï¼Œå¤šä¸ªç‚¹ 
 	int index = rand() % maxPoints.size();
 	return maxPoints[index];
 }

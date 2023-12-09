@@ -7,28 +7,28 @@
 #include "myUtils.h"
 #pragma comment(lib, "Winmm.lib")
 
-// ÿ�ż��ص�ͼƬ�ṹ��
+// 每张加载的图片结构体
 struct LoadPicture {
 	IMAGE pictureFile;
-	std::string name;   // ͼƬ���֣���ӡ��־ʹ��
-	bool isUse;		// ��ͼƬ�Ƿ�����չʾ��
-	int x;     // ͼƬ���õ����Ͻ�x����
-	int y;     // ͼƬ���õ����Ͻ�y����
-	int width;     // ͼƬ�Ŀ���
-	int height;     // ͼƬ�ĸ߶�
+	std::string name;   // 图片名字，打印日志使用
+	bool isUse;		// 该图片是否正在展示中
+	int x;     // 图片放置的左上角x坐标
+	int y;     // 图片放置的左上角y坐标
+	int width;     // 图片的宽度
+	int height;     // 图片的高度
 };
 
 typedef enum {
 	MENU_DEFAULT = 0,
-	MAIN_MENU = 1,   // ѡ��ʼ��Ϸ���˳���Ϸ
-	PLAYER_NUM_MENU = 2,   // ѡ������Ϸ��˫����Ϸ�������ս
-	CHESSBOARD_MENU = 3,  // ��ս�в˵������̺��˳���Ϸ������
-	WIN_MENU = 4,   // ������ϷӮ�ˣ�ѡ������һ�ֻ����˳���Ϸ
-	LOSE_MENU = 5,   // ������Ϸ���ˣ�ѡ������һ�ֻ����˳���Ϸ
-	DRAW_MENU = 6,     // ƽ�֣������������ӻ�δ����ʤ��
-	BLACK_WIN_MENU = 7,     // ����Ӯ
-	WHITE_WIN_MENU = 8,     // ����Ӯ
-	BEST_SCORE_MENU = 9     // ������а����
+	MAIN_MENU = 1,   // 选择开始游戏和退出游戏
+	PLAYER_NUM_MENU = 2,   // 选择单人游戏，双人游戏，网络对战
+	CHESSBOARD_MENU = 3,  // 对战中菜单，棋盘和退出游戏，悔棋
+	WIN_MENU = 4,   // 单人游戏赢了，选择再来一局或者退出游戏
+	LOSE_MENU = 5,   // 单人游戏输了，选择再来一局或者退出游戏
+	DRAW_MENU = 6,     // 平局，棋盘落满棋子还未决出胜负
+	BLACK_WIN_MENU = 7,     // 黑棋赢
+	WHITE_WIN_MENU = 8,     // 白棋赢
+	BEST_SCORE_MENU = 9     // 输出排行榜分数
 } menu_kind_type;
 
 class PictureDraw
@@ -40,22 +40,22 @@ public:
 		twoPlayersPicture, playerInternetPicture, startGamePicture, winGamePicture, loseGamePicture, curBlackPicture, curWhitePicture, backgroudPicture, backwardMenu,
 		whiteWinPicture, blackWinPicture;
 
-	// �Ƿ���Ч���  x,yΪ�������λ��, pictureΪҪ�����ͼƬ
+	// 是否有效点击  x,y为鼠标点击的位置, picture为要点击的图片
 	bool isValidClick(int x, int y, LoadPicture picture);
 
-	// ͳһ�Ļ�ͼ����������menu_kind_type���;���������������ͼ
+	// 统一的绘图函数，根据menu_kind_type类型决定绘制哪种类型图
 	void drawGraph(menu_kind_type kind);
 
-	// �������а�
+	// 绘制排行榜
 	void drawText(std::vector<BestScoreUser> bestScores);
 
-	// ����һ������򣬻�ȡ��������
+	// 创建一个输入框，获取输入文字
 	std::string getInputString();
 private:
-	// ���������ͼƬ����������б��е�ͼƬ�������Ҫ�е������
+	// 点击声音，图片名字在这个列表中的图片点击后需要有点击声音
 	std::vector<std::string> clickSound;
 	
-	// �����һ�ε�graph���ݣ���ֹ���´ε�����Ӱ��
+	// 清除上一次的graph数据，防止对下次点击造成影响
 	void clearLastGraph();
 
 };

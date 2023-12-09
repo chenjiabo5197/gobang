@@ -8,7 +8,7 @@ class Player
 {
 public:
 
-	// 单人游戏玩家棋子数量
+	// 鍗曚汉娓告垙鐜╁妫嬪瓙鏁伴噺
 	int chessNum;
 
 	std::string playerName;
@@ -17,12 +17,12 @@ public:
 
 	void init(Chess* chess, std::string playerName, chess_kind_type chessKind = CHESS_BLACK);
 
-	// 每次游戏完后，重开游戏需要设置的参数
+	// 姣忔娓告垙瀹屽悗锛岄噸寮�娓告垙闇�瑕佽缃殑鍙傛暟
 	void resetPlayer();
 	
 	bool go(int x, int y, chess_kind_type kind = CHESS_BLACK);
 
 private:
-	Chess* chess;    // 棋盘数据，对哪个棋盘下棋
+	Chess* chess;    // 妫嬬洏鏁版嵁锛屽鍝釜妫嬬洏涓嬫
 };
 

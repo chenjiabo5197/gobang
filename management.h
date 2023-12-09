@@ -23,33 +23,33 @@ private:
 	Chess* chess;
 	PictureDraw* pictureDraw;
 
-	// ¸ù¾İbestScoresÊÇ·ñ±»ĞŞ¸Ä¹ıÅĞ¶Ï£¬ÊÇ·ñĞèÒª¸üĞÂÅÅĞĞ°ñÎÄ¼ş
+	// æ ¹æ®bestScoresæ˜¯å¦è¢«ä¿®æ”¹è¿‡åˆ¤æ–­ï¼Œæ˜¯å¦éœ€è¦æ›´æ–°æ’è¡Œæ¦œæ–‡ä»¶
 	bool isUpdateBestScoreFile;
 
-	// ´¢´æÅÅĞĞ°ñĞÅÏ¢
+	// å‚¨å­˜æ’è¡Œæ¦œä¿¡æ¯
 	std::vector<BestScoreUser> bestScores;
 
-	// Ñ¡ÔñÓÎÏ··½Ê½
+	// é€‰æ‹©æ¸¸æˆæ–¹å¼
 	void chooseGame();
 
 	void showBestScores();
 
-	// µ¥ÈËÓÎÏ·
+	// å•äººæ¸¸æˆ
 	void onePlayerGame();
 
-	// µ¥ÈËÓÎÏ·³õÊ¼»¯¶ÔÏó£¬AI£¬player£¬chess
+	// å•äººæ¸¸æˆåˆå§‹åŒ–å¯¹è±¡ï¼ŒAIï¼Œplayerï¼Œchess
 	void onePlayerInit();
 
-	// ÓÎÏ·½áÊø£¬¸ù¾İÈ«¾Ö±äÁ¿¾ö¶¨Õ¹Ê¾µÄ³É¹¦»¹ÊÇÊ§°ÜÒ³Ãæ£¬²¢½ÓÊÜÔÙÀ´Ò»¾Ö»¹ÊÇÍË³öµ½Ö÷²Ëµ¥
+	// æ¸¸æˆç»“æŸï¼Œæ ¹æ®å…¨å±€å˜é‡å†³å®šå±•ç¤ºçš„æˆåŠŸè¿˜æ˜¯å¤±è´¥é¡µé¢ï¼Œå¹¶æ¥å—å†æ¥ä¸€å±€è¿˜æ˜¯é€€å‡ºåˆ°ä¸»èœå•
 	bool isAgainGame();
 
-	// Ë«ÈË¶ÔÕ½
+	// åŒäººå¯¹æˆ˜
 	void twoPlayersGame();
 
-	// Ë«ÈË¶ÔÕ½³õÊ¼»¯¶ÔÏó£¬player1, player2, chess
+	// åŒäººå¯¹æˆ˜åˆå§‹åŒ–å¯¹è±¡ï¼Œplayer1, player2, chess
 	void twoPlayersInit();
 
-	// µ¥¸öÑ¡ÊÖµÄÏÂÆåº¯Êı£¬´«ÈëÆåÊÖ
+	// å•ä¸ªé€‰æ‰‹çš„ä¸‹æ£‹å‡½æ•°ï¼Œä¼ å…¥æ£‹æ‰‹
 	bool onePlayer(Player*);
 };
 

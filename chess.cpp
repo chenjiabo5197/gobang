@@ -19,7 +19,7 @@ Chess::Chess(int chessBoardSize, int marginX, int marginY, float chessSize, Pict
 
 	playerFlag = CHESS_BLACK;
 
-	// ³õÊ¼»¯ÆåÅÌ£¬ÆåÅÌÃ¿¸öÎ»ÖÃ¶¼Îª0£¬±íÊ¾¿Õ°×
+	// åˆå§‹åŒ–æ£‹ç›˜ï¼Œæ£‹ç›˜æ¯ä¸ªä½ç½®éƒ½ä¸º0ï¼Œè¡¨ç¤ºç©ºç™½
 	for (int i = 0; i < chessBoardSize; i++)
 	{
 		std::vector<int> row;
@@ -35,7 +35,7 @@ Chess::Chess(int chessBoardSize, int marginX, int marginY, float chessSize, Pict
 
 void Chess::init()
 {
-	mciSendString("play res/start.wav", 0, 0, 0);  //ĞèÒªĞŞ¸Ä×Ö·û¼¯Îª¶à×Ö·û¼¯
+	mciSendString("play res/start.wav", 0, 0, 0);  //éœ€è¦ä¿®æ”¹å­—ç¬¦é›†ä¸ºå¤šå­—ç¬¦é›†
 	for (int i = 0; i < chessMap.size(); i++)
 	{
 		for (int j = 0; j < chessMap[i].size(); j++)
@@ -44,7 +44,7 @@ void Chess::init()
 		}
 	}
 	this->chessBoardData.clear();
-	// ³õÊ¼»¯´¢´æÉÏÒ»´ÎºÚ°×ÆåÎ»ÖÃµÄ²ÎÊı
+	// åˆå§‹åŒ–å‚¨å­˜ä¸Šä¸€æ¬¡é»‘ç™½æ£‹ä½ç½®çš„å‚æ•°
 	lastBlackPos.row = -1;
 	lastWhitePos.row = -1;
 
@@ -53,36 +53,36 @@ void Chess::init()
 }
 
 /*
-* ÏÈ¼ÆËãµã»÷Î»ÖÃ¸½½üµÄ4¸öµã£¨ÆåÅÌµÄ½»½ç´¦¼´Æå×Ó³öÏÖÎ»ÖÃ£©µÄÎ»ÖÃ£¬È»ºóÔÙ¼ÆËãµã»÷Î»ÖÃµ½ÕâËÄ¸öµãÖ®¼äµÄ¾àÀë£¬
-Èç¹ûÀëÄ³¸öµãµÄ¾àÀëĞ¡ÓÚ¡°ãĞÖµ¡±£¬¾ÍÈÏÎªÕâ¸öµãÊÇÂä×ÓÎ»ÖÃ¡£Õâ¸ö¡°ãĞÖµ¡±£¬ Ğ¡ÓÚÆå×Ó´óĞ¡µÄÒ»°ë¼´¿É¡£ÎÒÃÇÕâÀïÈ¡Æå¸ñ´óĞ¡µÄ0.4±¶
+* å…ˆè®¡ç®—ç‚¹å‡»ä½ç½®é™„è¿‘çš„4ä¸ªç‚¹ï¼ˆæ£‹ç›˜çš„äº¤ç•Œå¤„å³æ£‹å­å‡ºç°ä½ç½®ï¼‰çš„ä½ç½®ï¼Œç„¶åå†è®¡ç®—ç‚¹å‡»ä½ç½®åˆ°è¿™å››ä¸ªç‚¹ä¹‹é—´çš„è·ç¦»ï¼Œ
+å¦‚æœç¦»æŸä¸ªç‚¹çš„è·ç¦»å°äºâ€œé˜ˆå€¼â€ï¼Œå°±è®¤ä¸ºè¿™ä¸ªç‚¹æ˜¯è½å­ä½ç½®ã€‚è¿™ä¸ªâ€œé˜ˆå€¼â€ï¼Œ å°äºæ£‹å­å¤§å°çš„ä¸€åŠå³å¯ã€‚æˆ‘ä»¬è¿™é‡Œå–æ£‹æ ¼å¤§å°çš„0.4å€
 */
 bool Chess::clickBoard(int x, int y, ChessPos* pos)
 {
-	// Êó±êµã»÷ÔÚÆåÅÌÉÏµÄĞĞ£¬ÁĞÊı(ÓÃÊó±ê×ø±ê¼õÈ¥ÆåÅÌ±ßÔµÔÙ³ıÃ¿¸ö·½¸ñ´óĞ¡)
-	int row = (x - margin_x) / chessSize;  // ÁĞÊı
-	int col = (y - margin_y) / chessSize;  // ĞĞÊı
+	// é¼ æ ‡ç‚¹å‡»åœ¨æ£‹ç›˜ä¸Šçš„è¡Œï¼Œåˆ—æ•°(ç”¨é¼ æ ‡åæ ‡å‡å»æ£‹ç›˜è¾¹ç¼˜å†é™¤æ¯ä¸ªæ–¹æ ¼å¤§å°)
+	int row = (x - margin_x) / chessSize;  // åˆ—æ•°
+	int col = (y - margin_y) / chessSize;  // è¡Œæ•°
 
 	DEBUGLOG("Chess::clickBoard||margin_x={}||margin_y={}||row={}||col={}||x={}||y={}",
 		margin_x, margin_y, row, col, x, y);
 
-	// easyxµÄ×ø±êÔ­µãÔÚ×óÉÏ½Ç£¬yÖáÏòÏÂ£¬xÖáÏòÓÒ
-	// Êó±êµã»÷×ø±êµÄ·½¸ñ×óÉÏ½Ç×ø±ê
+	// easyxçš„åæ ‡åŸç‚¹åœ¨å·¦ä¸Šè§’ï¼Œyè½´å‘ä¸‹ï¼Œxè½´å‘å³
+	// é¼ æ ‡ç‚¹å‡»åæ ‡çš„æ–¹æ ¼å·¦ä¸Šè§’åæ ‡
 	int leftTopPosX = margin_x + chessSize * row;
 	int leftTopPosY = margin_y + chessSize * col;
 
-	// Êó±êµã»÷×ø±êµÄ·½¸ñÓÒÉÏ½Ç×ø±ê
+	// é¼ æ ‡ç‚¹å‡»åæ ‡çš„æ–¹æ ¼å³ä¸Šè§’åæ ‡
 	int rightTopPosX = margin_x + chessSize * (row + 1);
 	int rightTopPosY = margin_y + chessSize * col;
 
-	// Êó±êµã»÷×ø±êµÄ·½¸ñ×óÏÂ½Ç×ø±ê
+	// é¼ æ ‡ç‚¹å‡»åæ ‡çš„æ–¹æ ¼å·¦ä¸‹è§’åæ ‡
 	int leftBottomPosX = margin_x + chessSize * row;
 	int leftBottomPosY = margin_y + chessSize * (col + 1);
 
-	// Êó±êµã»÷×ø±êµÄ·½¸ñÓÒÏÂ½Ç×ø±ê
+	// é¼ æ ‡ç‚¹å‡»åæ ‡çš„æ–¹æ ¼å³ä¸‹è§’åæ ‡
 	int rightBottomPosX = margin_x + chessSize * (row + 1);
 	int rightBottomPosY = margin_y + chessSize * (col + 1);
 
-	int offset = chessSize * 0.4;  // 20 Êó±êµã»÷µÄÄ£ºı¾àÀëÉÏÏŞ
+	int offset = chessSize * 0.4;  // 20 é¼ æ ‡ç‚¹å‡»çš„æ¨¡ç³Šè·ç¦»ä¸Šé™
 
 	int len;
 	bool selectPos = false;
@@ -93,7 +93,7 @@ bool Chess::clickBoard(int x, int y, ChessPos* pos)
 
 	do
 	{
-		// ¾à×óÉÏ½ÇÎ»ÖÃµÄ¾àÀë
+		// è·å·¦ä¸Šè§’ä½ç½®çš„è·ç¦»
 		len = sqrt((x - leftTopPosX) * (x - leftTopPosX) + (y - leftTopPosY) * (y - leftTopPosY));
 		if (len < offset)
 		{
@@ -108,7 +108,7 @@ bool Chess::clickBoard(int x, int y, ChessPos* pos)
 		}
 		DEBUGLOG("Chess::clickBoard||leftTop||len={}", len);
 
-		// ¾àÓÒÉÏ½ÇÎ»ÖÃµÄ¾àÀë
+		// è·å³ä¸Šè§’ä½ç½®çš„è·ç¦»
 		len = sqrt((x - rightTopPosX) * (x - rightTopPosX) + (y - rightTopPosY) * (y - rightTopPosY));
 		if (len < offset)
 		{
@@ -123,7 +123,7 @@ bool Chess::clickBoard(int x, int y, ChessPos* pos)
 		}
 		DEBUGLOG("Chess::clickBoard||rightTop||len={}", len);
 
-		// ¾à×óÏÂ½ÇÎ»ÖÃµÄ¾àÀë
+		// è·å·¦ä¸‹è§’ä½ç½®çš„è·ç¦»
 		len = sqrt((x - leftBottomPosX) * (x - leftBottomPosX) + (y - leftBottomPosY) * (y - leftBottomPosY));
 		if (len < offset)
 		{
@@ -138,7 +138,7 @@ bool Chess::clickBoard(int x, int y, ChessPos* pos)
 		}
 		DEBUGLOG("Chess::clickBoard||leftBottom||len={}", len);
 
-		// ¾àÓÒÏÂ½ÇÎ»ÖÃµÄ¾àÀë
+		// è·å³ä¸‹è§’ä½ç½®çš„è·ç¦»
 		len = sqrt((x - rightBottomPosX) * (x - rightBottomPosX) + (y - rightBottomPosY) * (y - rightBottomPosY));
 		if (len < offset)
 		{
@@ -159,19 +159,19 @@ bool Chess::clickBoard(int x, int y, ChessPos* pos)
 	return selectPos;
 }
 
-// µ±º¯ÊıÉùÃ÷ºÍº¯Êı¶¨Òå·ÖÀëÊ±£¬²ÎÊıµÄÄ¬ÈÏÖµÖ»ÄÜ³öÏÖÔÚº¯ÊıÉùÃ÷ÖĞ£¬ÔÚº¯Êı¶¨ÒåµÄº¯ÊıÍ·ÖĞÎŞĞèÌí¼ÓÄ¬ÈÏÖµ
+// å½“å‡½æ•°å£°æ˜å’Œå‡½æ•°å®šä¹‰åˆ†ç¦»æ—¶ï¼Œå‚æ•°çš„é»˜è®¤å€¼åªèƒ½å‡ºç°åœ¨å‡½æ•°å£°æ˜ä¸­ï¼Œåœ¨å‡½æ•°å®šä¹‰çš„å‡½æ•°å¤´ä¸­æ— éœ€æ·»åŠ é»˜è®¤å€¼
 void Chess::chessDown(ChessPos* pos, chess_kind_type kind, bool isRecord)
 {
 	int x = margin_x + pos->row * chessSize - 0.5 * chessSize;
 	int y = margin_y + pos->col * chessSize - 0.5 * chessSize;
 
-	if (this->pictureDraw->chessBoardPicture.isUse)   // ÅĞ¶ÏÊÇ·ñÔÚÏÂÆåÒ³Ãæ
+	if (this->pictureDraw->chessBoardPicture.isUse)   // åˆ¤æ–­æ˜¯å¦åœ¨ä¸‹æ£‹é¡µé¢
 	{
 		if (kind == CHESS_WHITE)
 		{
 			if (this->lastWhitePos.row != -1)
 			{
-				putImagePNG(this->lastWhitePos.row, this->lastWhitePos.col, &this->pictureDraw->chessWhitePicture.pictureFile);   // ¸üĞÂ·Ç×îĞÂµÄÆå×ÓÍ¼Æ¬
+				putImagePNG(this->lastWhitePos.row, this->lastWhitePos.col, &this->pictureDraw->chessWhitePicture.pictureFile);   // æ›´æ–°éæœ€æ–°çš„æ£‹å­å›¾ç‰‡
 			}
 			putImagePNG(x, y, &this->pictureDraw->curWhitePicture.pictureFile);
 			if (isRecord)
@@ -187,7 +187,7 @@ void Chess::chessDown(ChessPos* pos, chess_kind_type kind, bool isRecord)
 		{
 			if (this->lastBlackPos.row != -1)
 			{
-				putImagePNG(this->lastBlackPos.row, this->lastBlackPos.col, &this->pictureDraw->chessBlackPicture.pictureFile);   // ¸üĞÂ·Ç×îĞÂµÄÆå×ÓÍ¼Æ¬
+				putImagePNG(this->lastBlackPos.row, this->lastBlackPos.col, &this->pictureDraw->chessBlackPicture.pictureFile);   // æ›´æ–°éæœ€æ–°çš„æ£‹å­å›¾ç‰‡
 			}
 			putImagePNG(x, y, &this->pictureDraw->curBlackPicture.pictureFile);
 			if (isRecord)
@@ -199,7 +199,7 @@ void Chess::chessDown(ChessPos* pos, chess_kind_type kind, bool isRecord)
 			this->lastBlackPos = temp;
 			DEBUGLOG("Chess::chessDown||CHESS_BLACK||x={}||y={}||row={}||col={}", x, y, pos->row, pos->col);
 		}
-		// ¸üĞÂÆåÅÌÊı¾İ
+		// æ›´æ–°æ£‹ç›˜æ•°æ®
 		updateChessMap(pos);
 	}
 }
@@ -226,13 +226,13 @@ bool Chess::checkOver()
 		Sleep(1500);
 		if (this->gameKind == ONE_PLAYER_GAME)
 		{
-			if (!playerFlag)   // ºÚÆåÓ®£¬Íæ¼ÒÓ®
+			if (!playerFlag)   // é»‘æ£‹èµ¢ï¼Œç©å®¶èµ¢
 			{
 				INFOLOG("Chess::checkOver||black win");
 				resultFlag = PLAYER_WIN;
 				return true;
 			}
-			else   // ºÚÆåÓ®£¬AIÓ®
+			else   // é»‘æ£‹èµ¢ï¼ŒAIèµ¢
 			{
 				INFOLOG("Chess::checkOver||white win");
 				resultFlag = PLAYER_LOSE;
@@ -241,13 +241,13 @@ bool Chess::checkOver()
 		}
 		else if (this->gameKind == TWO_PLAYERS_GAME)
 		{
-			if (!playerFlag)   // ºÚÆåÓ®
+			if (!playerFlag)   // é»‘æ£‹èµ¢
 			{
 				INFOLOG("Chess::checkOver||black win");
 				resultFlag = BLACK_WIN;
 				return true;
 			}
-			else   // °×ÆåÓ®
+			else   // ç™½æ£‹èµ¢
 			{
 				INFOLOG("Chess::checkOver||white win");
 				resultFlag = WHITE_WIN;
@@ -256,7 +256,7 @@ bool Chess::checkOver()
 		}
 		
 	}
-	// ÅĞ¶ÏÆåÅÌÊÇ·ñÂúÁË£¬13*13µÄÆåÅÌ£¬×î¶à169¿ÅÆå×Ó
+	// åˆ¤æ–­æ£‹ç›˜æ˜¯å¦æ»¡äº†ï¼Œ13*13çš„æ£‹ç›˜ï¼Œæœ€å¤š169é¢—æ£‹å­
 	if (this->chessBoardData.size() == 169)
 	{
 		INFOLOG("Chess::checkOver||result draw");
@@ -268,35 +268,35 @@ bool Chess::checkOver()
 
 void Chess::putImagePNG(int x, int y, IMAGE* picture)
 {
-	// ±äÁ¿³õÊ¼»¯
-	DWORD* dst = GetImageBuffer();   // GetImageBuffer()º¯ÊıÓÃÓÚ»ñÈ¡»æÍ¼Éè±¸µÄÏÔ´æÖ¸Õë£¬easyxº¯Êı
+	// å˜é‡åˆå§‹åŒ–
+	DWORD* dst = GetImageBuffer();   // GetImageBuffer()å‡½æ•°ç”¨äºè·å–ç»˜å›¾è®¾å¤‡çš„æ˜¾å­˜æŒ‡é’ˆï¼Œeasyxå‡½æ•°
 	DWORD* draw = GetImageBuffer();
-	DWORD* src = GetImageBuffer(picture);  // »ñÈ¡pictureµÄÏÔ´æÖ¸Õë
-	int picture_width = picture->getwidth();  // »ñÈ¡picture¿í¶È£¬easyxº¯Êı
-	int picture_height = picture->getheight();  // »ñÈ¡picture¸ß¶È£¬easyxº¯Êı
-	int graphWidth = getwidth();   // »ñÈ¡»æÍ¼ÇøµÄ¿í¶È£¬easyxº¯Êı
-	int graphHeight = getheight();   // »ñÈ¡»æÍ¼ÇøµÄ¿í¶È£¬easyxº¯Êı
-	int dstX = 0;   // ÔÚÏÔ´æÀïÏñËØµÄ×ø±ê
+	DWORD* src = GetImageBuffer(picture);  // è·å–pictureçš„æ˜¾å­˜æŒ‡é’ˆ
+	int picture_width = picture->getwidth();  // è·å–pictureå®½åº¦ï¼Œeasyxå‡½æ•°
+	int picture_height = picture->getheight();  // è·å–pictureé«˜åº¦ï¼Œeasyxå‡½æ•°
+	int graphWidth = getwidth();   // è·å–ç»˜å›¾åŒºçš„å®½åº¦ï¼Œeasyxå‡½æ•°
+	int graphHeight = getheight();   // è·å–ç»˜å›¾åŒºçš„å®½åº¦ï¼Œeasyxå‡½æ•°
+	int dstX = 0;   // åœ¨æ˜¾å­˜é‡Œåƒç´ çš„åæ ‡
 
-	// ÊµÏÖÍ¸Ã÷ÌùÍ¼  ¹«Ê½ Cp=¦Áp*FP+(1-¦Áp)*BP   ±´Ò¶Ë¹¶¨Àí½øĞĞµãÑÕÉ«µÄ¸ÅÂÊ¼ÆËã
+	// å®ç°é€æ˜è´´å›¾  å…¬å¼ Cp=Î±p*FP+(1-Î±p)*BP   è´å¶æ–¯å®šç†è¿›è¡Œç‚¹é¢œè‰²çš„æ¦‚ç‡è®¡ç®—
 	for (int ix = 0; ix < picture_height; ix++)
 	{
 		for (int iy = 0; iy < picture_width; iy++)
 		{
-			int srcX = ix + iy * picture_width; //ÔÚÏÔ´æÀïÏñËØµÄ½Ç±ê
-			int sa = ((src[srcX] & 0xff000000) >> 24); //0xAArrggbb;AAÊÇÍ¸Ã÷¶È
-			int sr = ((src[srcX] & 0xff0000) >> 16); //»ñÈ¡RGBÀïµÄR
+			int srcX = ix + iy * picture_width; //åœ¨æ˜¾å­˜é‡Œåƒç´ çš„è§’æ ‡
+			int sa = ((src[srcX] & 0xff000000) >> 24); //0xAArrggbb;AAæ˜¯é€æ˜åº¦
+			int sr = ((src[srcX] & 0xff0000) >> 16); //è·å–RGBé‡Œçš„R
 			int sg = ((src[srcX] & 0xff00) >> 8);   //G
 			int sb = src[srcX] & 0xff;              //B
 			if (ix >= 0 && ix <= graphWidth && iy >= 0 && iy <= graphHeight && dstX <= graphWidth * graphHeight)
 			{
-				dstX = (ix + x) + (iy + y) * graphWidth; //ÔÚÏÔ´æÀïÏñËØµÄ½Ç±ê
+				dstX = (ix + x) + (iy + y) * graphWidth; //åœ¨æ˜¾å­˜é‡Œåƒç´ çš„è§’æ ‡
 				int dr = ((dst[dstX] & 0xff0000) >> 16);
 				int dg = ((dst[dstX] & 0xff00) >> 8);
 				int db = dst[dstX] & 0xff;
-				draw[dstX] = ((sr * sa / 255 + dr * (255 - sa) / 255) << 16)  //¹«Ê½£º Cp=¦Áp*FP+(1-¦Áp)*BP  £» ¦Áp=sa/255 , FP=sr , BP=dr
-					| ((sg * sa / 255 + dg * (255 - sa) / 255) << 8)         //¦Áp=sa/255 , FP=sg , BP=dg
-					| (sb * sa / 255 + db * (255 - sa) / 255);              //¦Áp=sa/255 , FP=sb , BP=db
+				draw[dstX] = ((sr * sa / 255 + dr * (255 - sa) / 255) << 16)  //å…¬å¼ï¼š Cp=Î±p*FP+(1-Î±p)*BP  ï¼› Î±p=sa/255 , FP=sr , BP=dr
+					| ((sg * sa / 255 + dg * (255 - sa) / 255) << 8)         //Î±p=sa/255 , FP=sg , BP=dg
+					| (sb * sa / 255 + db * (255 - sa) / 255);              //Î±p=sa/255 , FP=sb , BP=db
 			}
 		}
 	}
@@ -304,11 +304,11 @@ void Chess::putImagePNG(int x, int y, IMAGE* picture)
 
 bool Chess::checkWin()
 {
-	// ºáÊú×óĞ±ÓÒĞ±ËÄ¸ö·½Ïò£¬Ã¿ÖÖÇé¿ö¶¼¸ù¾İµ±Ç°Âä×ÓÏòºó±éÀú5¸öÆå×Ó£¬ÓĞÒ»ÖÖ·ûºÏ¾ÍËãÓ®
+	// æ¨ªç«–å·¦æ–œå³æ–œå››ä¸ªæ–¹å‘ï¼Œæ¯ç§æƒ…å†µéƒ½æ ¹æ®å½“å‰è½å­å‘åéå†5ä¸ªæ£‹å­ï¼Œæœ‰ä¸€ç§ç¬¦åˆå°±ç®—èµ¢
 	int row = lastPos.row;
 	int col = lastPos.col;
 
-	// Ë®Æ½·½Ïò, Ïò×óºÍÓÒ·Ö±ğÆ¥Åä4¸ö×Ó
+	// æ°´å¹³æ–¹å‘, å‘å·¦å’Œå³åˆ†åˆ«åŒ¹é…4ä¸ªå­
 	for (int i = 0; i < 5; i++)
 	{
 		if (col - i >= 0 && col - i + 4 < chessBoardSize && chessMap[row][col - i] == chessMap[row][col - i + 1] && chessMap[row][col - i] == chessMap[row][col - i + 2] &&
@@ -319,7 +319,7 @@ bool Chess::checkWin()
 		}
 	}
 
-	// ÊúÖ±·½Ïò 
+	// ç«–ç›´æ–¹å‘ 
 	for (int i = 0; i < 5; i++)
 	{
 		if (row - i >= 0 && row - i + 4 < chessBoardSize && chessMap[row - i][col] == chessMap[row - i + 1][col] && chessMap[row - i][col] == chessMap[row - i + 2][col] &&
@@ -330,7 +330,7 @@ bool Chess::checkWin()
 		}
 	}
 
-	// ×óĞ±·½Ïò"/"
+	// å·¦æ–œæ–¹å‘"/"
 	for (int i = 0; i < 5; i++)
 	{
 		if (row - i >= 0 && col - i >= 0 && row - i + 4 < chessBoardSize && col - i + 4 < chessBoardSize && chessMap[row - i][col - i] == chessMap[row - i + 1][col - i + 1] && chessMap[row - i][col - i] == chessMap[row - i + 2][col - i + 2] &&
@@ -341,7 +341,7 @@ bool Chess::checkWin()
 		}
 	}
 
-	// ÓÒĞ±·½Ïò "\"
+	// å³æ–œæ–¹å‘ "\"
 	for (int i = 0; i < 5; i++)
 	{
 		if (row + i < chessBoardSize && row + i - 4 >= 0 && col - i >= 0 && col - i + 4 < chessBoardSize && chessMap[row + i][col - i] == chessMap[row + i - 1][col - i + 1] && chessMap[row + i][col - i] == chessMap[row + i - 2][col - i + 2] &&
@@ -358,17 +358,17 @@ bool Chess::checkWin()
 
 void Chess::playerWithDraw()
 {
-	// ³õÊ¼»¯ºÚ°×ÆåÉÏ´ÎÎ»ÖÃ
+	// åˆå§‹åŒ–é»‘ç™½æ£‹ä¸Šæ¬¡ä½ç½®
 	this->lastBlackPos.row = -1;
 	this->lastWhitePos.row = -1;
-	// ÅĞ¶ÏÆåÅÌÉÏÆå×ÓÊıÁ¿
+	// åˆ¤æ–­æ£‹ç›˜ä¸Šæ£‹å­æ•°é‡
 	if (this->chessBoardData.size() <= 1)
 	{
 		WARNLOG("Chess::playerWithDraw||chess nums small 1||can not withdraw");
 		return;
 	}
 
-	// this->chessMap.clear();// »áÉ¾³ıvectorµÄ¿Õ¼ä    // ÏÈÇå¿ÕÆåÅÌÊı¾İ
+	// this->chessMap.clear();// ä¼šåˆ é™¤vectorçš„ç©ºé—´    // å…ˆæ¸…ç©ºæ£‹ç›˜æ•°æ®
 	for (int i = 0; i < chessBoardSize; i++)
 	{
 		for (int j = 0; j < chessBoardSize; j++)
@@ -377,9 +377,9 @@ void Chess::playerWithDraw()
 		}
 	}
 
-	// É¾³ıÆå×ÓÍ¼Æ¬, ĞèÒªÖØĞÂ¼ÓÔØÍ¼Æ¬£¬easyx²»ÄÜÉ¾³ıÍ¼Æ¬
+	// åˆ é™¤æ£‹å­å›¾ç‰‡, éœ€è¦é‡æ–°åŠ è½½å›¾ç‰‡ï¼Œeasyxä¸èƒ½åˆ é™¤å›¾ç‰‡
 	this->chessBoardData.pop_back();
-	this->chessBoardData.pop_back();  //É¾³ıÁ½¸öÔªËØ£¬ÒòÎªÍæ¼ÒÑ¡Ôñ»ÚÆåÊ±£¬AIµÄÆå×ÓÒ²ĞèÒª³·Ïúµô
+	this->chessBoardData.pop_back();  //åˆ é™¤ä¸¤ä¸ªå…ƒç´ ï¼Œå› ä¸ºç©å®¶é€‰æ‹©æ‚”æ£‹æ—¶ï¼ŒAIçš„æ£‹å­ä¹Ÿéœ€è¦æ’¤é”€æ‰
 	this->pictureDraw->drawGraph(CHESSBOARD_MENU);
 	for (std::vector<ChessData>::iterator it = this->chessBoardData.begin(); it != this->chessBoardData.end(); it++)
 	{
@@ -398,7 +398,7 @@ void Chess::playerWithDraw()
 			this->chessDown(&temp, CHESS_BLACK, false);
 			this->playerFlag = true;
 		}
-		// ¸üĞÂÆåÅÌÊı¾İ
+		// æ›´æ–°æ£‹ç›˜æ•°æ®
 		DEBUGLOG("Chess::chessDown111||CHESS_BLACK||x={}||y={}", it->pos.row, it->pos.col);
 		ChessPos temp{ it->pos.row, it->pos.col };
 		updateChessMap(&temp);
@@ -409,8 +409,8 @@ void Chess::updateChessMap(ChessPos* pos)
 {
 	DEBUGLOG("Chess::updateChessMap||playerFlag={}||pos->row={}||pos->col={}", !playerFlag, pos->row, pos->col);
 	lastPos = *pos;
-	chessMap[pos->row][pos->col] = playerFlag ? 1 : -1;  // ´¢´æµ±Ç°Î»ÖÃÊÇºÚÆå»¹ÊÇ°×Æå
-	playerFlag = !playerFlag;   // ¸ü»»ÏÂÆå·½
+	chessMap[pos->row][pos->col] = playerFlag ? 1 : -1;  // å‚¨å­˜å½“å‰ä½ç½®æ˜¯é»‘æ£‹è¿˜æ˜¯ç™½æ£‹
+	playerFlag = !playerFlag;   // æ›´æ¢ä¸‹æ£‹æ–¹
 }
 
 

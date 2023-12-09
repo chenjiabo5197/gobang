@@ -29,7 +29,7 @@ void Management::play()
 		if (msg.uMsg == WM_LBUTTONDOWN)
 		{
 			DEBUGLOG("Management::play||mouse click||x={}||y={}", msg.x, msg.y);
-			// ¿ÉÒÔÑ¡Ôñ¿ªÊ¼ÓÎÏ·¡¢²é¿´ÅÅÐÐ°ñ¡¢ÍË³öÓÎÏ·
+			// å¯ä»¥é€‰æ‹©å¼€å§‹æ¸¸æˆã€æŸ¥çœ‹æŽ’è¡Œæ¦œã€é€€å‡ºæ¸¸æˆ
 			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->startGamePicture))
 			{
 				DEBUGLOG("Management::play||select start game");
@@ -70,7 +70,7 @@ void Management::chooseGame()
 		if (msg.uMsg == WM_LBUTTONDOWN)
 		{
 			DEBUGLOG("Management::chooseGame||mouse click||x={}||y={}", msg.x, msg.y);
-			// ¿ÉÒÔÑ¡Ôñµ¥ÈËÓÎÏ·¡¢Ë«ÈËÓÎÏ·¡¢ÍøÂç¶ÔÕ½
+			// å¯ä»¥é€‰æ‹©å•äººæ¸¸æˆã€åŒäººæ¸¸æˆã€ç½‘ç»œå¯¹æˆ˜
 			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->onePlayerPicture))
 			{
 				DEBUGLOG("Management::chooseGame||select one player");
@@ -171,14 +171,14 @@ void Management::onePlayerInit()
 
 bool Management::isAgainGame()
 {
-	if (resultFlag == PLAYER_WIN)   // ºÚÆåÓ®£¬Íæ¼ÒÓ®
+	if (resultFlag == PLAYER_WIN)   // é»‘æ£‹èµ¢ï¼ŒçŽ©å®¶èµ¢
 	{
 		mciSendString("play res/clap.mp3", 0, 0, 0);
 		this->pictureDraw->drawGraph(WIN_MENU);
 	}
 	else if (resultFlag == PLAYER_LOSE)
 	{
-		mciSendString("play res/Ê§°Ü.mp3", 0, 0, 0);
+		mciSendString("play res/å¤±è´¥.mp3", 0, 0, 0);
 		this->pictureDraw->drawGraph(LOSE_MENU);
 	}
 	else if (resultFlag == RESULT_DRAW)
@@ -193,7 +193,7 @@ bool Management::isAgainGame()
 	{
 		this->pictureDraw->drawGraph(WHITE_WIN_MENU);
 	}
-	// Ñ­»·£¬½ÓÊÕÑ¡ÊÖÑ¡Ôñ
+	// å¾ªçŽ¯ï¼ŒæŽ¥æ”¶é€‰æ‰‹é€‰æ‹©
 	while (1)
 	{
 		MOUSEMSG msg = GetMouseMsg();
@@ -257,17 +257,17 @@ bool Management::onePlayer(Player* player)
 		{
 			DEBUGLOG("Management::onePlayer||{} mouse click||x={}||y={}", player->playerName, msg.x, msg.y);
 
-			// ÅÐ¶Ïµã»÷ÇøÓòÊÇ·ñÔÚÆåÅÌÍ¼Æ¬µÄ³ß´çÄÚ
+			// åˆ¤æ–­ç‚¹å‡»åŒºåŸŸæ˜¯å¦åœ¨æ£‹ç›˜å›¾ç‰‡çš„å°ºå¯¸å†…
 			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->chessBoardPicture))
 			{
 				DEBUGLOG("Management::onePlayer||{} click to chess||x={}||y={}", player->playerName, msg.x, msg.y);
-				// ÅÐ¶Ïµã»÷µÄÇøÓòÊÇ·ñÓÐÐ§£¬¿ÉÒÔÏÂÆå
+				// åˆ¤æ–­ç‚¹å‡»çš„åŒºåŸŸæ˜¯å¦æœ‰æ•ˆï¼Œå¯ä»¥ä¸‹æ£‹
 				if (player->go(msg.x, msg.y, player->chessKind))
 				{
 					if (chess->checkOver())
 					{
 						DEBUGLOG("Management::onePlayer||player win||chessNum={}", player->chessNum);
-						// µ¥ÈËÓÎÏ·£¬ÇÒ´ËÊ±Íæ¼ÒµÄÆå×ÓÊýÁ¿Ð¡ÓÚÅÅÐÐ°ñÖÐ×î´óÖµ
+						// å•äººæ¸¸æˆï¼Œä¸”æ­¤æ—¶çŽ©å®¶çš„æ£‹å­æ•°é‡å°äºŽæŽ’è¡Œæ¦œä¸­æœ€å¤§å€¼
 						if (this->chess->gameKind == ONE_PLAYER_GAME && player->chessNum < std::stoi(this->bestScores.back().userScore))
 						{
 							MyUtils::updateBestScore(this->bestScores, MyUtils::getIBestScoreUser(this->pictureDraw->getInputString(), player->chessNum));
@@ -284,13 +284,13 @@ bool Management::onePlayer(Player* player)
 							return false;
 						}
 					}
-					// µ±Ç°playerÓÐÐ§Âä×Ó£¬ÇÒÎ´¾ö¶¨³öÊ¤¸º£¬ÇÐ»»ÏÂÆå·½
+					// å½“å‰playeræœ‰æ•ˆè½å­ï¼Œä¸”æœªå†³å®šå‡ºèƒœè´Ÿï¼Œåˆ‡æ¢ä¸‹æ£‹æ–¹
 					return true;
 				}
 			}
 
 
-			// ¿ÉÒÔÑ¡Ôñ»ÚÆå»òÕßÖ±½Ó·µ»ØÖ÷²Ëµ¥
+			// å¯ä»¥é€‰æ‹©æ‚”æ£‹æˆ–è€…ç›´æŽ¥è¿”å›žä¸»èœå•
 			if (this->pictureDraw->isValidClick(msg.x, msg.y, this->pictureDraw->withDrawPicture))
 			{
 				DEBUGLOG("Management::onePlayer||{} select withDraw", player->playerName);

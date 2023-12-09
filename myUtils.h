@@ -8,7 +8,7 @@
 #define BESTSCORESFILE "bestScoresFile.csv"
 #define MAXBESTSCORES 10
 
-// ´¢´æÅÅĞĞ°ñÊı¾İµÄ½á¹¹Ìå
+// å‚¨å­˜æ’è¡Œæ¦œæ•°æ®çš„ç»“æ„ä½“
 struct BestScoreUser
 {
 	std::string userName;
@@ -20,22 +20,22 @@ class MyUtils
 {
 public:
 
-	// ÊäÈëÎÄ¼şÃû£¬ÅĞ¶Ï¸ÄÎÄ¼ş´æÔÚÇÒ²»Îª¿Õ
+	// è¾“å…¥æ–‡ä»¶åï¼Œåˆ¤æ–­æ”¹æ–‡ä»¶å­˜åœ¨ä¸”ä¸ä¸ºç©º
 	static bool isFileExistAndNotEmpty(std::string fileName);
 
-	// ½«std::vector<std::string>¸ñÊ½µÄvector´¢´æµ½BESTSCORESFILEÖĞ£¬²¢·µ»Ø´¢´æ½á¹û
+	// å°†std::vector<std::string>æ ¼å¼çš„vectorå‚¨å­˜åˆ°BESTSCORESFILEä¸­ï¼Œå¹¶è¿”å›å‚¨å­˜ç»“æœ
 	static bool saveVectorToCsv(std::vector<BestScoreUser> v);
 
-	// »ñÈ¡µ±Ç°Ê±¼ä²¢·µ»Østring¸ñÊ½"%YÄê%mÔÂ%dÈÕ%HÊ±%M·Ö%SÃë"
+	// è·å–å½“å‰æ—¶é—´å¹¶è¿”å›stringæ ¼å¼"%Yå¹´%mæœˆ%dæ—¥%Hæ—¶%Måˆ†%Sç§’"
 	static std::string getCurTime();
 
-	// ÅÅĞĞ°ñ³õÊ¼»¯
+	// æ’è¡Œæ¦œåˆå§‹åŒ–
 	static std::vector<BestScoreUser> initBestScores();
 
-	// ÏòÅÅĞĞ°ñ²åÈë
+	// å‘æ’è¡Œæ¦œæ’å…¥
 	static void updateBestScore(std::vector<BestScoreUser> & bestScores, const BestScoreUser & user);
 
-	// Í¨¹ıÊäÈëĞÕÃû×é½¨½á¹¹Ìå
+	// é€šè¿‡è¾“å…¥å§“åç»„å»ºç»“æ„ä½“
 	static BestScoreUser getIBestScoreUser(std::string userName, int chessNum);
 };
 

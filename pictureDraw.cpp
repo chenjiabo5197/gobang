@@ -2,8 +2,8 @@
 
 PictureDraw::PictureDraw(int chessBoardSize, int marginX, int marginY, float chessSize)
 {
-	// ¼ÓÔØÍ¼Æ¬
-	loadimage(&this->chessBoardPicture.pictureFile, "res/ÆåÅÌ2.jpg");
+	// åŠ è½½å›¾ç‰‡
+	loadimage(&this->chessBoardPicture.pictureFile, "res/æ£‹ç›˜2.jpg");
 	this->chessBoardPicture.width = 897;
 	this->chessBoardPicture.height = 895;
 	this->chessBoardPicture.name = "chessBoard";
@@ -111,7 +111,7 @@ bool PictureDraw::isValidClick(int x, int y, LoadPicture picture)
 	if (x >= picture.x && x <= picture.x + picture.width && y >= picture.y && y <= picture.y + picture.height && picture.isUse)
 	{
 		auto it = std::find(this->clickSound.begin(), this->clickSound.end(), picture.name);
-		if (it != this->clickSound.end())   // ÔÚÁĞ±íÖĞµÄÍ¼Æ¬µã»÷ĞèÒª²¥·ÅÉùÒô
+		if (it != this->clickSound.end())   // åœ¨åˆ—è¡¨ä¸­çš„å›¾ç‰‡ç‚¹å‡»éœ€è¦æ’­æ”¾å£°éŸ³
 		{
 			mciSendString("play res/select.wav", 0, 0, 0);
 		}
@@ -122,23 +122,23 @@ bool PictureDraw::isValidClick(int x, int y, LoadPicture picture)
 	return false;
 }
 
-// ÔÚswitch...case...½á¹¹ÖĞ²»ÄÜÔÚcaseÖĞ¶¨ÒåĞÂ±äÁ¿,³ı·Ç½«¶¨ÒåĞÂ±äÁ¿µÄcaseÓÃ¿é{}°ü×¡£¬»òÕßÑ¡Ôñ½«ÄãµÄĞÂ±äÁ¿ÔÚswitchÖ®Ç°
+// åœ¨switch...case...ç»“æ„ä¸­ä¸èƒ½åœ¨caseä¸­å®šä¹‰æ–°å˜é‡,é™¤éå°†å®šä¹‰æ–°å˜é‡çš„caseç”¨å—{}åŒ…ä½ï¼Œæˆ–è€…é€‰æ‹©å°†ä½ çš„æ–°å˜é‡åœ¨switchä¹‹å‰
 void PictureDraw::drawGraph(menu_kind_type kind)
 {
 	clearLastGraph();
 	switch (kind)
 	{
-	case MAIN_MENU:   // Ö÷²Ëµ¥£¬Ñ¡Ôñ¿ªÊ¼ÓÎÏ·£¬ÍË³öÓÎÏ·
+	case MAIN_MENU:   // ä¸»èœå•ï¼Œé€‰æ‹©å¼€å§‹æ¸¸æˆï¼Œé€€å‡ºæ¸¸æˆ
 	{
-		// È¡±³¾°Í¼Æ¬¿í¶ÈºÍ¸ß¶È
+		// å–èƒŒæ™¯å›¾ç‰‡å®½åº¦å’Œé«˜åº¦
 		int graphWidth = this->backgroudPicture.width;
 		int graphHeight = this->backgroudPicture.height;
 		initgraph(graphWidth, graphHeight);
-		// ÉèÖÃ±³¾°É«Îª°×É«
+		// è®¾ç½®èƒŒæ™¯è‰²ä¸ºç™½è‰²
 		setbkcolor(WHITE);
-		cleardevice();  // Ê¹ÓÃµ±Ç°±³¾°É«Çå¿Õ»æÍ¼Éè±¸
+		cleardevice();  // ä½¿ç”¨å½“å‰èƒŒæ™¯è‰²æ¸…ç©ºç»˜å›¾è®¾å¤‡
 
-		// Í¼Æ¬µÄ×óÉÏ½Ç×ø±ê£¬ÓÃÓÚ¶¨Î»
+		// å›¾ç‰‡çš„å·¦ä¸Šè§’åæ ‡ï¼Œç”¨äºå®šä½
 		this->backgroudPicture.x = 0;
 		this->backgroudPicture.y = 0;
 		this->backgroudPicture.isUse = true;
@@ -161,17 +161,17 @@ void PictureDraw::drawGraph(menu_kind_type kind)
 			backgroudPicture.x, backgroudPicture.y, startGamePicture.x, startGamePicture.y, bestScoresPicture.x, bestScoresPicture.y, exitGamePicture.x, exitGamePicture.y);
 		break;
 	}
-	case PLAYER_NUM_MENU:   // Ñ¡ÔñÓÎÏ·ÈËÊı²Ëµ¥£¬µ¥ÈËÓÎÏ·£¨ºÍai¶ÔÕ½£©£¬Ë«ÈË¶ÔÕ½£¬ÍøÂç¶ÔÕ½£¬·µ»ØÖ÷²Ëµ¥
+	case PLAYER_NUM_MENU:   // é€‰æ‹©æ¸¸æˆäººæ•°èœå•ï¼Œå•äººæ¸¸æˆï¼ˆå’Œaiå¯¹æˆ˜ï¼‰ï¼ŒåŒäººå¯¹æˆ˜ï¼Œç½‘ç»œå¯¹æˆ˜ï¼Œè¿”å›ä¸»èœå•
 	{
-		// È¡±³¾°Í¼Æ¬¿í¶ÈºÍ¸ß¶È
+		// å–èƒŒæ™¯å›¾ç‰‡å®½åº¦å’Œé«˜åº¦
 		int graphWidth = this->backgroudPicture.width;
 		int graphHeight = this->backgroudPicture.height;
 		initgraph(graphWidth, graphHeight);
-		// ÉèÖÃ±³¾°É«Îª°×É«
+		// è®¾ç½®èƒŒæ™¯è‰²ä¸ºç™½è‰²
 		setbkcolor(WHITE);
-		cleardevice();  // Ê¹ÓÃµ±Ç°±³¾°É«Çå¿Õ»æÍ¼Éè±¸
+		cleardevice();  // ä½¿ç”¨å½“å‰èƒŒæ™¯è‰²æ¸…ç©ºç»˜å›¾è®¾å¤‡
 
-		// Í¼Æ¬µÄ×óÉÏ½Ç×ø±ê£¬ÓÃÓÚ¶¨Î»
+		// å›¾ç‰‡çš„å·¦ä¸Šè§’åæ ‡ï¼Œç”¨äºå®šä½
 		this->backgroudPicture.x = 0;
 		this->backgroudPicture.y = 0;
 		this->backgroudPicture.isUse = true;
@@ -198,17 +198,17 @@ void PictureDraw::drawGraph(menu_kind_type kind)
 			backgroudPicture.x, backgroudPicture.y, onePlayerPicture.x, onePlayerPicture.y, twoPlayersPicture.x, twoPlayersPicture.y, playerInternetPicture.x, playerInternetPicture.y, backwardMenu.x, backwardMenu.y);
 		break;
 	}
-	case CHESSBOARD_MENU:   // µ¥ÈËÓÎÏ·£¨ºÍai¶ÔÕ½£©
+	case CHESSBOARD_MENU:   // å•äººæ¸¸æˆï¼ˆå’Œaiå¯¹æˆ˜ï¼‰
 	{
-		// È¡°´¼ü¿í¶ÈµÄ×î´óÖµ+ÆåÅÌ¿í¶È +1ÊÇÎªÁËÁôÒ»µãÓàÁ¿
+		// å–æŒ‰é”®å®½åº¦çš„æœ€å¤§å€¼+æ£‹ç›˜å®½åº¦ +1æ˜¯ä¸ºäº†ç•™ä¸€ç‚¹ä½™é‡
 		int graphWidth = max(this->withDrawPicture.width, this->backwardMenu.width) + this->chessBoardPicture.width + 1;
 		int graphHeight = this->chessBoardPicture.height;
 		initgraph(graphWidth, graphHeight);
-		// ÉèÖÃ±³¾°É«Îª°×É«
+		// è®¾ç½®èƒŒæ™¯è‰²ä¸ºç™½è‰²
 		setbkcolor(WHITE);
-		cleardevice();  // Ê¹ÓÃµ±Ç°±³¾°É«Çå¿Õ»æÍ¼Éè±¸
+		cleardevice();  // ä½¿ç”¨å½“å‰èƒŒæ™¯è‰²æ¸…ç©ºç»˜å›¾è®¾å¤‡
 
-		// Í¼Æ¬µÄ×óÉÏ½Ç×ø±ê£¬ÓÃÓÚ¶¨Î»
+		// å›¾ç‰‡çš„å·¦ä¸Šè§’åæ ‡ï¼Œç”¨äºå®šä½
 		this->chessBoardPicture.x = 0;
 		this->chessBoardPicture.y = 0;
 		this->chessBoardPicture.isUse = true;
@@ -229,15 +229,15 @@ void PictureDraw::drawGraph(menu_kind_type kind)
 	}
 	case WIN_MENU:
 	{
-		// È¡°´¼ü¿í¶ÈµÄ×î´óÖµ+Í¼Æ¬¿í¶È +1ÊÇÎªÁËÁôÒ»µãÓàÁ¿
+		// å–æŒ‰é”®å®½åº¦çš„æœ€å¤§å€¼+å›¾ç‰‡å®½åº¦ +1æ˜¯ä¸ºäº†ç•™ä¸€ç‚¹ä½™é‡
 		int graphWidth = max(this->againGamePicture.width, this->backwardMenu.width) + this->winGamePicture.width + 1;
 		int graphHeight = this->winGamePicture.height;
 		initgraph(graphWidth, graphHeight);
-		// ÉèÖÃ±³¾°É«Îª°×É«
+		// è®¾ç½®èƒŒæ™¯è‰²ä¸ºç™½è‰²
 		setbkcolor(WHITE);
-		cleardevice();  // Ê¹ÓÃµ±Ç°±³¾°É«Çå¿Õ»æÍ¼Éè±¸
+		cleardevice();  // ä½¿ç”¨å½“å‰èƒŒæ™¯è‰²æ¸…ç©ºç»˜å›¾è®¾å¤‡
 
-		// Í¼Æ¬µÄ×óÉÏ½Ç×ø±ê£¬ÓÃÓÚ¶¨Î»
+		// å›¾ç‰‡çš„å·¦ä¸Šè§’åæ ‡ï¼Œç”¨äºå®šä½
 		this->winGamePicture.x = 0;
 		this->winGamePicture.y = 0;
 		this->winGamePicture.isUse = true;
@@ -258,15 +258,15 @@ void PictureDraw::drawGraph(menu_kind_type kind)
 	}
 	case LOSE_MENU:
 	{
-		// È¡°´¼ü¿í¶ÈµÄ×î´óÖµ+Í¼Æ¬¿í¶È +1ÊÇÎªÁËÁôÒ»µãÓàÁ¿
+		// å–æŒ‰é”®å®½åº¦çš„æœ€å¤§å€¼+å›¾ç‰‡å®½åº¦ +1æ˜¯ä¸ºäº†ç•™ä¸€ç‚¹ä½™é‡
 		int graphWidth = max(this->againGamePicture.width, this->backwardMenu.width) + this->loseGamePicture.width + 1;
 		int graphHeight = this->loseGamePicture.height;
 		initgraph(graphWidth, graphHeight);
-		// ÉèÖÃ±³¾°É«Îª°×É«
+		// è®¾ç½®èƒŒæ™¯è‰²ä¸ºç™½è‰²
 		setbkcolor(WHITE);
-		cleardevice();  // Ê¹ÓÃµ±Ç°±³¾°É«Çå¿Õ»æÍ¼Éè±¸
+		cleardevice();  // ä½¿ç”¨å½“å‰èƒŒæ™¯è‰²æ¸…ç©ºç»˜å›¾è®¾å¤‡
 
-		// Í¼Æ¬µÄ×óÉÏ½Ç×ø±ê£¬ÓÃÓÚ¶¨Î»
+		// å›¾ç‰‡çš„å·¦ä¸Šè§’åæ ‡ï¼Œç”¨äºå®šä½
 		this->loseGamePicture.x = 0;
 		this->loseGamePicture.y = 0;
 		this->loseGamePicture.isUse = true;
@@ -287,15 +287,15 @@ void PictureDraw::drawGraph(menu_kind_type kind)
 	}
 	case DRAW_MENU:
 	{
-		// È¡°´¼ü¿í¶ÈµÄ×î´óÖµ+Í¼Æ¬¿í¶È +1ÊÇÎªÁËÁôÒ»µãÓàÁ¿
+		// å–æŒ‰é”®å®½åº¦çš„æœ€å¤§å€¼+å›¾ç‰‡å®½åº¦ +1æ˜¯ä¸ºäº†ç•™ä¸€ç‚¹ä½™é‡
 		int graphWidth = max(this->againGamePicture.width, this->backwardMenu.width) + this->drawGamePicture.width + 1;
 		int graphHeight = this->drawGamePicture.height;
 		initgraph(graphWidth, graphHeight);
-		// ÉèÖÃ±³¾°É«Îª°×É«
+		// è®¾ç½®èƒŒæ™¯è‰²ä¸ºç™½è‰²
 		setbkcolor(WHITE);
-		cleardevice();  // Ê¹ÓÃµ±Ç°±³¾°É«Çå¿Õ»æÍ¼Éè±¸
+		cleardevice();  // ä½¿ç”¨å½“å‰èƒŒæ™¯è‰²æ¸…ç©ºç»˜å›¾è®¾å¤‡
 
-		// Í¼Æ¬µÄ×óÉÏ½Ç×ø±ê£¬ÓÃÓÚ¶¨Î»
+		// å›¾ç‰‡çš„å·¦ä¸Šè§’åæ ‡ï¼Œç”¨äºå®šä½
 		this->drawGamePicture.x = 0;
 		this->drawGamePicture.y = 0;
 		this->drawGamePicture.isUse = true;
@@ -316,15 +316,15 @@ void PictureDraw::drawGraph(menu_kind_type kind)
 	}
 	case BLACK_WIN_MENU:
 	{
-		// È¡°´¼ü¿í¶ÈµÄ×î´óÖµ+Í¼Æ¬¿í¶È +1ÊÇÎªÁËÁôÒ»µãÓàÁ¿
+		// å–æŒ‰é”®å®½åº¦çš„æœ€å¤§å€¼+å›¾ç‰‡å®½åº¦ +1æ˜¯ä¸ºäº†ç•™ä¸€ç‚¹ä½™é‡
 		int graphWidth = max(this->againGamePicture.width, this->backwardMenu.width) + this->blackWinPicture.width + 1;
 		int graphHeight = this->blackWinPicture.height;
 		initgraph(graphWidth, graphHeight);
-		// ÉèÖÃ±³¾°É«Îª°×É«
+		// è®¾ç½®èƒŒæ™¯è‰²ä¸ºç™½è‰²
 		setbkcolor(WHITE);
-		cleardevice();  // Ê¹ÓÃµ±Ç°±³¾°É«Çå¿Õ»æÍ¼Éè±¸
+		cleardevice();  // ä½¿ç”¨å½“å‰èƒŒæ™¯è‰²æ¸…ç©ºç»˜å›¾è®¾å¤‡
 
-		// Í¼Æ¬µÄ×óÉÏ½Ç×ø±ê£¬ÓÃÓÚ¶¨Î»
+		// å›¾ç‰‡çš„å·¦ä¸Šè§’åæ ‡ï¼Œç”¨äºå®šä½
 		this->blackWinPicture.x = 0;
 		this->blackWinPicture.y = 0;
 		this->blackWinPicture.isUse = true;
@@ -345,15 +345,15 @@ void PictureDraw::drawGraph(menu_kind_type kind)
 	}
 	case WHITE_WIN_MENU:
 	{
-		// È¡°´¼ü¿í¶ÈµÄ×î´óÖµ+Í¼Æ¬¿í¶È +1ÊÇÎªÁËÁôÒ»µãÓàÁ¿
+		// å–æŒ‰é”®å®½åº¦çš„æœ€å¤§å€¼+å›¾ç‰‡å®½åº¦ +1æ˜¯ä¸ºäº†ç•™ä¸€ç‚¹ä½™é‡
 		int graphWidth = max(this->againGamePicture.width, this->backwardMenu.width) + this->whiteWinPicture.width + 1;
 		int graphHeight = this->whiteWinPicture.height;
 		initgraph(graphWidth, graphHeight);
-		// ÉèÖÃ±³¾°É«Îª°×É«
+		// è®¾ç½®èƒŒæ™¯è‰²ä¸ºç™½è‰²
 		setbkcolor(WHITE);
-		cleardevice();  // Ê¹ÓÃµ±Ç°±³¾°É«Çå¿Õ»æÍ¼Éè±¸
+		cleardevice();  // ä½¿ç”¨å½“å‰èƒŒæ™¯è‰²æ¸…ç©ºç»˜å›¾è®¾å¤‡
 
-		// Í¼Æ¬µÄ×óÉÏ½Ç×ø±ê£¬ÓÃÓÚ¶¨Î»
+		// å›¾ç‰‡çš„å·¦ä¸Šè§’åæ ‡ï¼Œç”¨äºå®šä½
 		this->whiteWinPicture.x = 0;
 		this->whiteWinPicture.y = 0;
 		this->whiteWinPicture.isUse = true;
@@ -375,11 +375,11 @@ void PictureDraw::drawGraph(menu_kind_type kind)
 	case BEST_SCORE_MENU:
 	{
 		initgraph(300, 480);
-		// ÉèÖÃ±³¾°É«Îª°×É«
+		// è®¾ç½®èƒŒæ™¯è‰²ä¸ºç™½è‰²
 		setbkcolor(WHITE);
-		cleardevice();  // Ê¹ÓÃµ±Ç°±³¾°É«Çå¿Õ»æÍ¼Éè±¸
+		cleardevice();  // ä½¿ç”¨å½“å‰èƒŒæ™¯è‰²æ¸…ç©ºç»˜å›¾è®¾å¤‡
 
-		// Í¼Æ¬µÄ×óÉÏ½Ç×ø±ê£¬ÓÃÓÚ¶¨Î»
+		// å›¾ç‰‡çš„å·¦ä¸Šè§’åæ ‡ï¼Œç”¨äºå®šä½
 		this->backwardMenu.x = 140;
 		this->backwardMenu.y = 430;
 		this->backwardMenu.isUse = true;
@@ -400,7 +400,7 @@ void PictureDraw::drawText(std::vector<BestScoreUser> bestScores)
 	settextcolor(BLACK);
 	if (bestScores.size() > 0)
 	{
-		outtextxy(10, 20, "ĞÕÃû,  ·ÖÊı,  Ê±¼ä");
+		outtextxy(10, 20, "å§“å,  åˆ†æ•°,  æ—¶é—´");
 		int index = 2;
 		for (std::vector<BestScoreUser>::iterator it = bestScores.begin(); it != bestScores.end(); it++, index++)
 		{
@@ -421,7 +421,7 @@ std::string PictureDraw::getInputString()
 {
 	initgraph(400, 300);
 	char str[20];
-	InputBox(str, 20, "ÄãÒÑ½øÈëÅÅĞĞ°ñ£¬ÇëÊäÈëĞÕÃû");
+	InputBox(str, 20, "ä½ å·²è¿›å…¥æ’è¡Œæ¦œï¼Œè¯·è¾“å…¥å§“å");
 	outtextxy(100, 150, str);
 	std::string result = str;
 	DEBUGLOG("PictureDraw::getInputString||input={}", result);

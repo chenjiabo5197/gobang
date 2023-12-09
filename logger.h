@@ -6,15 +6,15 @@
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/rotating_file_sink.h"
 
-// ÈÕÖ¾µÄÅäÖÃÏî
+// æ—¥å¿—çš„é…ç½®é¡¹
 struct LogConfig {
-    std::string level;   // ÈÕÖ¾¼¶±ğ
-    std::string path;    // ÈÕÖ¾µÄ´¢´æÂ·¾¶
-    int64_t     size;    // Ñ­»·ÈÕÖ¾ÎÄ¼şÒ»¸öÎÄ¼şµÄ´óĞ¡
-    int         count;   // ×î¶àµÄÈÕÖ¾ÎÄ¼şÊıÁ¿
+    std::string level;   // æ—¥å¿—çº§åˆ«
+    std::string path;    // æ—¥å¿—çš„å‚¨å­˜è·¯å¾„
+    int64_t     size;    // å¾ªç¯æ—¥å¿—æ–‡ä»¶ä¸€ä¸ªæ–‡ä»¶çš„å¤§å°
+    int         count;   // æœ€å¤šçš„æ—¥å¿—æ–‡ä»¶æ•°é‡
 };
 
-// ÈÕÖ¾µÄµ¥ÀıÄ£Ê½
+// æ—¥å¿—çš„å•ä¾‹æ¨¡å¼
 class Logger {
 public:
     static Logger* getInstance() {
@@ -22,7 +22,7 @@ public:
         return &instance;
     }
 
-    //c++14·µ»ØÖµ¿ÉÉèÖÃÎªauto
+    //c++14è¿”å›å€¼å¯è®¾ç½®ä¸ºauto
     std::shared_ptr<spdlog::logger> getLogger() {
         return loggerPtr;
     }
@@ -39,7 +39,7 @@ private:
     std::shared_ptr<spdlog::logger> loggerPtr;
 };
 
-// ÈÕÖ¾Ïà¹Ø²Ù×÷µÄºê·â×°
+// æ—¥å¿—ç›¸å…³æ“ä½œçš„å®å°è£…
 #define INITLOG(conf)      Logger::getInstance()->Init(conf)
 #define GETLOGLEVEL()      Logger::getInstance()->GetLogLevel()
 #define SETLOGLEVEL(level) Logger::getInstance()->SetLogLevel(level)

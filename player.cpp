@@ -17,12 +17,12 @@ void Player::resetPlayer()
 
 bool Player::go(int x, int y, chess_kind_type kind)
 {
-	// 等待棋手有效落子
+	// 绛夊緟妫嬫墜鏈夋晥钀藉瓙
 	ChessPos pos;
 	if (this->chess->clickBoard(x, y, &pos))
 	{
 		INFOLOG("Player::go||valid mouse click chessboard||x={}||y={}", x, y);
-		// 落子
+		// 钀藉瓙
 		mciSendString("play res/chess_down.mp3", 0, 0, 0);
 		this->chess->chessDown(&pos, kind);
 		this->chessNum++;
