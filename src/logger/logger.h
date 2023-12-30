@@ -1,5 +1,11 @@
 #pragma once
-// logger.h
+/*============================================
+* Author: chenjiabo
+* E-mail: chen_wangyi666@163.com
+* Date: 2023-12-30
+* Description: This is logger.h file
+* Copyright (c) 2023, All rights reserved
+=============================================*/
 #ifndef LOGGER_H
 #define LOGGER_H
 

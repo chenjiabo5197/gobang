@@ -1,4 +1,10 @@
-// logger.cpp
+/*============================================
+* Author: chenjiabo
+* E-mail: chen_wangyi666@163.com
+* Date: 2023-12-30
+* Description: This is logger.cpp file
+* Copyright (c) 2023, All rights reserved
+=============================================*/
 #include "logger.h"
 
 void Logger::Init(const LogConfig& conf) {

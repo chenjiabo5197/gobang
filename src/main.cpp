@@ -1,8 +1,15 @@
+/*============================================
+* Author: chenjiabo
+* E-mail: chen_wangyi666@163.com
+* Date: 2023-12-30
+* Description: This is main file
+* Copyright (c) 2023, All rights reserved
+=============================================*/
+
 #include <iostream>
-#include "management.h"
-#include "spdlog/spdlog.h"
-#include "logger.h"
-#include "pictureDraw.h"
+// #include "management.h"
+#include "logger/logger.h"
+// #include "pictureDraw.h"
 
 // 初始化日志
 void initLogger()
@@ -31,15 +38,15 @@ int main()
 {
     initLogger();
 
-    PictureDraw pictureDraw(13, 44, 43, 67.4);
+    // PictureDraw pictureDraw(13, 44, 43, 67.4);
 
-	Chess chess(13, 44, 43, 67.4, &pictureDraw);
-	Player player1;
-	Player player2;
-	AI ai;
-	Management game(&player1, &player2, &ai, &chess, &pictureDraw);
+	// Chess chess(13, 44, 43, 67.4, &pictureDraw);
+	// Player player1;
+	// Player player2;
+	// AI ai;
+	// Management game(&player1, &player2, &ai, &chess, &pictureDraw);
 
-	game.play();
+	// game.play();
 
 	return 0;
 }
