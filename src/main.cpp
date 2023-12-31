@@ -60,7 +60,8 @@ int main()
     int screen_width = config.Read("screen_width", 0);
     int screen_height = config.Read("screen_height", 0);
     Render render(screen_width, screen_height);
-    render.renderMenu();
+    render.setRendererType(PLAYCHESS_INTERFACE);
+    render.renderer();
 
     // PictureDraw pictureDraw(13, 44, 43, 67.4);
 

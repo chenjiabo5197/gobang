@@ -11,6 +11,7 @@ Render::Render(const int& width, const int& height)
 {
     this->width = width;
     this->height = height;
+    this->render_type = DEFAULT_INTERFACE;
     DEBUGLOG("Render init success!");
 }
 
@@ -46,7 +47,7 @@ bool Render::initRender()
         }
         else
         {
-            DEBUGLOG("Create window success!");
+            DEBUGLOG("Create window success, width={}, height={}", this->width, this->height);
             //为窗口创建垂直同步渲染器
             /*
             垂直同步,VSync 可以让渲染与显示器在垂直刷新时的更新同步进行。在本教程中，它将确保动画的运行速度不会太快。
@@ -122,7 +123,7 @@ void Render::closeRender()
     SDL_Quit();
 }
 
-void Render::renderMenu()
+void Render::renderer()
 {
     //Start up SDL and create window
     if(!this->initRender())
@@ -154,30 +155,18 @@ void Render::renderMenu()
                         quit = true;
                     }
                 }
-                 //Clear screen
+                //Clear screen
                 SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
                 SDL_RenderClear(gRenderer);
 
-                //Render chessboard backgroud
-                SDL_Rect fillRect = {0, 0, this->width, this->height};
-                SDL_SetRenderDrawColor(gRenderer, 255, 228, 181, 0xFF);        
-                SDL_RenderFillRect(gRenderer, &fillRect);
-
-                // //Render green outlined quad
-                // SDL_Rect outlineRect = { SCREEN_WIDTH / 6, SCREEN_HEIGHT / 6, SCREEN_WIDTH * 2 / 3, SCREEN_HEIGHT * 2 / 3 };
-                // SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);        
-                // SDL_RenderDrawRect(gRenderer, &outlineRect);
-                
-                //Draw blue horizontal line
-                SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0xFF);        
-                SDL_RenderDrawLine(gRenderer, 0, this->height / 2, this->width, this->height / 2);
-
-                // //Draw vertical line of yellow dots
-                // SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0x00, 0xFF);
-                // for(int i = 0; i < SCREEN_HEIGHT; i += 4)
-                // {
-                //     SDL_RenderDrawPoint(gRenderer, SCREEN_WIDTH / 2, i);
-                // }
+                switch (this->render_type)
+                {
+                case PLAYCHESS_INTERFACE:
+                    this->renderPlayChessInterface();
+                    break;
+                default:
+                    break;
+                }
 
                 //Update screen
                 SDL_RenderPresent(gRenderer);
@@ -186,4 +175,71 @@ void Render::renderMenu()
         //Free resources and close SDL
         this->closeRender();
     }
+}
+
+bool Render::renderPlayChessInterface()
+{
+    // 棋盘的左上角坐标
+    int boundary_x = 50;
+    int boundary_y = 50;
+    // 棋盘的每个格子大小
+    int lattice_size = 60;
+    // 渲染棋盘背景色
+    SDL_Rect chessboard_backgroud = {boundary_x, boundary_y, lattice_size*14, lattice_size*14};
+    SDL_SetRenderDrawColor(gRenderer, 255, 246, 143, 0xFF);        
+    SDL_RenderFillRect(gRenderer, &chessboard_backgroud);
+
+    // 渲染棋盘边界正方形,五子棋盘一共有15*15行，一共是14*14个间距,此处+1是为了渲染棋盘边框两次，使棋盘边框线看起来粗一点
+    SDL_Rect chessboard_boundary = {boundary_x+1, boundary_y+1, lattice_size*14+1, lattice_size*14+1};
+    SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);        
+    SDL_RenderDrawRect(gRenderer, &chessboard_boundary);
+    
+    //渲染棋盘网格线
+    for (int i = 0; i < 15; i++)
+    {
+        // 横向的棋盘线
+        SDL_RenderDrawLine(gRenderer, boundary_x, lattice_size*i+boundary_y, lattice_size*14+boundary_x, lattice_size*i+boundary_y);
+        // 纵向的棋盘线
+        SDL_RenderDrawLine(gRenderer, lattice_size*i+boundary_x, boundary_y, lattice_size*i+boundary_x, lattice_size*14+boundary_y);
+    }
+    // 渲染棋盘上五个点
+    this->renderCircle(lattice_size*7+boundary_x, lattice_size*7+boundary_y, 5);
+    this->renderCircle(lattice_size*3+boundary_x, lattice_size*3+boundary_y, 5);
+    this->renderCircle(lattice_size*3+boundary_x, lattice_size*11+boundary_y, 5);
+    this->renderCircle(lattice_size*11+boundary_x, lattice_size*3+boundary_y, 5);
+    this->renderCircle(lattice_size*11+boundary_x, lattice_size*11+boundary_y, 5);
+    return true;
+}
+
+void Render::setRendererType(const interface_kind_type& render_type)
+{
+    this->render_type = render_type;
+    INFOLOG("setRendererType||set render_type={}", (int)render_type);
+}
+
+void Render::renderCircle(const int& x, const int& y, const int& radius)
+{
+    INFOLOG("renderCircle||x={}||y={}||radius={}", x, y, radius);
+    for (int k = 0; k < 2; k++)  // 向上和向下各渲染一次
+    {
+        for (int i = 1; i < radius; i++)
+        {
+            int row_point_nums = 2*radius+1-2*i;
+            for (int j = 1; j <= row_point_nums; j++)
+            {
+                int temp_x = j-(radius+1-i) + x;
+                int temp_y = 0;
+                if (k == 0)
+                {
+                    temp_y = y-i;
+                }
+                else
+                {
+                    temp_y = y+i;
+                }
+                SDL_RenderDrawPoint(gRenderer, temp_x, temp_y);
+                DEBUGLOG("renderCircle||temp_x={}||temp_y={}||row_point_nums={}", temp_x, temp_y, row_point_nums);
+            }
+        }
+    }     
 }
