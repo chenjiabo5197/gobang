@@ -1,0 +1,10 @@
+# log
+log_level=info
+log_path=logs
+log_filename=gobang.log
+# MB
+log_filesize=10
+log_filenums=10
+
+screen_width=640
+screen_height=480

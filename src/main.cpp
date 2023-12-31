@@ -9,21 +9,40 @@
 #include <iostream>
 // #include "management.h"
 #include "logger/logger.h"
-// #include "pictureDraw.h"
+#include "utils/config.h"
+#include "render/render.h"
+
+// 初始化配置文件
+Config initConfig(const std::string& config_path)
+{  
+    Config configSettings(config_path);
+    // int port;  
+    // std::string ipAddress;
+    // port = configSettings.Read("port", 0);  
+    // ipAddress = configSettings.Read("ipAddress", ipAddress); 
+    return configSettings;
+}
 
 // 初始化日志
-void initLogger()
+void initLogger(const Config& config)
 {
+    std::string str_temp;
+    std::string log_level = config.Read("log_level", str_temp);
+    std::string log_path = config.Read("log_path", str_temp);
+    std::string log_filename = config.Read("log_filename", str_temp);
+    int log_filesize = config.Read("log_filesize", 0);
+    int log_filenums = config.Read("log_filenums", 0);
+    std::string path = log_path + "/" + log_filename;
     // 定义日志配置项
     LogConfig conf = {
-        "trace",
+        log_level,
         //"info",
-        "logs/gobang.log",
-        100 * 1024 * 1024,
-        10
+        path,
+        log_filesize * 1024 * 1024,
+        log_filenums
     };
     INITLOG(conf);
-    INFOLOG("init logger success!");
+    INFOLOG("init logger success, log_level={}, path={}, log_filesize={}, log_filenums={}", log_level, path, log_filesize, log_filenums);
     // 日志初始级别为trace,写日志的demo
     /*TRACELOG("current log level is {}", GETLOGLEVEL());
     TRACELOG("this is trace log");
@@ -36,7 +55,12 @@ void initLogger()
 
 int main()
 {
-    initLogger();
+    Config config = initConfig("config/config.txt");
+    initLogger(config);
+    int screen_width = config.Read("screen_width", 0);
+    int screen_height = config.Read("screen_height", 0);
+    Render render(screen_width, screen_height);
+    render.renderMenu();
 
     // PictureDraw pictureDraw(13, 44, 43, 67.4);
 

@@ -1,16 +1,31 @@
 # gobang
 
 #### 介绍
-用c++写的五子棋对战，基于SDL2库
+用c++写的五子棋对战，基于SDL2图像库、spdlog日志库，使用CMakeLists.txt方式编译代码
 #### 软件架构
 软件架构说明
 
 
 #### 安装教程
 
-1.  xxx
-2.  xxxx
-3.  xxxx
+1.  安装SDL2  
+        sudo apt-get install libsdl2-dev  
+        sudo apt-cache search libsdl2-image
+        sudo apt-cache search libsdl2-ttf-dev
+        sudo apt-cache search libsdl2-mixer-dev.
+2.  在本地/usr/lib/x86_64-linux-gnu/cmake下新建sdl2_image、sdl2_ttf、sdl2_mixer等文件夹
+3.  各自文件夹里面新建文件,例sdl2_image下新建文件sdl2_image-config.cmake  
+        文件内容:  
+        set(prefix "/usr")  
+        set(exec_prefix "\$\{prefix}")  
+        set(libdir "\$\{prefix}/lib/x86_64-linux-gnu")  
+        set(SDL2_IMAGE_PREFIX "/usr")  
+        set(SDL2_IMAGE_EXEC_PREFIX "/usr")  
+        set(SDL2_IMAGE_INCLUDE_DIRS "${prefix}/include/SDL2_image")  
+        set(SDL2_IMAGE_LIBRARIES "-lSDL2_image")  
+4.  安装spdlog  
+        代码库:https://github.com/gabime/spdlog/tree/v1.x  
+        使用代码自带的CMakeLists.txt安装，命令:make install
 
 #### 使用说明
 

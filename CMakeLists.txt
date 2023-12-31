@@ -9,10 +9,7 @@ find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 find_package(SDL2_mixer REQUIRED)
-
-add_subdirectory(
-    third_party/spdlog
-)
+find_package(spdlog REQUIRED)
 
 include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS} ${SDL2_MIXER_INCLUDE_DIRS})
 
@@ -26,15 +23,23 @@ set(CMAKE_CXX_STANDARD 11)
 file(GLOB_RECURSE SOURCES_FILES 
     src/main.cpp 
     src/logger/*
+    src/draw/*
+    src/utils/config.h
+    src/utils/config.cpp
+    src/render/render.h
+    src/render/render.cpp
+    src/render/sdl_texture.h
+    src/render/sdl_texture.cpp
+    # third_party/spdlog/*
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES_FILES})
 
-target_link_libraries(${TARGET_PROJECT} LINK_PUBLIC ${TARGET_LOGGER})
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES})
-# add_custom_command(
-#     TARGET ${PROJECT_NAME}
-#     POST_BUILD
-#     COMMAND ${CMAKE_COMMAND} -E copy "${PROJECT_SOURCE_DIR}/*.png" ${PROJECT_BINARY_DIR}
-# )
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
+# target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES})
+add_custom_command(
+    TARGET ${PROJECT_NAME}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/config" ${PROJECT_BINARY_DIR}/config
+)
 
