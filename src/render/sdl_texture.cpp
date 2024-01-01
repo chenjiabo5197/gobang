@@ -7,15 +7,13 @@
 =============================================*/
 #include "sdl_texture.h"
 
-SDLTexture::SDLTexture(SDL_Window* gWindow, SDL_Renderer* gRenderer, const std::string& name)
+SDLTexture::SDLTexture(const std::string& name)
 {
     //Initialize
     mTexture = nullptr;
     mSurfacePixels = nullptr;
     mWidth = 0;
     mHeight = 0;
-    this->gWindow = gWindow;
-    this->gRenderer = gRenderer;
     this->texture_name = name;
     INFOLOG("SDLTexture construct success, texture_name={}", this->texture_name);
 }
@@ -84,7 +82,7 @@ bool SDLTexture::loadFromRenderedText(std::string textureText, SDL_Color textCol
 }
 #endif
 
-bool SDLTexture::loadPixelsFromFile(const std::string& path)
+bool SDLTexture::loadPixelsFromFile(SDL_Window * gWindow, const std::string& path)
 {
     //Free preexisting assets
     // free();
@@ -118,7 +116,7 @@ bool SDLTexture::loadPixelsFromFile(const std::string& path)
 }
 
 // 加载纹理
-bool SDLTexture::loadFromPixels()
+bool SDLTexture::loadFromPixels(SDL_Renderer* gRenderer)
 {
     //Only load if pixels exist
     if(mSurfacePixels == nullptr)
@@ -152,19 +150,19 @@ bool SDLTexture::loadFromPixels()
     return mTexture != nullptr;
 }
 
-bool SDLTexture::loadFromFile(const std::string& path)
+bool SDLTexture::loadFromFile(SDL_Window * gWindow, SDL_Renderer* gRenderer, const std::string& path)
 {
     INFOLOG("loadFromFile||path={}", path);
 
     //Load pixels
-    if(!loadPixelsFromFile(path))
+    if(!loadPixelsFromFile(gWindow, path))
     {
         ERRORLOG("Failed to load pixels, path={}", path.c_str());
     }
     else
     {
         //Load texture from pixels
-        if(!loadFromPixels())
+        if(!loadFromPixels(gRenderer))
         {
             ERRORLOG("Failed to texture from pixels, path={}", path.c_str());
         }
@@ -217,7 +215,7 @@ void SDLTexture::free()
     }
 }
 
-void SDLTexture::render(int x, int y, float multiple, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
+void SDLTexture::render(SDL_Renderer* gRenderer, int x, int y, float multiple, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
     //设置渲染区域并渲染到屏幕
     SDL_Rect renderQuad = {x, y, mWidth, mHeight};
@@ -281,7 +279,7 @@ Uint32 SDLTexture::getPixel32(Uint32 x, Uint32 y)
 }
 
 //创建一个 32 位 RGBA 纹理并进行流访问。创建纹理时必须确保的一点是，纹理像素的格式要与流式传输的像素格式一致
-bool SDLTexture::createBlank(int width, int height)
+bool SDLTexture::createBlank(SDL_Renderer* gRenderer, int width, int height)
 {
     //Get rid of preexisting texture
     free();
@@ -301,7 +299,7 @@ bool SDLTexture::createBlank(int width, int height)
     return mTexture != nullptr;
 }
 
-bool SDLTexture::createBlank(int width, int height, SDL_TextureAccess access)
+bool SDLTexture::createBlank(SDL_Renderer* gRenderer, int width, int height, SDL_TextureAccess access)
 {
     //Get rid of preexisting texture
     free();
@@ -322,7 +320,7 @@ bool SDLTexture::createBlank(int width, int height, SDL_TextureAccess access)
 }
 
 // 对纹理进行渲染，将其设置为渲染目标
-void SDLTexture::setAsRenderTarget()
+void SDLTexture::setAsRenderTarget(SDL_Renderer* gRenderer)
 {
     //Make self render target
     SDL_SetRenderTarget(gRenderer, mTexture);

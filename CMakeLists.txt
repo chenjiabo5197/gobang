@@ -30,6 +30,8 @@ file(GLOB_RECURSE SOURCES_FILES
     src/render/render.cpp
     src/render/sdl_texture.h
     src/render/sdl_texture.cpp
+    src/chess/chess.*
+    src/chess/chessboard.*
     # third_party/spdlog/*
 )
 
@@ -41,6 +43,6 @@ add_custom_command(
     TARGET ${PROJECT_NAME}
     POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/config" ${PROJECT_BINARY_DIR}/config
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/resource" ${PROJECT_BINARY_DIR}/resource
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/resources" ${PROJECT_BINARY_DIR}/resources
 )
 

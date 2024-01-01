@@ -9,6 +9,8 @@
 
 #include <math.h>
 #include "sdl_texture.h"
+#include "../chess/chessboard.h"
+#include "../utils/config.h"
 
 // 枚举渲染的种类
 typedef enum {
@@ -32,17 +34,16 @@ private:
 
     SDL_Window * gWindow;
     SDL_Renderer* gRenderer;
-
-    // 棋子
-    SDLTexture* white_chess;
-    // SDLTexture* black_chess;
+    
+    // 棋盘
+    Chessboard* chessboard;
 
     // 渲染的种类
     interface_kind_type render_type;
 
 public:
 
-    Render(const int& width, const int& height);
+    Render(const Config& config);
     ~Render();
 
     // 初始化渲染
@@ -55,12 +56,6 @@ public:
 
     // 渲染主函数
     void renderer();
-
-    // 渲染圆形，传入圆心坐标和圆的半径
-    void renderCircle(const int& x, const int& y, const int& radius);
-
-    // 渲染下棋界面
-    bool renderPlayChessInterface();
 
     // 设置渲染界面类型
     void setRendererType(const interface_kind_type& render_type);

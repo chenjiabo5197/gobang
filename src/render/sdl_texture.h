@@ -16,13 +16,13 @@ class SDLTexture
 {
 public:
     //Initializes variables
-    SDLTexture(SDL_Window* gWindow, SDL_Renderer* gRenderer, const std::string& name);
+    SDLTexture(const std::string& name);
 
     //Deallocates memory
     ~SDLTexture();
 
     //Loads image at specified path
-    bool loadFromFile(const std::string& path);
+    bool loadFromFile(SDL_Window * gWindow, SDL_Renderer* gRenderer, const std::string& path);
 
     #if defined(SDL_TTF_MAJOR_VERSION)
     /*
@@ -35,16 +35,16 @@ public:
     #endif
 
     //Loads image into pixel buffer  加载像素 
-    bool loadPixelsFromFile(const std::string& path);
+    bool loadPixelsFromFile(SDL_Window * gWindow, const std::string& path);
 
     //Creates image from preloaded pixels  将纹理转化为像素  
-    bool loadFromPixels();
+    bool loadFromPixels(SDL_Renderer* gRenderer);
 
     //createBlank 函数分配了一个空白纹理，可以在流式传输时将数据复制到该纹理中
-    bool createBlank(int width, int height);
+    bool createBlank(SDL_Renderer* gRenderer, int width, int height);
 
     //接收了access参数，该参数定义了如何访问它
-    bool createBlank(int width, int height, SDL_TextureAccess access);
+    bool createBlank(SDL_Renderer* gRenderer, int width, int height, SDL_TextureAccess access);
 
     //Deallocates texture
     void free();
@@ -62,10 +62,10 @@ public:
     /*接受一个矩形参数，用来定义要渲染的纹理部分。给它一个默认参数 nullptr，以防渲染整个纹理
     接受旋转角度、纹理旋转点和 SDL 翻转枚举值，同样也给出了参数的默认值，以备在不旋转或翻转的情况下渲染纹理。
     */
-    void render(int x, int y, float multiple = 1.0, SDL_Rect* clip = nullptr, double angle = 0.0, SDL_Point* center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
+    void render(SDL_Renderer* gRenderer, int x, int y, float multiple = 1.0, SDL_Rect* clip = nullptr, double angle = 0.0, SDL_Point* center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
     //渲染该纹理
-    void setAsRenderTarget();
+    void setAsRenderTarget(SDL_Renderer* gRenderer);
 
     //Gets image dimensions
     int getWidth();
@@ -88,10 +88,6 @@ public:
     bool unlockTexture();
 
 private:
-    // 渲染的窗口
-    SDL_Window * gWindow;
-    SDL_Renderer* gRenderer;
-
     std::string texture_name;
 
     //实际渲染的纹理

@@ -9,3 +9,14 @@ log_filenums=10
 # display
 screen_width=1280
 screen_height=960
+
+#resources
+white_chess_resource_path=resources/white.png
+black_chess_resource_path=resources/black.png
+chess_multiple=0.5
+chess_origin_size=83
+
+#chessboard
+chessboard_origin_x=50
+chessboard_origin_y=50
+chessboard_lattice_size=60

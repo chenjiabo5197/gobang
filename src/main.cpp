@@ -57,9 +57,7 @@ int main()
 {
     Config config = initConfig("config/config.txt");
     initLogger(config);
-    int screen_width = config.Read("screen_width", 0);
-    int screen_height = config.Read("screen_height", 0);
-    Render render(screen_width, screen_height);
+    Render render(config);
     render.setRendererType(PLAYCHESS_INTERFACE);
     render.renderer();
 
