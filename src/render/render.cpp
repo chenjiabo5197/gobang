@@ -153,6 +153,17 @@ void Render::renderer()
                 {
                     // this->renderPlayChessInterface();
                     this->chessboard->renderPlayChessInterface(this->gRenderer);
+                    this->chessboard->black_chess->loadResource(this->gWindow, this->gRenderer);
+                    this->chessboard->white_chess->loadResource(this->gWindow, this->gRenderer);
+                    this->chessboard->black_chess->chessRender(this->gRenderer, 0, 0);
+                    this->chessboard->white_chess->chessRender(this->gRenderer, 0, 1);
+                    this->chessboard->white_chess->chessRender(this->gRenderer, 1, 0);
+                    this->chessboard->black_chess->chessRender(this->gRenderer, 1, 1);
+                    this->chessboard->white_chess->chessRender(this->gRenderer, 7, 7);
+                    this->chessboard->white_chess->chessRender(this->gRenderer, 7, 6);
+                    this->chessboard->black_chess->chessRender(this->gRenderer, 6, 7);
+                    this->chessboard->white_chess->chessRender(this->gRenderer, 7, 8);
+                    this->chessboard->black_chess->chessRender(this->gRenderer, 8, 7);
                     this->setRendererType(DEFAULT_INTERFACE);
                     break;
                 }

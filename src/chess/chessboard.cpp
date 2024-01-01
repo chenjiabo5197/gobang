@@ -8,8 +8,8 @@ Chessboard::Chessboard(const Config& config)
     this->lattice_size = config.Read("chessboard_lattice_size", 0);
     std::string white_chess_path = config.Read("white_chess_resource_path", temp);
     std::string black_chess_path = config.Read("black_chess_resource_path", temp);
-    this->white_chess = new Chess(config, "white_chess", white_chess_path);
-    this->black_chess = new Chess(config, "black_chess", black_chess_path);
+    this->white_chess = new Chess(config, "white_chess", white_chess_path, origin_x, origin_y, lattice_size);
+    this->black_chess = new Chess(config, "black_chess", black_chess_path, origin_x, origin_y, lattice_size);
     INFOLOG("Chessboard construct success||origin_x={}||origin_y={}||lattice_size={}||white_chess_path={}||black_chess_path={}", this->origin_x, this->origin_y, this->lattice_size, white_chess_path, black_chess_path);
 }
 

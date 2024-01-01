@@ -17,8 +17,12 @@ private:
     float chess_multiple;
 
     SDLTexture* sdl_texture;
+
+    int chess_origin_size;
+    int lattice_size;
+    int origin_x, origin_y;
 public:
-    Chess(const Config& config, const std::string& chess_name, const std::string& chess_resource_path);
+    Chess(const Config& config, const std::string& chess_name, const std::string& chess_resource_path, const int& origin_x, const int& origin_y, const int& lattice_size);
 
     ~Chess();
 
@@ -26,7 +30,7 @@ public:
     bool loadResource(SDL_Window * gWindow, SDL_Renderer* gRenderer);
 
     // 将棋子渲染在棋盘的x,y坐标，其中x，y是棋盘上以左上角为坐标原点的相对坐标
-    bool chessRender(const int& x, const int& y);
+    bool chessRender(SDL_Renderer* gRenderer, const int& x, const int& y);
 };
 
 

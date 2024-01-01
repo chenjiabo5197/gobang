@@ -8,6 +8,9 @@
 class Chessboard
 {
 public:
+    // 棋子
+    Chess* white_chess;
+    Chess* black_chess;
 
     // 传入棋盘左上角的坐标origin_x，origin_y，棋盘中单个格子大小，每种棋子原素材的缩放倍数，默认不缩放
     Chessboard(const Config& config);
@@ -50,16 +53,10 @@ public:
 	// void playerWithDraw();
 
 private:
-    // 棋子
-    Chess* white_chess;
-    Chess* black_chess;
 
     // 棋盘左上角坐标
     int origin_x, origin_y;
 
     // 棋盘中每个格子大小
     int lattice_size;
-
-    // 每种棋子缩放大小
-    float multiple;
 };

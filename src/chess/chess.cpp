@@ -1,12 +1,16 @@
 #include "chess.h"
 
-Chess::Chess(const Config& config, const std::string& chess_name, const std::string& chess_resource_path)
+Chess::Chess(const Config& config, const std::string& chess_name, const std::string& chess_resource_path, const int& origin_x, const int& origin_y, const int& lattice_size)
 {
     this->chess_resource_path = chess_resource_path;
     this->chess_name = chess_name;
     this->chess_multiple = config.Read("chess_multiple", 0.0);
+    this->chess_origin_size = config.Read("chess_origin_size", 0);
+    this->origin_x = origin_x;
+    this->origin_y = origin_y;
+    this->lattice_size = lattice_size;
     this->sdl_texture = new SDLTexture(this->chess_name);
-    INFOLOG("Chess construct success||chess_resource_path={}||chess_name={}||chess_multiple={}", chess_resource_path, chess_name, chess_multiple);
+    INFOLOG("Chess construct success||chess_resource_path={}||chess_name={}||chess_multiple={}||chess_origin_size={}", this->chess_resource_path, this->chess_name, this->chess_multiple, this->chess_origin_size);
 }
 
 Chess::~Chess()
@@ -20,7 +24,7 @@ bool Chess::loadResource(SDL_Window * gWindow, SDL_Renderer* gRenderer)
     //Loading success flag
     bool success = true;
     //Load data stream
-    if(this->sdl_texture->loadPixelsFromFile(gWindow, this->chess_resource_path))
+    if(!this->sdl_texture->loadPixelsFromFile(gWindow, this->chess_resource_path))
     {        
         ERRORLOG("Failed to load texture!");
         success = false;
@@ -53,7 +57,15 @@ bool Chess::loadResource(SDL_Window * gWindow, SDL_Renderer* gRenderer)
     return success;
 }
 
-bool Chess::chessRender(const int& x, const int& y)
+bool Chess::chessRender(SDL_Renderer* gRenderer, const int& x, const int& y)
 {
+    int new_width = (int)this->chess_origin_size * this->chess_multiple;
+    int new_height = (int)this->chess_origin_size * this->chess_multiple;
+    int x_offset = new_width / 2;
+    int y_offset = new_height / 2;
+    int chess_x = x * this->lattice_size + this->origin_x - x_offset;
+    int chess_y = y * this->lattice_size + this->origin_y - y_offset;
+    this->sdl_texture->render(gRenderer, chess_x, chess_y, this->chess_multiple);
+    INFOLOG("chessRender||x={}y={}||chess_x={}||chess_y={}", x, y, chess_x, chess_y);
     return false;
 }
