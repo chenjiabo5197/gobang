@@ -7,12 +7,17 @@
 =============================================*/
 #include "sdl_texture.h"
 
-SDLTexture::SDLTexture(const int& width, const int& height)
+SDLTexture::SDLTexture(SDL_Window* gWindow, SDL_Renderer* gRenderer, const std::string& name)
 {
     //Initialize
     mTexture = nullptr;
+    mSurfacePixels = nullptr;
     mWidth = 0;
     mHeight = 0;
+    this->gWindow = gWindow;
+    this->gRenderer = gRenderer;
+    this->texture_name = name;
+    INFOLOG("SDLTexture construct success, texture_name={}", this->texture_name);
 }
 
 SDLTexture::~SDLTexture()
@@ -79,7 +84,7 @@ bool SDLTexture::loadFromRenderedText(std::string textureText, SDL_Color textCol
 }
 #endif
 
-bool SDLTexture::loadPixelsFromFile(SDL_Window * gWindow, const std::string& path)
+bool SDLTexture::loadPixelsFromFile(const std::string& path)
 {
     //Free preexisting assets
     // free();
@@ -113,7 +118,7 @@ bool SDLTexture::loadPixelsFromFile(SDL_Window * gWindow, const std::string& pat
 }
 
 // 加载纹理
-bool SDLTexture::loadFromPixels(SDL_Renderer* gRenderer)
+bool SDLTexture::loadFromPixels()
 {
     //Only load if pixels exist
     if(mSurfacePixels == nullptr)
@@ -123,7 +128,7 @@ bool SDLTexture::loadFromPixels(SDL_Renderer* gRenderer)
     else
     {
         //Color key image
-        SDL_SetColorKey(mSurfacePixels, SDL_TRUE, SDL_MapRGB(mSurfacePixels->format, 0, 0xFF, 0xFF));
+        SDL_SetColorKey(mSurfacePixels, SDL_TRUE, SDL_MapRGB(mSurfacePixels->format, 0xff, 0xff, 0xff));
 
         //Create texture from surface pixels
         mTexture = SDL_CreateTextureFromSurface(gRenderer, mSurfacePixels);
@@ -147,20 +152,19 @@ bool SDLTexture::loadFromPixels(SDL_Renderer* gRenderer)
     return mTexture != nullptr;
 }
 
-bool SDLTexture::loadFromFile(SDL_Window * gWindow, SDL_Renderer* gRenderer, const std::string& path)
+bool SDLTexture::loadFromFile(const std::string& path)
 {
-    //先取消原有纹理的渲染
-    // free();
+    INFOLOG("loadFromFile||path={}", path);
 
     //Load pixels
-    if(!loadPixelsFromFile(gWindow, path))
+    if(!loadPixelsFromFile(path))
     {
         ERRORLOG("Failed to load pixels, path={}", path.c_str());
     }
     else
     {
         //Load texture from pixels
-        if(!loadFromPixels(gRenderer))
+        if(!loadFromPixels())
         {
             ERRORLOG("Failed to texture from pixels, path={}", path.c_str());
         }
@@ -213,10 +217,10 @@ void SDLTexture::free()
     }
 }
 
-void SDLTexture::render(SDL_Renderer* gRenderer, int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
+void SDLTexture::render(int x, int y, float multiple, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
     //设置渲染区域并渲染到屏幕
-    SDL_Rect renderQuad = { x, y, mWidth, mHeight };
+    SDL_Rect renderQuad = {x, y, mWidth, mHeight};
     /* 在特定位置渲染纹理时，需要指定一个目标矩形，该矩形可设置 x/y 位置和宽度/高度。在不知道原始图像尺寸的情况下，我们无法指定宽度/高度。
     因此，当我们渲染纹理时，我们会创建一个包含位置参数和成员宽度/高度的矩形，并将此矩形传递给 SDL_RenderCopy
     */
@@ -227,6 +231,10 @@ void SDLTexture::render(SDL_Renderer* gRenderer, int x, int y, SDL_Rect* clip, d
         renderQuad.w = clip->w;
         renderQuad.h = clip->h;
     }
+
+    // 使用倍数来缩放加载的图像
+    renderQuad.w = (int)mWidth * multiple;
+    renderQuad.h = (int)mHeight * multiple;
     /*
     在剪辑时，如果使用的是剪辑矩形的尺寸而不是纹理的尺寸，我们将把目标矩形（此处称为 renderQuad）的宽度/高度设置为剪辑矩形的尺寸。
     我们要将剪辑矩形作为源矩形传递给 SDL_RenderCopy。源矩形定义了要渲染纹理的哪一部分。当源矩形为空时，将渲染整个纹理。
@@ -273,7 +281,7 @@ Uint32 SDLTexture::getPixel32(Uint32 x, Uint32 y)
 }
 
 //创建一个 32 位 RGBA 纹理并进行流访问。创建纹理时必须确保的一点是，纹理像素的格式要与流式传输的像素格式一致
-bool SDLTexture::createBlank(SDL_Renderer* gRenderer, int width, int height)
+bool SDLTexture::createBlank(int width, int height)
 {
     //Get rid of preexisting texture
     free();
@@ -293,7 +301,7 @@ bool SDLTexture::createBlank(SDL_Renderer* gRenderer, int width, int height)
     return mTexture != nullptr;
 }
 
-bool SDLTexture::createBlank(SDL_Renderer* gRenderer, int width, int height, SDL_TextureAccess access)
+bool SDLTexture::createBlank(int width, int height, SDL_TextureAccess access)
 {
     //Get rid of preexisting texture
     free();
@@ -314,7 +322,7 @@ bool SDLTexture::createBlank(SDL_Renderer* gRenderer, int width, int height, SDL
 }
 
 // 对纹理进行渲染，将其设置为渲染目标
-void SDLTexture::setAsRenderTarget(SDL_Renderer* gRenderer)
+void SDLTexture::setAsRenderTarget()
 {
     //Make self render target
     SDL_SetRenderTarget(gRenderer, mTexture);

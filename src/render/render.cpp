@@ -12,11 +12,14 @@ Render::Render(const int& width, const int& height)
     this->width = width;
     this->height = height;
     this->render_type = DEFAULT_INTERFACE;
+    // this->black_chess = new SDLTexture(this->gWindow, this->gRenderer, "black_chess");
     DEBUGLOG("Render init success!");
 }
 
 Render::~Render()
 {
+    // delete(white_chess);
+    // delete(black_chess);
     DEBUGLOG("~Render success!");
 }
 
@@ -81,6 +84,7 @@ bool Render::initRender()
             }
         }
     }
+    this->white_chess = new SDLTexture(this->gWindow, this->gRenderer, "white_chess");
     INFOLOG("initRender success!");
     return success;
 }
@@ -91,19 +95,38 @@ bool Render::loadMedia()
     bool success = true;
 
     //Load data stream
-    // if(!gSplashTexture.loadFromFile("splash.png"))
-    // {        
-    //     ERRORLOG("Failed to load splash texture!");
-    //     success = false;
-    // }
-    // else
-    // {
-    //     //Create texture from manually color keyed pixels
-    //     if(!gFooTexture.loadFromPixels())
-    //     {
-    //         ERRORLOG("Unable to load Foo' texture from surface!");
-    //     }
-    // }
+    if(!white_chess->loadPixelsFromFile("resource/white.png"))
+    {        
+        ERRORLOG("Failed to load white texture!");
+        success = false;
+    }
+    else
+    {
+        INFOLOG("load white texture success!");
+        //Get pixel data
+        Uint32* pixels = white_chess->getPixels32();
+        int pixelCount = white_chess->getPitch32() * white_chess->getHeight();
+        //Map colors
+        Uint32 colorKey = 28095;   //取出白色棋子周围的颜色，用下面的值将其设置为透明色
+        Uint32 transparent = SDL_MapRGBA(SDL_GetWindowSurface(gWindow)->format, 0xFF, 0xFF, 0xFF, 0x00);
+
+        INFOLOG("loadMedia||pixelCount={}||colorKey={}||transparent={}", pixelCount, std::to_string(colorKey), std::to_string(transparent));
+
+        //Color key pixels
+        for(int i = 0; i < pixelCount; ++i)
+        {
+            DEBUGLOG("loadMedia||pixelCount={}", pixels[i]);
+            if(pixels[i] == colorKey)
+            {
+                pixels[i] = transparent;
+            }
+        }
+        //Create texture from manually color keyed pixels
+        if(!white_chess->loadFromPixels())
+        {
+            ERRORLOG("Unable to load white texture from surface!");
+        }
+    }
 
     return success;
 }
@@ -155,21 +178,25 @@ void Render::renderer()
                         quit = true;
                     }
                 }
-                //Clear screen
-                SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-                SDL_RenderClear(gRenderer);
-
-                switch (this->render_type)
+                if (this->render_type != DEFAULT_INTERFACE)
                 {
-                case PLAYCHESS_INTERFACE:
-                    this->renderPlayChessInterface();
-                    break;
-                default:
-                    break;
+                    //Clear screen
+                    SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+                    SDL_RenderClear(gRenderer);
+                    switch (this->render_type)
+                    {
+                    case PLAYCHESS_INTERFACE:
+                    {
+                        this->renderPlayChessInterface();
+                        white_chess->render(50, 50);
+                        break;
+                    }
+                    default:
+                        break;
+                    }
+                    //Update screen
+                    SDL_RenderPresent(gRenderer);
                 }
-
-                //Update screen
-                SDL_RenderPresent(gRenderer);
             }
         }
         //Free resources and close SDL
@@ -208,6 +235,7 @@ bool Render::renderPlayChessInterface()
     this->renderCircle(lattice_size*3+boundary_x, lattice_size*11+boundary_y, 5);
     this->renderCircle(lattice_size*11+boundary_x, lattice_size*3+boundary_y, 5);
     this->renderCircle(lattice_size*11+boundary_x, lattice_size*11+boundary_y, 5);
+    this->setRendererType(DEFAULT_INTERFACE);
     return true;
 }
 

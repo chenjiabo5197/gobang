@@ -33,10 +33,15 @@ private:
     SDL_Window * gWindow;
     SDL_Renderer* gRenderer;
 
+    // 棋子
+    SDLTexture* white_chess;
+    // SDLTexture* black_chess;
+
     // 渲染的种类
     interface_kind_type render_type;
 
 public:
+
     Render(const int& width, const int& height);
     ~Render();
 
