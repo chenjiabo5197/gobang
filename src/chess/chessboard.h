@@ -1,9 +1,44 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include <vector>
 #include "chess.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"
+
+typedef enum {
+    CHESS_DEFAULT,  // 空白
+	CHESS_WHITE,    // 白方
+	CHESS_BLACK		// 黑方
+} chess_kind_type;
+
+// 鼠标点击时在棋盘格子的周围四个角
+typedef enum {
+	COORD_DEFAULT,		   // 初始位置
+	LEFTTOP,           //左上     
+	RIGHTTOP,          //右上
+	LEFTBOTTOM,        //左下
+	RIGHTBOTTOM       //右下
+} chess_coordinate;
+
+typedef enum {
+	GAME_KIND_DEFAULT,
+	ONE_PLAYER_GAME,    // 单人游戏
+	TWO_PLAYERS_GAME,    // 双人游戏
+	PLAYER_INTERNET    // 网络对战
+} game_kind;
+
+// 棋子位置
+struct ChessPos {   
+	int chess_row;
+	int chess_col;
+};
+
+// 储存每一步棋子位置和棋子类型的结构体
+struct ChessData {
+	ChessPos* chessPos;
+	chess_kind_type chess_type;
+};
 
 class Chessboard
 {
@@ -27,11 +62,14 @@ public:
     void renderCircle(SDL_Renderer* gRenderer, const int& x, const int& y, const int& radius);
 
 	// 判断在指定坐标(x,y)位置，是否有效点击
-	// 如果是有效点击，把有效点击的位置(x,y)保存到参数pos中
-	// bool clickBoard(int x, int y, ChessPos* pos);
+	// 如果是有效点击，返回true，把有效点击的位置(x,y)保存到参数pos中，否则返回false
+	bool clickBoard(const int& x, const int& y, ChessPos* pos);
 
-	// // 在棋盘的指定位置pos，落子kind, isRecord表示是否要将棋子记录到chessBoardData中，默认需要记录，只有悔棋时下棋数据不用记录
-	// void chessDown(ChessPos* pos, chess_kind_type kind, bool isRecord = true);
+	// 在棋盘的x行、y列，落子kind, isRecord表示是否要将棋子记录到chessBoardData中，默认需要记录，只有悔棋时下棋数据不用记录
+	void chessDown(const ChessPos& chessPos, const chess_kind_type& kind, bool isRecord = true);
+
+    // 棋盘渲染当前对局，渲染棋盘，渲染当前已下的棋子
+    void render(SDL_Window * gWindow, SDL_Renderer* gRenderer);
 
 	// // 获取棋盘大小（13,15,19）
 	// int getChessBoardSize();
@@ -53,6 +91,8 @@ public:
 	// void playerWithDraw();
 
 private:
+    // 储存当前棋盘和棋子情况，空白0，白子1，黑子2
+	std::vector<std::vector<int>> chessMap;
 
     // 棋盘左上角坐标
     int origin_x, origin_y;

@@ -19,7 +19,7 @@ Render::Render(const Config& config)
 Render::~Render()
 {
     delete(chessboard);
-    DEBUGLOG("~Render success, release black_chess white_chess");
+    DEBUGLOG("~Render success, release chessboard");
 }
 
 bool Render::initRender()
@@ -29,7 +29,7 @@ bool Render::initRender()
     //Initialize SDL
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
     {
-        ERRORLOG("SDL could not initialize! SDL_Error: ", SDL_GetError());
+        ERRORLOG("SDL could not initialize||SDL_Error: ", SDL_GetError());
         success = false;
     }
     else
@@ -44,12 +44,12 @@ bool Render::initRender()
         this->gWindow = SDL_CreateWindow("五子棋", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->width, this->height, SDL_WINDOW_SHOWN);
         if(gWindow == nullptr)
         {
-            ERRORLOG("Window could not be created! SDL_Error: ", SDL_GetError());
+            ERRORLOG("Window could not be created||SDL_Error: ", SDL_GetError());
             success = false;
         }
         else
         {
-            DEBUGLOG("Create window success, width={}, height={}", this->width, this->height);
+            DEBUGLOG("Create window success||width={}||height={}", this->width, this->height);
             //为窗口创建垂直同步渲染器
             /*
             垂直同步,VSync 可以让渲染与显示器在垂直刷新时的更新同步进行。在本教程中，它将确保动画的运行速度不会太快。
@@ -58,7 +58,7 @@ bool Render::initRender()
             this->gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
             if(gRenderer == nullptr)
             {
-                ERRORLOG("Renderer could not be created! SDL Error:", SDL_GetError());
+                ERRORLOG("Renderer could not be created||SDL Error:", SDL_GetError());
                 success = false;
             }
             else
@@ -71,27 +71,19 @@ bool Render::initRender()
                 int imgFlags = IMG_INIT_PNG;
                 if(!(IMG_Init(imgFlags) & imgFlags))
                 {
-                    ERRORLOG("SDL_image could not initialize! SDL_image Error:", IMG_GetError());
+                    ERRORLOG("SDL_image could not initialize||SDL_image Error:", IMG_GetError());
                     success = false;
                 }
                 // //Initialize SDL_ttf
                 // if(TTF_Init() == -1)
                 // {
-                //     ERRORLOG("SDL_ttf could not initialize! SDL_ttf Error:", TTF_GetError());
+                //     ERRORLOG("SDL_ttf could not initialize||SDL_ttf Error:", TTF_GetError());
                 //     success = false;
                 // }
             }
         }
     }
     INFOLOG("initRender success!");
-    return success;
-}
-
-bool Render::loadMedia()
-{
-    //Loading success flag
-    bool success = true;
-
     return success;
 }
 
@@ -119,14 +111,7 @@ void Render::renderer()
     }
     else
     {
-        //Load media
-        // if(!loadMedia())
-        // {
-        //     ERRORLOG("Failed to load media!");
-        // }
-        // else
-        // {
-            //Hack to get window to stay up
+        //Hack to get window to stay up
         SDL_Event e;
         bool quit = false;
 
@@ -141,43 +126,37 @@ void Render::renderer()
                 {
                     quit = true;
                 }
-            }
-            if (this->render_type != DEFAULT_INTERFACE)
-            {
-                //Clear screen
-                SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-                SDL_RenderClear(gRenderer);
-                switch (this->render_type)
+                else if (e.type == SDL_MOUSEBUTTONDOWN)   // 鼠标点击事件
                 {
-                case PLAYCHESS_INTERFACE:
-                {
-                    // this->renderPlayChessInterface();
-                    this->chessboard->renderPlayChessInterface(this->gRenderer);
-                    this->chessboard->black_chess->loadResource(this->gWindow, this->gRenderer);
-                    this->chessboard->white_chess->loadResource(this->gWindow, this->gRenderer);
-                    this->chessboard->black_chess->chessRender(this->gRenderer, 0, 0);
-                    this->chessboard->white_chess->chessRender(this->gRenderer, 0, 1);
-                    this->chessboard->white_chess->chessRender(this->gRenderer, 1, 0);
-                    this->chessboard->black_chess->chessRender(this->gRenderer, 1, 1);
-                    this->chessboard->white_chess->chessRender(this->gRenderer, 7, 7);
-                    this->chessboard->white_chess->chessRender(this->gRenderer, 7, 6);
-                    this->chessboard->black_chess->chessRender(this->gRenderer, 6, 7);
-                    this->chessboard->white_chess->chessRender(this->gRenderer, 7, 8);
-                    this->chessboard->black_chess->chessRender(this->gRenderer, 8, 7);
-                    this->setRendererType(DEFAULT_INTERFACE);
-                    break;
+                    this->handleMouseClick(&e);
                 }
-                default:
-                    break;
-                }
-                //Update screen
-                SDL_RenderPresent(gRenderer);
             }
+            //Clear screen
+            SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+            SDL_RenderClear(gRenderer);
+            this->chessboard->render(gWindow, gRenderer);
+            //Update screen
+            SDL_RenderPresent(gRenderer);
         }
         // }
         //Free resources and close SDL
         this->closeRender();
     }
+}
+
+bool Render::handleMouseClick(SDL_Event* e)
+{
+    //获取鼠标位置
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    ChessPos pos;
+    // 检查是否有效落子
+    bool is_valid_click = this->chessboard->clickBoard(x, y, &pos);
+    if (is_valid_click)
+    {
+        this->chessboard->chessDown(pos, CHESS_BLACK);
+    }
+    return is_valid_click;
 }
 
 void Render::setRendererType(const interface_kind_type& render_type)

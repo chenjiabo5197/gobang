@@ -95,7 +95,7 @@ bool SDLTexture::loadPixelsFromFile(SDL_Window * gWindow, const std::string& pat
     }
     else
     {
-        DEBUGLOG("loadPixelsFromFile loadedSurface success");
+        // DEBUGLOG("loadPixelsFromFile loadedSurface success");
         //将现有的表面复制到指定格式的新的表面 第一个参数为源表面指针，第二个参数为像素格式，第三个参数设置为0即可
         mSurfacePixels = SDL_ConvertSurfaceFormat(loadedSurface, SDL_GetWindowPixelFormat(gWindow), 0);
         if(mSurfacePixels == nullptr)
@@ -107,13 +107,13 @@ bool SDLTexture::loadPixelsFromFile(SDL_Window * gWindow, const std::string& pat
             //Get image dimensions
             mWidth = mSurfacePixels->w;
             mHeight = mSurfacePixels->h;
-            DEBUGLOG("loadPixelsFromFile SDL_ConvertSurfaceFormat success||mWidth={}||mHeight={}", mWidth, mHeight);
+            // DEBUGLOG("loadPixelsFromFile SDL_ConvertSurfaceFormat success||mWidth={}||mHeight={}", mWidth, mHeight);
         }
 
         //Get rid of old loaded surface
         SDL_FreeSurface(loadedSurface);
     }
-    INFOLOG("loadPixelsFromFile mSurfacePixels success||mWidth={}||mHeight={}", mWidth, mHeight);
+    // INFOLOG("loadPixelsFromFile mSurfacePixels success||mWidth={}||mHeight={}", mWidth, mHeight);
     return mSurfacePixels != nullptr;
 }
 
@@ -215,7 +215,7 @@ void SDLTexture::free()
         SDL_FreeSurface(mSurfacePixels);
         mSurfacePixels = nullptr;
     }
-    INFOLOG("free success");
+    // INFOLOG("free success");
 }
 
 void SDLTexture::render(SDL_Renderer* gRenderer, int x, int y, float multiple, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)

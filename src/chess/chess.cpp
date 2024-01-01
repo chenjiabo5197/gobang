@@ -16,7 +16,7 @@ Chess::Chess(const Config& config, const std::string& chess_name, const std::str
 Chess::~Chess()
 {
     delete(sdl_texture);
-    INFOLOG("~Chess");
+    INFOLOG("~Chess||chess_name={}", this->chess_name);
 }
 
 bool Chess::loadResource(SDL_Window * gWindow, SDL_Renderer* gRenderer)
@@ -31,14 +31,14 @@ bool Chess::loadResource(SDL_Window * gWindow, SDL_Renderer* gRenderer)
     }
     else
     {
-        INFOLOG("load texture success!");
+        // INFOLOG("load texture success!");
         //Get pixel data
         Uint32* pixels = this->sdl_texture->getPixels32();
         int pixelCount = this->sdl_texture->getPitch32() * this->sdl_texture->getHeight();
         //Map colors
         Uint32 colorKey = 28095;   //取出棋子周围的颜色，用下面的值将其设置为透明色
         Uint32 transparent = SDL_MapRGBA(SDL_GetWindowSurface(gWindow)->format, 0xFF, 0xFF, 0xFF, 0x00);
-        INFOLOG("loadMedia||pixelCount={}||colorKey={}||transparent={}", pixelCount, std::to_string(colorKey), std::to_string(transparent));
+        // INFOLOG("loadMedia||pixelCount={}||colorKey={}||transparent={}", pixelCount, std::to_string(colorKey), std::to_string(transparent));
         //Color key pixels
         for(int i = 0; i < pixelCount; ++i)
         {
@@ -66,6 +66,6 @@ bool Chess::chessRender(SDL_Renderer* gRenderer, const int& x, const int& y)
     int chess_x = x * this->lattice_size + this->origin_x - x_offset;
     int chess_y = y * this->lattice_size + this->origin_y - y_offset;
     this->sdl_texture->render(gRenderer, chess_x, chess_y, this->chess_multiple);
-    INFOLOG("chessRender||x={}y={}||chess_x={}||chess_y={}", x, y, chess_x, chess_y);
+    // DEBUGLOG("chessRender||chess_name={}||x={}||y={}||chess_x={}||chess_y={}",this->chess_name, x, y, chess_x, chess_y);
     return false;
 }
