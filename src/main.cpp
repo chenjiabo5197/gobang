@@ -7,10 +7,9 @@
 =============================================*/
 
 #include <iostream>
-// #include "management.h"
+#include "manage/top_manage.h"
 #include "logger/logger.h"
 #include "utils/config.h"
-#include "render/render.h"
 
 // 初始化配置文件
 Config initConfig(const std::string& config_path)
@@ -57,9 +56,8 @@ int main()
 {
     Config config = initConfig("config/config.txt");
     initLogger(config);
-    Render render(config);
-    render.setRendererType(PLAYCHESS_INTERFACE);
-    render.renderer();
+    TopManage top_manage(config);
+    top_manage.start();
 
     // PictureDraw pictureDraw(13, 44, 43, 67.4);
 

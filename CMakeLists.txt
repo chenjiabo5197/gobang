@@ -29,6 +29,7 @@ file(GLOB_RECURSE SOURCES_FILES
     src/render/sdl_texture.*
     src/chess/chess.*
     src/chess/chessboard.*
+    src/manage/top*
     # third_party/spdlog/*
 )
 

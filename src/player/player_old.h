@@ -1,22 +1,19 @@
 #pragma once
-#include "../logger/logger.h"
-#include "../chess/chessboard.h"
+#include "Chess.h"
+#include "logger.h"
+#include "myUtils.h"
+#include <vector>
 
 class Player
 {
-private:
-    // 棋盘数据，对哪个棋盘下棋
-    Chessboard* chessboard;    
+public:
 
-    // 单人游戏玩家棋子数量
+	// 单人游戏玩家棋子数量
 	int chessNum;
 
 	std::string playerName;
 
 	chess_kind_type chessKind;
-public:
-    Player(Chessboard* chessboard);
-    ~Player();
 
 	void init(Chess* chess, std::string playerName, chess_kind_type chessKind = CHESS_BLACK);
 
@@ -24,6 +21,8 @@ public:
 	void resetPlayer();
 	
 	bool go(int x, int y, chess_kind_type kind = CHESS_BLACK);
-};
 
+private:
+	Chess* chess;    // 棋盘数据，对哪个棋盘下棋
+};
 

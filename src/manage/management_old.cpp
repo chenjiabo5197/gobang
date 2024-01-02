@@ -1,4 +1,4 @@
-#include "Management.h"
+#include "management.h"
 
 extern bool exitGame;
 extern result_flag resultFlag;
