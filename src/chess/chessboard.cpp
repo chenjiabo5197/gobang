@@ -20,21 +20,41 @@ Chessboard::Chessboard(const Config& config)
 		}
 		chessMap.push_back(row);
 	}
-
-    INFOLOG("Chessboard construct success||origin_x={}||origin_y={}||lattice_size={}||white_chess_path={}||black_chess_path={}", this->origin_x, this->origin_y, this->lattice_size, white_chess_path, black_chess_path);
+	this->initChessBoardBoundary();
+    INFOLOG("Chessboard construct success||origin_x={}||origin_y={}||lattice_size={}||white_chess_path={}||black_chess_path={}", 
+	this->origin_x, this->origin_y, this->lattice_size, white_chess_path, black_chess_path);
 }
 
 Chessboard::~Chessboard()
 {
-    delete(white_chess);
-    delete(black_chess);
+    delete white_chess;
+    delete black_chess;
+	delete chessboard_boundary;
     INFOLOG("~Chessboard success||release resources");
+}
+
+void Chessboard::initChessBoardBoundary()
+{
+	this->chessboard_boundary = new ChessBoardBoundary();
+	this->chessboard_boundary->left_top_x = this->origin_x-this->lattice_size/2;
+	this->chessboard_boundary->left_top_y = this->origin_y-this->lattice_size/2;
+	this->chessboard_boundary->right_top_x = this->origin_x+this->lattice_size*14+this->lattice_size/2;
+	this->chessboard_boundary->right_top_y = this->origin_y-this->lattice_size/2;
+	this->chessboard_boundary->left_bottom_x = this->origin_x-this->lattice_size/2;
+	this->chessboard_boundary->left_bottom_y = this->origin_y+this->lattice_size*14+this->lattice_size/2;
+	this->chessboard_boundary->right_bottom_x = this->origin_x+this->lattice_size*14+this->lattice_size/2;
+	this->chessboard_boundary->right_bottom_y = this->origin_y+this->lattice_size*14+this->lattice_size/2;
+	INFOLOG("initChessBoardBoundary||left_top_x={}||left_top_y={}||right_top_x={}||right_top_y={}||left_bottom_x={}||left_bottom_y={}||right_bottom_x={}||right_bottom_y={}", 
+	this->chessboard_boundary->left_top_x, this->chessboard_boundary->left_top_y, this->chessboard_boundary->right_top_x, 
+	this->chessboard_boundary->right_top_y, this->chessboard_boundary->left_bottom_x, this->chessboard_boundary->left_bottom_y,
+	this->chessboard_boundary->right_bottom_x, this->chessboard_boundary->right_bottom_y);
 }
 
 bool Chessboard::renderPlayChessInterface(SDL_Renderer* gRenderer)
 {
     // 渲染棋盘背景色
-    SDL_Rect chessboard_backgroud = {this->origin_x, this->origin_y, this->lattice_size*14, this->lattice_size*14};
+    SDL_Rect chessboard_backgroud = {this->chessboard_boundary->left_top_x, this->chessboard_boundary->left_top_y, 
+	this->chessboard_boundary->right_top_x-this->chessboard_boundary->left_top_x, this->chessboard_boundary->left_bottom_y-this->chessboard_boundary->left_top_y};
     SDL_SetRenderDrawColor(gRenderer, 255, 246, 143, 0xFF);        
     SDL_RenderFillRect(gRenderer, &chessboard_backgroud);
 
@@ -88,8 +108,39 @@ void Chessboard::renderCircle(SDL_Renderer* gRenderer, const int& x, const int& 
     }     
 }
 
+bool Chessboard::isClickOnChessBoard(const int& x, const int& y)
+{
+	if (x < this->chessboard_boundary->left_top_x)
+	{
+		DEBUGLOG("isClickOnChessBoard||x too small");
+		return false;
+	}
+	else if (x > this->chessboard_boundary->right_top_x)
+	{
+		DEBUGLOG("isClickOnChessBoard||x too big");
+		return false;
+	}
+	else if (y < this->chessboard_boundary->left_top_y)
+	{
+		DEBUGLOG("isClickOnChessBoard||y too small");
+		return false;
+	}
+	else if (y > this->chessboard_boundary->left_bottom_y)
+	{
+		DEBUGLOG("isClickOnChessBoard||y too big");
+		return false;
+	}
+	INFOLOG("isClickOnChessBoard||click on chessboard");
+	return true;
+}
+
 bool Chessboard::clickBoard(const int& x, const int& y, ChessPos* pos)
 {
+	if (!this->isClickOnChessBoard(x, y))
+	{
+		return false;
+	}
+	
     // 鼠标点击在棋盘上的行，列数(用鼠标坐标减去棋盘边缘再除每个方格大小)
 	int row = (x - this->origin_x) / this->lattice_size;  // 行数
 	int col = (y - this->origin_y) / this->lattice_size;  // 列数

@@ -18,7 +18,7 @@ Render::Render(const Config& config)
 
 Render::~Render()
 {
-    delete(chessboard);
+    delete chessboard;
     DEBUGLOG("~Render success, release chessboard");
 }
 

@@ -40,6 +40,18 @@ struct ChessData {
 	chess_kind_type chess_type;
 };
 
+// 棋盘边界，储存棋盘的四个角坐标
+struct ChessBoardBoundary {
+	int left_top_x;
+	int left_top_y;
+	int right_top_x;
+	int right_top_y;
+	int left_bottom_x;
+	int left_bottom_y;
+	int right_bottom_x;
+	int right_bottom_y;
+};
+
 class Chessboard
 {
 public:
@@ -71,6 +83,12 @@ public:
     // 棋盘渲染当前对局，渲染棋盘，渲染当前已下的棋子
     void render(SDL_Window * gWindow, SDL_Renderer* gRenderer);
 
+	// 初始化棋盘边界结构体
+	void initChessBoardBoundary();
+
+	// 判断传过来的点击位置是否在棋盘上
+	bool isClickOnChessBoard(const int& x, const int& y);
+
 	// // 获取棋盘大小（13,15,19）
 	// int getChessBoardSize();
 
@@ -99,4 +117,7 @@ private:
 
     // 棋盘中每个格子大小
     int lattice_size;
+
+	// 棋盘边界的结构体
+	ChessBoardBoundary* chessboard_boundary;
 };

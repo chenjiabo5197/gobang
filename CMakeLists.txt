@@ -24,12 +24,9 @@ file(GLOB_RECURSE SOURCES_FILES
     src/main.cpp 
     src/logger/*
     src/draw/*
-    src/utils/config.h
-    src/utils/config.cpp
-    src/render/render.h
-    src/render/render.cpp
-    src/render/sdl_texture.h
-    src/render/sdl_texture.cpp
+    src/utils/config.*
+    src/render/render.*
+    src/render/sdl_texture.*
     src/chess/chess.*
     src/chess/chessboard.*
     # third_party/spdlog/*
