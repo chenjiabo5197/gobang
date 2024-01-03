@@ -25,11 +25,10 @@ file(GLOB_RECURSE SOURCES_FILES
     src/logger/*
     src/draw/*
     src/utils/config.*
-    src/render/render.*
     src/render/sdl_texture.*
     src/chess/chess.*
     src/chess/chessboard.*
-    src/manage/top*
+    src/manage/manage.*
     # third_party/spdlog/*
 )
 

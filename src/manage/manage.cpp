@@ -1,28 +1,70 @@
 /*============================================
 * Author: chenjiabo
 * E-mail: chen_wangyi666@163.com
-* Date: 2023-12-30
-* Description: This is main file
+* Date: 2024-1-3
+* Description: This is manage.cpp file
 * Copyright (c) 2023, All rights reserved
 =============================================*/
-#include "render.h"
+#include "manage.h"
 
-Render::Render(const Config& config)
+Manage::Manage(const Config& config)
 {
     this->width = config.Read("screen_width", 0);
     this->height = config.Read("screen_height", 0);
     this->render_type = DEFAULT_INTERFACE;
     this->chessboard = new Chessboard(config);
-    DEBUGLOG("Render construct success||width={}||height={}||render_type={}", this->width, this->height, (int)this->render_type);
+    DEBUGLOG("Manage construct success||width={}||height={}||render_type={}", this->width, this->height, (int)this->render_type);
 }
 
-Render::~Render()
+Manage::~Manage()
 {
     delete chessboard;
-    DEBUGLOG("~Render success, release chessboard");
+    DEBUGLOG("~Manage success, release chessboard");
 }
 
-bool Render::initRender()
+void Manage::start()
+{
+    //Start up SDL and create window
+    if(!this->initRender())
+    {
+        ERRORLOG("Failed to initialize!");
+    }
+    else
+    {
+        //Hack to get window to stay up
+        SDL_Event e;
+        bool quit = false;
+
+        //While application is running
+        while(!quit)
+        {
+            //Handle events on queue
+            while(SDL_PollEvent(&e) != 0)
+            {
+                //User requests quit
+                if(e.type == SDL_QUIT)
+                {
+                    quit = true;
+                }
+                else if (e.type == SDL_MOUSEBUTTONDOWN)   // 鼠标点击事件
+                {
+                    this->handleMouseClick(&e);
+                }
+            }
+            //Clear screen
+            SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+            SDL_RenderClear(gRenderer);
+            this->chessboard->render(gWindow, gRenderer);
+            //Update screen
+            SDL_RenderPresent(gRenderer);
+        }
+        // }
+        //Free resources and close SDL
+        this->closeRender();
+    }
+}
+
+bool Manage::initRender()
 {
     //Initialization flag
     bool success = true;
@@ -87,7 +129,7 @@ bool Render::initRender()
     return success;
 }
 
-void Render::closeRender()
+void Manage::closeRender()
 {
     //Destroy windows
     SDL_DestroyWindow(gWindow);
@@ -102,49 +144,7 @@ void Render::closeRender()
     SDL_Quit();
 }
 
-void Render::renderer()
-{
-    //Start up SDL and create window
-    if(!this->initRender())
-    {
-        ERRORLOG("Failed to initialize!");
-    }
-    else
-    {
-        //Hack to get window to stay up
-        SDL_Event e;
-        bool quit = false;
-
-        //While application is running
-        while(!quit)
-        {
-            //Handle events on queue
-            while(SDL_PollEvent(&e) != 0)
-            {
-                //User requests quit
-                if(e.type == SDL_QUIT)
-                {
-                    quit = true;
-                }
-                else if (e.type == SDL_MOUSEBUTTONDOWN)   // 鼠标点击事件
-                {
-                    this->handleMouseClick(&e);
-                }
-            }
-            //Clear screen
-            SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-            SDL_RenderClear(gRenderer);
-            this->chessboard->render(gWindow, gRenderer);
-            //Update screen
-            SDL_RenderPresent(gRenderer);
-        }
-        // }
-        //Free resources and close SDL
-        this->closeRender();
-    }
-}
-
-bool Render::handleMouseClick(SDL_Event* e)
+bool Manage::handleMouseClick(SDL_Event* e)
 {
     //获取鼠标位置
     int x, y;
@@ -159,8 +159,9 @@ bool Render::handleMouseClick(SDL_Event* e)
     return is_valid_click;
 }
 
-void Render::setRendererType(const interface_kind_type& render_type)
+void Manage::setRendererType(const interface_kind_type& render_type)
 {
     this->render_type = render_type;
     INFOLOG("setRendererType||set render_type={}", (int)render_type);
 }
+

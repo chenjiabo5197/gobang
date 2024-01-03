@@ -10,6 +10,7 @@ Chess::Chess(const Config& config, const std::string& chess_name, const std::str
     this->origin_y = origin_y;
     this->lattice_size = lattice_size;
     this->sdl_texture = new SDLTexture(this->chess_name);
+    this->is_load_resource = false;
     INFOLOG("Chess construct success||chess_resource_path={}||chess_name={}||chess_multiple={}||chess_origin_size={}", this->chess_resource_path, this->chess_name, this->chess_multiple, this->chess_origin_size);
 }
 
@@ -54,11 +55,18 @@ bool Chess::loadResource(SDL_Window * gWindow, SDL_Renderer* gRenderer)
             ERRORLOG("Unable to load texture from surface!");
         }
     }
+    this->is_load_resource = true;
     return success;
 }
 
 bool Chess::chessRender(SDL_Renderer* gRenderer, const int& x, const int& y)
 {
+    if (!this->is_load_resource)
+    {
+        ERRORLOG("chess not load resource, please load resource");
+        return false;
+    }
+    
     int new_width = (int)this->chess_origin_size * this->chess_multiple;
     int new_height = (int)this->chess_origin_size * this->chess_multiple;
     int x_offset = new_width / 2;

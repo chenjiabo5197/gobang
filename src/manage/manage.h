@@ -1,16 +1,18 @@
 /*============================================
 * Author: chenjiabo
 * E-mail: chen_wangyi666@163.com
-* Date: 2023-12-30
-* Description: This is main file
+* Date: 2024-1-3
+* Description: This is manage.h file
 * Copyright (c) 2023, All rights reserved
 =============================================*/
+
 #pragma once
 
 #include <math.h>
-#include "sdl_texture.h"
-#include "../chess/chessboard.h"
+#include "../logger/logger.h"
 #include "../utils/config.h"
+#include "../render/sdl_texture.h"
+#include "../chess/chessboard.h"
 
 // 枚举渲染的种类
 typedef enum {
@@ -26,9 +28,10 @@ typedef enum {
 	BEST_SCORE_INTERFACE          // 输出排行榜分数
 } interface_kind_type;  
 
-class Render
+class Manage
 {
 private:
+    // 渲染的宽和高
     int width;
     int height;
 
@@ -40,11 +43,12 @@ private:
 
     // 渲染的种类
     interface_kind_type render_type;
-
+    
 public:
+    Manage(const Config& config);
+    ~Manage();
 
-    Render(const Config& config);
-    ~Render();
+    void start();
 
     // 初始化渲染
     bool initRender();

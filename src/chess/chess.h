@@ -21,6 +21,9 @@ private:
     int chess_origin_size;
     int lattice_size;
     int origin_x, origin_y;
+
+    // 标志该chess是否已经加载资源，以前出现了未加载资源去渲染结果没有数据，找了好久原因
+    bool is_load_resource;
 public:
     Chess(const Config& config, const std::string& chess_name, const std::string& chess_resource_path, const int& origin_x, const int& origin_y, const int& lattice_size);
 

@@ -7,7 +7,7 @@
 =============================================*/
 
 #include <iostream>
-#include "manage/top_manage.h"
+#include "manage/manage.h"
 #include "logger/logger.h"
 #include "utils/config.h"
 
@@ -56,8 +56,8 @@ int main()
 {
     Config config = initConfig("config/config.txt");
     initLogger(config);
-    TopManage top_manage(config);
-    top_manage.start();
+    Manage manage(config);
+    manage.start();
 
     // PictureDraw pictureDraw(13, 44, 43, 67.4);
 
