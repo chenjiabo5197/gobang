@@ -53,7 +53,14 @@ std::string MyUtils::getCurTime()
 	auto NowTime = std::chrono::system_clock::now();
 	time_t ticks = std::chrono::system_clock::to_time_t(NowTime);
 	struct tm* p_Time = new tm();
-	localtime_s(p_Time, &ticks);
+
+	#if defined(__linux__)
+		// Linux系统
+		localtime_r(&ticks, p_Time);
+	#elif defined(_WIN32)
+		// Windows系统
+		localtime_s(p_Time, &ticks);
+	#endif
 
 	char c_TimeStamp[64];
 	memset(c_TimeStamp, 0, sizeof(c_TimeStamp));
@@ -136,4 +143,15 @@ BestScoreUser MyUtils::getIBestScoreUser(std::string userName, int chessNum)
 	temp.userScore = std::to_string(chessNum);
 	temp.curTime = MyUtils::getCurTime();
 	return temp;
+}
+
+void MyUtils::sleep_seconds(int sceonds)
+{
+	#if defined(__linux__)
+		// Linux系统
+		sleep(sceonds);
+	#elif defined(_WIN32)
+		// Windows系统
+		Sleep((sceonds*1000));
+	#endif
 }

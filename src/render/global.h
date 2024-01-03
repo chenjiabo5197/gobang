@@ -2,13 +2,6 @@
 #include <SDL2/SDL.h>
 #include <vector>
 
-#if defined(__linux__)
-// Linux系统
-#include<unistd.h>
-#elif defined(_WIN32)
-// Windows系统
-#include<windows.h>
-#endif
 
 SDL_SpinLock gDataLock = 0;
 int gData = -1;
@@ -235,12 +228,3 @@ int worker( void* data )
     return 0;
 }
 
-void my_p_sleep(int time) {
-#if defined(__linux__)
-	// Linux系统
-	sleep(time);
-#elif defined(_WIN32)
-	// Windows系统
-	Sleep((time*1000));
-#endif
-}

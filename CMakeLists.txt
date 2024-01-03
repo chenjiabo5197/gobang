@@ -24,11 +24,12 @@ file(GLOB_RECURSE SOURCES_FILES
     src/main.cpp 
     src/logger/*
     src/draw/*
-    src/utils/config.*
+    src/utils/*
     src/render/sdl_texture.*
     src/chess/chess.*
     src/chess/chessboard.*
     src/manage/manage.*
+    src/machine/*
     # third_party/spdlog/*
 )
 

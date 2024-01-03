@@ -13,17 +13,22 @@ Manage::Manage(const Config& config)
     this->height = config.Read("screen_height", 0);
     this->render_type = DEFAULT_INTERFACE;
     this->chessboard = new Chessboard(config);
+    this->machine = new Machine(this->chessboard);
+    this->player_flag = DEFAULT_PLAYER;
     DEBUGLOG("Manage construct success||width={}||height={}||render_type={}", this->width, this->height, (int)this->render_type);
 }
 
 Manage::~Manage()
 {
     delete chessboard;
+    delete machine;
     DEBUGLOG("~Manage success, release chessboard");
 }
 
 void Manage::start()
 {
+    this->render_type = PLAYCHESS_INTERFACE;
+    this->player_flag = SINGLE_PLAYER;
     //Start up SDL and create window
     if(!this->initRender())
     {
@@ -46,15 +51,39 @@ void Manage::start()
                 {
                     quit = true;
                 }
-                else if (e.type == SDL_MOUSEBUTTONDOWN)   // 鼠标点击事件
+                //清除所有事件
+                SDL_FlushEvents(SDL_APP_TERMINATING, SDL_LASTEVENT);
+                switch (this->player_flag)
                 {
-                    this->handleMouseClick(&e);
+                    case SINGLE_PLAYER:
+                    {
+                        if(this->handleMouseClick(&e))
+                        {
+                            this->player_flag = MACHINE_PLAYER;
+                        }
+                        break;
+                    }
+                    case MACHINE_PLAYER:
+                    {
+                        this->machine->go();
+                        this->player_flag = SINGLE_PLAYER;
+                        break;
+                    }
+                    default:
+                        break;
                 }
             }
             //Clear screen
             SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
             SDL_RenderClear(gRenderer);
-            this->chessboard->render(gWindow, gRenderer);
+            switch (this->render_type)
+            {
+            case PLAYCHESS_INTERFACE:
+                this->chessboard->render(gWindow, gRenderer);
+                break;
+            default:
+                break;
+            }
             //Update screen
             SDL_RenderPresent(gRenderer);
         }
@@ -146,17 +175,21 @@ void Manage::closeRender()
 
 bool Manage::handleMouseClick(SDL_Event* e)
 {
-    //获取鼠标位置
-    int x, y;
-    SDL_GetMouseState(&x, &y);
-    ChessPos pos;
-    // 检查是否有效落子
-    bool is_valid_click = this->chessboard->clickBoard(x, y, &pos);
-    if (is_valid_click)
+    if (e->type == SDL_MOUSEBUTTONDOWN)  // 鼠标点击事件
     {
-        this->chessboard->chessDown(pos, CHESS_BLACK);
+        //获取鼠标位置
+        int x, y;
+        SDL_GetMouseState(&x, &y);
+        ChessPos pos;
+        // 检查是否有效落子
+        bool is_valid_click = this->chessboard->clickBoard(x, y, &pos);
+        if (is_valid_click)
+        {
+            this->chessboard->chessDown(pos, CHESS_BLACK);
+        }
+        return is_valid_click;
     }
-    return is_valid_click;
+    return false;
 }
 
 void Manage::setRendererType(const interface_kind_type& render_type)

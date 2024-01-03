@@ -1,9 +1,17 @@
 #pragma once
 #include <string>
 #include <fstream>
-#include "logger.h"
 #include <sstream>
 #include <chrono>
+#include "../logger/logger.h"
+
+#if defined(__linux__)
+// Linux系统
+#include<unistd.h>
+#elif defined(_WIN32)
+// Windows系统
+#include<windows.h>
+#endif
 
 #define BESTSCORESFILE "bestScoresFile.csv"
 #define MAXBESTSCORES 10
@@ -37,5 +45,8 @@ public:
 
 	// 通过输入姓名组建结构体
 	static BestScoreUser getIBestScoreUser(std::string userName, int chessNum);
+
+	// 让程序休眠的秒数
+	static void sleep_seconds(int sceonds);
 };
 

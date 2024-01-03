@@ -13,6 +13,7 @@
 #include "../utils/config.h"
 #include "../render/sdl_texture.h"
 #include "../chess/chessboard.h"
+#include "../machine/machine.h"
 
 // 枚举渲染的种类
 typedef enum {
@@ -26,7 +27,16 @@ typedef enum {
 	BLACK_WIN_INTERFACE,          // 黑棋赢
 	WHITE_WIN_INTERFACE,          // 白棋赢
 	BEST_SCORE_INTERFACE          // 输出排行榜分数
-} interface_kind_type;  
+} interface_kind_type;
+
+// 下棋方的枚举值
+typedef enum {
+    DEFAULT_PLAYER,
+    MACHINE_PLAYER,         // 单人游戏，电脑
+    SINGLE_PLAYER,          // 单人游戏，玩家
+    BLACK_PLAYER,           // 双人游戏，黑棋
+    WHITE_PLAYER            // 双人游戏，白棋
+} player_flag_type;
 
 class Manage
 {
@@ -43,6 +53,12 @@ private:
 
     // 渲染的种类
     interface_kind_type render_type;
+
+    // 电脑AI
+    Machine* machine;
+
+    // 当前下棋方
+    player_flag_type player_flag;
     
 public:
     Manage(const Config& config);

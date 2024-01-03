@@ -90,11 +90,11 @@ public:
 	bool isClickOnChessBoard(const int& x, const int& y);
 
 	// // 获取棋盘大小（13,15,19）
-	// int getChessBoardSize();
+	int getChessBoardSize();
 
-	// // 获取指定位置是黑棋/白棋/空白  空白0，白子-1，黑子1
-	// int getChessData(ChessPos* pos);
-	// int getChessData(int row, int col);
+	// 获取指定位置是黑棋/白棋/空白  空白0，白子1，黑子2
+	int getChessData(ChessPos* pos);
+	int getChessData(int row, int col);
 
 	// // 判断棋局是否结束
 	// bool checkOver();
@@ -109,6 +109,9 @@ public:
 	// void playerWithDraw();
 
 private:
+	// 储存当前棋盘大小，当前默认为15
+	int chessboard_size;
+
     // 储存当前棋盘和棋子情况，空白0，白子1，黑子2
 	std::vector<std::vector<int>> chessMap;
 

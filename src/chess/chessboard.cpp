@@ -10,11 +10,12 @@ Chessboard::Chessboard(const Config& config)
     std::string black_chess_path = config.Read("black_chess_resource_path", temp);
     this->white_chess = new Chess(config, "white_chess", white_chess_path, origin_x, origin_y, lattice_size);
     this->black_chess = new Chess(config, "black_chess", black_chess_path, origin_x, origin_y, lattice_size);
+	this->chessboard_size = 15;
     // 初始化棋盘，棋盘每个位置都为0，表示空白，标准五子棋盘为15*15
-	for (int i = 0; i < 15; i++)
+	for (int i = 0; i < chessboard_size; i++)
 	{
 		std::vector<int> row;
-		for (int j = 0; j < 15; j++)
+		for (int j = 0; j < chessboard_size; j++)
 		{
 			row.push_back(0);
 		}
@@ -275,4 +276,19 @@ void Chessboard::render(SDL_Window * gWindow, SDL_Renderer* gRenderer)
             }
         }
     }
+}
+
+int Chessboard::getChessBoardSize()
+{
+	return chessboard_size;
+}
+
+int Chessboard::getChessData(ChessPos* pos)
+{
+	return chessMap[pos->chess_row][pos->chess_col];
+}
+
+int Chessboard::getChessData(int row, int col)
+{
+	return chessMap[row][col];
 }
