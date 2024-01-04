@@ -292,3 +292,18 @@ int Chessboard::getChessData(int row, int col)
 {
 	return chessMap[row][col];
 }
+
+int* Chessboard::getChessBoardData()
+{
+	int array_length = this->chessboard_size * this->chessboard_size;
+	int* array = new int[array_length];
+	int index = 0;
+	for (int i = 0; i < this->chessboard_size; i++)
+	{
+		for (int j = 0; j < this->chessboard_size; j++)
+		{
+			array[index++] = this->chessMap[i][j];
+		}
+	}
+	return array;
+}

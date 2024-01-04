@@ -51,26 +51,13 @@ void Manage::start()
                 {
                     quit = true;
                 }
-                //清除所有事件
-                SDL_FlushEvents(SDL_APP_TERMINATING, SDL_LASTEVENT);
-                switch (this->player_flag)
+                else
                 {
-                    case SINGLE_PLAYER:
+                    if(this->handleMouseClick(&e))
                     {
-                        if(this->handleMouseClick(&e))
-                        {
-                            this->player_flag = MACHINE_PLAYER;
-                        }
-                        break;
+                        int* chessboard_data = this->chessboard->getChessBoardData();
+                        SDL_Thread* threadA = SDL_CreateThread(Machine::go, "machine player", static_cast<void*>(chessboard_data));
                     }
-                    case MACHINE_PLAYER:
-                    {
-                        this->machine->go();
-                        this->player_flag = SINGLE_PLAYER;
-                        break;
-                    }
-                    default:
-                        break;
                 }
             }
             //Clear screen
@@ -175,7 +162,7 @@ void Manage::closeRender()
 
 bool Manage::handleMouseClick(SDL_Event* e)
 {
-    if (e->type == SDL_MOUSEBUTTONDOWN)  // 鼠标点击事件
+    if (e->type == SDL_MOUSEBUTTONDOWN && this->player_flag == SINGLE_PLAYER)  // 鼠标点击事件
     {
         //获取鼠标位置
         int x, y;
