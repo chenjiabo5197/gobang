@@ -25,6 +25,18 @@ Manage::~Manage()
     DEBUGLOG("~Manage success, release chessboard");
 }
 
+int go(void* data)
+{
+	Machine* machine = (Machine *)(data);
+    ChessPos pos = machine->think();
+    // 程序休眠1s，假装在思考
+    MyUtils::sleep_seconds(1);
+	// mciSendString("play res/chess_down.mp3", 0, 0, 0);
+	machine->chessboard->chessDown(pos, CHESS_WHITE);
+    DEBUGLOG("Machine::go||Machine chess down success");
+    return 0;
+}
+
 void Manage::start()
 {
     this->render_type = PLAYCHESS_INTERFACE;
@@ -39,7 +51,7 @@ void Manage::start()
         //Hack to get window to stay up
         SDL_Event e;
         bool quit = false;
-
+        SDL_Thread* machine_thread = nullptr;
         //While application is running
         while(!quit)
         {
@@ -56,7 +68,7 @@ void Manage::start()
                     if(this->handleMouseClick(&e))
                     {
                         int* chessboard_data = this->chessboard->getChessBoardData();
-                        SDL_Thread* threadA = SDL_CreateThread(Machine::go, "machine player", static_cast<void*>(chessboard_data));
+                        machine_thread = SDL_CreateThread(go, "machine player", this->machine);
                     }
                 }
             }
@@ -74,7 +86,7 @@ void Manage::start()
             //Update screen
             SDL_RenderPresent(gRenderer);
         }
-        // }
+        SDL_WaitThread(machine_thread, nullptr);
         //Free resources and close SDL
         this->closeRender();
     }

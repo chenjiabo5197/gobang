@@ -28,18 +28,18 @@ private:
 	* 死棋是指白棋方堵住黑棋方一头
 	*/
 	// 静态函数，经过计算输入棋盘数据的值，返回当前棋盘数据的打分值
-	static std::vector<std::vector<int>> calculateScore(const std::vector<std::vector<int>>& chessboard_data);
+	void calculateScore();
 
 	// AI的思考，遍历周围找出评分最高的点
-	static ChessPos think();
+	ChessPos think();
 public:
     Machine(Chessboard* chessboard);
     ~Machine();
 
     // 初始化，评分数组初始化
     void init();
-	// 多线程函数，传入棋盘数据，先进程打分之后再下棋  std::vector<std::vector<int>>类型的棋盘数据
-	static int go(void* data);
+	// 友元函数，用于做线程函数，访问Machine类内部变量
+	friend int go(void* data);
 };
 
 
