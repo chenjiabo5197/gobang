@@ -2,10 +2,6 @@
 #include <SDL2/SDL.h>
 #include <vector>
 
-
-SDL_SpinLock gDataLock = 0;
-int gData = -1;
-
 struct Circle
 {
     int x, y;
@@ -183,47 +179,6 @@ int threadFunction( void* data )
     //接收整数数据，并用它向控制台打印一条信息
     //此处需要将data转化为long，因为为64为系统，void*为8字节，int为4字节，转化会丢失精度，转化为long就可以
     std::cout << "Running thread with value = " << (long)data << std::endl;
-
-    return 0;
-}
-
-// semaphores锁可以允许单线程以外的访问。原子操作适用于需要严格锁定/解锁状态的情况
-int worker( void* data )
-{
-    std::cout << static_cast<char*>(data) << " starting..." << std::endl;
-
-    //Pre thread random seeding
-    // 按线程进行时间设置随机数种子
-    srand( SDL_GetTicks() );
-
-    //Work 5 times
-    // 每个线程半随机延迟、打印开始工作时的数据、为数据分配一个随机数、打印分配给数据缓冲区的数，然后再延迟一段时间，然后再次工作。之所以需要锁定数据，
-    // 是因为不希望两个线程同时读写共享数据。
-    for( int i = 0; i < 5; ++i )
-    {
-        //Wait randomly 半随机延迟
-        SDL_Delay( 16 + rand() % 32 );
-        
-        //Lock  加锁  
-        SDL_AtomicLock( &gDataLock );
-
-        //Print pre work data  打印开始工作时的数据
-        std::cout << static_cast<char*>(data) << " gets " << gData << std::endl;
-
-        //"Work"  为数据分配一个随机数
-        gData = rand() % 256;
-
-        //Print post work data  打印分配给数据缓冲区的数
-        std::cout << static_cast<char*>(data) << " sets " << gData << std::endl;
-        
-        //Unlock  释放锁  
-        SDL_AtomicUnlock( &gDataLock );
-
-        //Wait randomly  再延迟一段时间
-        SDL_Delay( 16 + rand() % 640 );
-    }
-
-    std::cout << static_cast<char*>(data) << " finished!" << std::endl;
 
     return 0;
 }

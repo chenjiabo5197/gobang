@@ -23,7 +23,6 @@ set(CMAKE_CXX_STANDARD 11)
 file(GLOB_RECURSE SOURCES_FILES 
     src/main.cpp 
     src/logger/*
-    src/draw/*
     src/utils/*
     src/render/sdl_texture.*
     src/chess/chess.*

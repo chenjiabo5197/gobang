@@ -1,6 +1,6 @@
 #include "myUtils.h"
 
-bool MyUtils::isFileExistAndNotEmpty(std::string fileName)
+bool MyUtils::isFileExistAndNotEmpty(const std::string& fileName)
 {
 	std::ifstream ifs;
 	ifs.open(fileName, std::ios::in);
@@ -25,7 +25,7 @@ bool MyUtils::isFileExistAndNotEmpty(std::string fileName)
 	return true;
 }
 
-bool MyUtils::saveVectorToCsv(std::vector<BestScoreUser> v)
+bool MyUtils::saveVectorToCsv(std::vector<BestScoreUser>& v)
 {
 	std::ofstream ofs;
 	// 覆盖写入，默认此时程序中维护的为最新的，因为需要考虑更新排行榜，排行榜数量最大为5个
@@ -136,7 +136,7 @@ void MyUtils::updateBestScore(std::vector<BestScoreUser> & bestScores, const Bes
 	INFOLOG("MyUtils::updateBestScore||updateBestScore success");
 }
 
-BestScoreUser MyUtils::getIBestScoreUser(std::string userName, int chessNum)
+BestScoreUser MyUtils::getIBestScoreUser(const std::string& userName, const int& chessNum)
 {
 	BestScoreUser temp;
 	temp.userName = userName;
@@ -145,11 +145,11 @@ BestScoreUser MyUtils::getIBestScoreUser(std::string userName, int chessNum)
 	return temp;
 }
 
-void MyUtils::sleep_seconds(int sceonds)
+void MyUtils::sleep_seconds(const float& sceonds)
 {
 	#if defined(__linux__)
 		// Linux系统
-		sleep(sceonds);
+		usleep(1000 * 1000 * sceonds);
 	#elif defined(_WIN32)
 		// Windows系统
 		Sleep((sceonds*1000));

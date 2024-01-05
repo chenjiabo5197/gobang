@@ -11,6 +11,8 @@ Chessboard::Chessboard(const Config& config)
     this->white_chess = new Chess(config, "white_chess", white_chess_path, origin_x, origin_y, lattice_size);
     this->black_chess = new Chess(config, "black_chess", black_chess_path, origin_x, origin_y, lattice_size);
 	this->chessboard_size = 15;
+	this->last_chess_pos = new ChessPos(); 
+	this->player_flag = DEFAULT_PLAYER;
     // 初始化棋盘，棋盘每个位置都为0，表示空白，标准五子棋盘为15*15
 	for (int i = 0; i < chessboard_size; i++)
 	{
@@ -31,6 +33,7 @@ Chessboard::~Chessboard()
     delete white_chess;
     delete black_chess;
 	delete chessboard_boundary;
+	delete last_chess_pos;
     INFOLOG("~Chessboard success||release resources");
 }
 
@@ -254,6 +257,8 @@ void Chessboard::chessDown(const ChessPos& chessPos, const chess_kind_type& kind
         this->chessMap[chessPos.chess_row][chessPos.chess_col] = 2; 
         DEBUGLOG("chessDown||BLACK_CHESS||row={}||col={}", chessPos.chess_row, chessPos.chess_col);
     }
+	this->last_chess_pos->chess_row = chessPos.chess_row;
+	this->last_chess_pos->chess_col = chessPos.chess_col;
 }
 
 void Chessboard::render(SDL_Window * gWindow, SDL_Renderer* gRenderer)
@@ -293,17 +298,90 @@ int Chessboard::getChessData(int row, int col)
 	return chessMap[row][col];
 }
 
-int* Chessboard::getChessBoardData()
+void Chessboard::set_player_flag_type(const player_flag_type& type)
 {
-	int array_length = this->chessboard_size * this->chessboard_size;
-	int* array = new int[array_length];
-	int index = 0;
-	for (int i = 0; i < this->chessboard_size; i++)
+	INFOLOG("set_player_flag_type||current player_flag={}||next type={}", (int)this->player_flag, (int)type);
+	this->player_flag = type;
+}
+
+bool Chessboard::checkOver()
+{
+	if (checkWin())
 	{
-		for (int j = 0; j < this->chessboard_size; j++)
+		MyUtils::sleep_seconds(1.5);
+		if (player_flag == SINGLE_PLAYER)   // 玩家赢
 		{
-			array[index++] = this->chessMap[i][j];
+			INFOLOG("Chess::checkOver||single player win");
+			// resultFlag = PLAYER_WIN;
+			return true;
+		}
+		else if (player_flag == MACHINE_PLAYER)  // AI赢
+		{
+			INFOLOG("Chess::checkOver||machine win");
+			// resultFlag = PLAYER_LOSE;
+			return true;
 		}
 	}
-	return array;
+	// 判断棋盘是否满了，13*13的棋盘，最多169颗棋子
+	// if (this->chessBoardData.size() == 169)
+	// {
+	// 	INFOLOG("Chess::checkOver||result draw");
+	// 	resultFlag = RESULT_DRAW;
+	// 	return true;
+	// }
+	return false;
+}
+
+bool Chessboard::checkWin()
+{
+	// 横竖左斜右斜四个方向，每种情况都根据当前落子向后遍历5个棋子，有一种符合就算赢
+	int row = last_chess_pos->chess_row;
+	int col = last_chess_pos->chess_col;
+
+	// 水平方向, 向左和右分别匹配4个子
+	for (int i = 0; i < 5; i++)
+	{
+		if (col - i >= 0 && col - i + 4 < chessboard_size && chessMap[row][col - i] == chessMap[row][col - i + 1] && chessMap[row][col - i] == chessMap[row][col - i + 2] &&
+			chessMap[row][col - i] == chessMap[row][col - i + 3] && chessMap[row][col - i] == chessMap[row][col - i + 4])
+		{
+			INFOLOG("Chess::checkWin||calculate horizontal direction success||i={}||playFlag={}", i, (int)this->player_flag);
+			return true;
+		}
+	}
+
+	// 竖直方向 
+	for (int i = 0; i < 5; i++)
+	{
+		if (row - i >= 0 && row - i + 4 < chessboard_size && chessMap[row - i][col] == chessMap[row - i + 1][col] && chessMap[row - i][col] == chessMap[row - i + 2][col] &&
+			chessMap[row - i][col] == chessMap[row - i + 3][col] && chessMap[row - i][col] == chessMap[row - i + 4][col])
+		{
+			INFOLOG("Chess::checkWin||calculate vertical direction success||i={}||playFlag={}", i, (int)this->player_flag);
+			return true;
+		}
+	}
+
+	// 左斜方向"/"
+	for (int i = 0; i < 5; i++)
+	{
+		if (row - i >= 0 && col - i >= 0 && row - i + 4 < chessboard_size && col - i + 4 < chessboard_size && chessMap[row - i][col - i] == chessMap[row - i + 1][col - i + 1] && chessMap[row - i][col - i] == chessMap[row - i + 2][col - i + 2] &&
+			chessMap[row - i][col - i] == chessMap[row - i + 3][col - i + 3] && chessMap[row - i][col - i] == chessMap[row - i + 4][col - i + 4])
+		{
+			INFOLOG("Chess::checkWin||calculate left oblique direction success||i={}||playFlag={}", i, (int)this->player_flag);
+			return true;
+		}
+	}
+
+	// 右斜方向 "\"
+	for (int i = 0; i < 5; i++)
+	{
+		if (row + i < chessboard_size && row + i - 4 >= 0 && col - i >= 0 && col - i + 4 < chessboard_size && chessMap[row + i][col - i] == chessMap[row + i - 1][col - i + 1] && chessMap[row + i][col - i] == chessMap[row + i - 2][col - i + 2] &&
+			chessMap[row + i][col - i] == chessMap[row + i - 3][col - i + 3] && chessMap[row + i][col - i] == chessMap[row + i - 4][col - i + 4])
+		{
+			INFOLOG("Chess::checkWin||calculate right oblique direction success||i={}||playFlag={}", i, (int)this->player_flag);
+			return true;
+		}
+	}
+
+	return false;
+
 }

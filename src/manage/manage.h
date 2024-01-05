@@ -34,9 +34,6 @@ private:
 
     // 电脑AI
     Machine* machine;
-
-    // 当前下棋方
-    player_flag_type player_flag;
     
 public:
     Manage(const Config& config);

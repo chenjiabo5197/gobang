@@ -4,6 +4,7 @@
 #include <vector>
 #include "chess.h"
 #include "../common.h"
+#include "../utils/myUtils.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"
 
@@ -51,15 +52,14 @@ public:
 	int getChessData(ChessPos* pos);
 	int getChessData(int row, int col);
 
-	int* getChessBoardData();
-	// // 判断棋局是否结束
-	// bool checkOver();
+	// 判断棋局是否结束
+	bool checkOver();
 
-	// // 自定义图形渲染，easyx图形库不支持背景透明的png格式图片，把透明背景渲染为黑色
-	// void putImagePNG(int x, int y, IMAGE* picture);
+	// 判断胜负
+	bool checkWin();
 
-	// // 判断胜负
-	// bool checkWin();
+	// 设置当前的下棋方
+	void set_player_flag_type(const player_flag_type& type);
 
 	// // 悔棋,悔棋需要记录每一步的顺序和下棋位置
 	// void playerWithDraw();
@@ -79,4 +79,10 @@ private:
 
 	// 棋盘边界的结构体
 	ChessBoardBoundary* chessboard_boundary;
+
+	// 最近的落子位置
+	ChessPos* last_chess_pos;
+
+	// 当前的下棋方
+	player_flag_type player_flag;
 };

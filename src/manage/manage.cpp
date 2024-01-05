@@ -7,6 +7,9 @@
 =============================================*/
 #include "manage.h"
 
+//多线程锁
+SDL_SpinLock player_machine_lock = 0;
+
 Manage::Manage(const Config& config)
 {
     this->width = config.Read("screen_width", 0);
@@ -14,7 +17,6 @@ Manage::Manage(const Config& config)
     this->render_type = DEFAULT_INTERFACE;
     this->chessboard = new Chessboard(config);
     this->machine = new Machine(this->chessboard);
-    this->player_flag = DEFAULT_PLAYER;
     DEBUGLOG("Manage construct success||width={}||height={}||render_type={}", this->width, this->height, (int)this->render_type);
 }
 
@@ -25,14 +27,19 @@ Manage::~Manage()
     DEBUGLOG("~Manage success, release chessboard");
 }
 
+// Machine类的友元函数
 int go(void* data)
 {
 	Machine* machine = (Machine *)(data);
+    SDL_AtomicLock(&player_machine_lock);
     ChessPos pos = machine->think();
     // 程序休眠1s，假装在思考
     MyUtils::sleep_seconds(1);
 	// mciSendString("play res/chess_down.mp3", 0, 0, 0);
 	machine->chessboard->chessDown(pos, CHESS_WHITE);
+    machine->chessboard->checkOver();
+    machine->chessboard->set_player_flag_type(SINGLE_PLAYER);
+    SDL_AtomicUnlock(&player_machine_lock);
     DEBUGLOG("Machine::go||Machine chess down success");
     return 0;
 }
@@ -40,7 +47,7 @@ int go(void* data)
 void Manage::start()
 {
     this->render_type = PLAYCHESS_INTERFACE;
-    this->player_flag = SINGLE_PLAYER;
+    this->chessboard->set_player_flag_type(SINGLE_PLAYER);
     //Start up SDL and create window
     if(!this->initRender())
     {
@@ -67,7 +74,6 @@ void Manage::start()
                 {
                     if(this->handleMouseClick(&e))
                     {
-                        int* chessboard_data = this->chessboard->getChessBoardData();
                         machine_thread = SDL_CreateThread(go, "machine player", this->machine);
                     }
                 }
@@ -174,7 +180,8 @@ void Manage::closeRender()
 
 bool Manage::handleMouseClick(SDL_Event* e)
 {
-    if (e->type == SDL_MOUSEBUTTONDOWN && this->player_flag == SINGLE_PLAYER)  // 鼠标点击事件
+    SDL_AtomicLock(&player_machine_lock);
+    if (e->type == SDL_MOUSEBUTTONDOWN)  // 鼠标点击事件
     {
         //获取鼠标位置
         int x, y;
@@ -185,9 +192,13 @@ bool Manage::handleMouseClick(SDL_Event* e)
         if (is_valid_click)
         {
             this->chessboard->chessDown(pos, CHESS_BLACK);
+            this->chessboard->checkOver();
         }
+        this->chessboard->set_player_flag_type(MACHINE_PLAYER);
+        SDL_AtomicUnlock(&player_machine_lock);
         return is_valid_click;
     }
+    SDL_AtomicUnlock(&player_machine_lock);
     return false;
 }
 
