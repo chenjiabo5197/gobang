@@ -5,7 +5,6 @@ project(gobang)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 find_package(SDL2 REQUIRED)
-# /usr/lib/x86_64-linux-gnu/cmake/sdl2_image/sdl2_image-config.cmake
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 find_package(SDL2_mixer REQUIRED)
@@ -21,7 +20,8 @@ set(CMAKE_CXX_STANDARD 11)
 # )
 
 file(GLOB_RECURSE SOURCES_FILES 
-    src/main.cpp 
+    src/main.cpp
+    src/common.h
     src/logger/*
     src/utils/*
     src/render/sdl_texture.*
