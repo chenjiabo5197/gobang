@@ -3,7 +3,6 @@
 #include <iostream>
 #include "../render/sdl_texture.h"
 #include "../logger/logger.h"
-#include "../render/sdl_texture.h"
 #include "../utils/config.h"
 
 class Chess
@@ -18,8 +17,11 @@ private:
 
     SDLTexture* sdl_texture;
 
+    // 棋子的原始尺寸
     int chess_origin_size;
+    // 棋盘每个格子大小
     int lattice_size;
+    // 棋盘左上角坐标
     int origin_x, origin_y;
 
     // 标志该chess是否已经加载资源，以前出现了未加载资源去渲染结果没有数据，找了好久原因

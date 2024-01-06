@@ -9,10 +9,12 @@
 #pragma once
 
 #include <math.h>
+#include <SDL2/SDL_ttf.h>
 #include "../common.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"
 #include "../render/sdl_texture.h"
+#include "../render/ttf_result_interface.h"
 #include "../chess/chessboard.h"
 #include "../player/machine.h"
 #include "../player/player.h"
@@ -26,6 +28,8 @@ private:
 
     SDL_Window * gWindow;
     SDL_Renderer* gRenderer;
+    TTF_Font* gResultFont; 
+    std::string ttf_result_path;
 
     // 棋盘
     Chessboard* chessboard;
@@ -38,6 +42,13 @@ private:
 
     // 玩家
     Player* single_player;
+
+    // 结算页面的渲染
+    TTFResultInterface* ttf_result_interface;
+
+    //棋盘中心的坐标
+    int chessboard_x;
+    int chessboard_y;
     
 public:
     Manage(const Config& config);

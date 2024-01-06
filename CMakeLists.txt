@@ -25,6 +25,7 @@ file(GLOB_RECURSE SOURCES_FILES
     src/logger/*
     src/utils/*
     src/render/sdl_texture.*
+    src/render/ttf_result_interface.*
     src/chess/chess.*
     src/chess/chessboard.*
     src/manage/manage.*

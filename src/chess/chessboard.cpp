@@ -389,5 +389,26 @@ bool Chessboard::checkWin()
 	}
 
 	return false;
+}
 
+int Chessboard::get_chessboard_center_x()
+{
+	int center_x = 500;
+	if (this->chessboard_boundary != nullptr)
+	{
+		center_x = (this->chessboard_boundary->left_top_x+this->chessboard_boundary->right_top_x) / 2;
+	}
+	INFOLOG("get_chessboard_center_x||center_x={}", center_x);
+	return center_x;
+}
+
+int Chessboard::get_chessboard_center_y()
+{
+	int center_y = 500;
+	if (this->chessboard_boundary != nullptr)
+	{
+		center_y = (this->chessboard_boundary->left_top_y+this->chessboard_boundary->left_bottom_y) / 2;
+	}
+	INFOLOG("get_chessboard_center_y||center_y={}", center_y);
+	return center_y;
 }

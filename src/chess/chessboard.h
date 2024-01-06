@@ -63,6 +63,10 @@ public:
 
 	player_flag_type get_player_flag_type();
 
+	// 获取棋盘中心的坐标
+	int get_chessboard_center_x();
+	int get_chessboard_center_y();
+
 	// // 悔棋,悔棋需要记录每一步的顺序和下棋位置
 	// void playerWithDraw();
 

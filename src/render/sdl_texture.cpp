@@ -37,48 +37,41 @@ void SDLTexture::setColor(Uint8 red, Uint8 green, Uint8 blue)
 }
 
 #if defined(SDL_TTF_MAJOR_VERSION)
-bool SDLTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor)
+bool SDLTexture::loadFromRenderedText(SDL_Renderer* gRenderer, TTF_Font* gFont, std::string textureText, SDL_Color textColor)
 {
     ////先取消原有纹理的渲染
     free();
 
     //Render text surface
     /*
-    根据字体创建要渲染的纹理。该函数接收要渲染的文本字符串和要用来渲染它的颜色。在此之后，该函数的工作原理与从文件加载相似，
-    只不过这次使用的是由 SDL_ttf 创建的 SDL_Surface，而不是文件
     使用 TTF_RenderText_Solid 加载一个曲面。函数会根据给出的字体、文本和颜色创建一个纯色曲面。如果曲面创建成功，
-    就会像之前从文件加载曲面一样创建纹理。创建纹理后，我们就可以像渲染其他纹理一样对其进行渲染。
+    就会像之前从文件加载曲面一样创建纹理。创建纹理后，可以像渲染其他纹理一样对其进行渲染。
     */
     if(gFont == nullptr)
     {
         ERRORLOG("gFont nullptr");
+        return false;
     }
     SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);
     if(textSurface == nullptr)
     {
         ERRORLOG("Unable to render text surface! SDL_ttf Error={}", TTF_GetError());
+        return false;
     }
-    else
+    //Create texture from surface pixels
+    mTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
+    if(mTexture == nullptr)
     {
-        //Create texture from surface pixels
-        mTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
-        if(mTexture == nullptr)
-        {
-            ERRORLOG("Unable to create texture from rendered text! SDL Error={}", SDL_GetError());
-        }
-        else
-        {
-            //Get image dimensions
-            mWidth = textSurface->w;
-            mHeight = textSurface->h;
-        }
-
-        //Get rid of old surface
-        SDL_FreeSurface(textSurface);
+        ERRORLOG("Unable to create texture from rendered text! SDL Error={}", SDL_GetError());
+        return false;
     }
-    
+    //Get image dimensions
+    mWidth = textSurface->w;
+    mHeight = textSurface->h;
+    //Get rid of old surface
+    SDL_FreeSurface(textSurface);
     //Return success
-    return mTexture != NULL;
+    return mTexture != nullptr;
 }
 #endif
 

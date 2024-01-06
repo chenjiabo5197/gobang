@@ -1,4 +1,3 @@
-#pragma once
 /*============================================
 * Author: chenjiabo
 * E-mail: chen_wangyi666@163.com
@@ -6,8 +5,11 @@
 * Description: This is sdl_texture.h file
 * Copyright (c) 2023, All rights reserved
 =============================================*/
+#pragma once
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include "../logger/logger.h"
 
 // 封装SDL_Texture
@@ -25,13 +27,9 @@ public:
     bool loadFromFile(SDL_Window * gWindow, SDL_Renderer* gRenderer, const std::string& path);
 
     #if defined(SDL_TTF_MAJOR_VERSION)
-    /*
-    如果头文件不包含 SDL_ttf.h，编译器就会忽略它。它检查是否定义了 SDL_TTF_MAJOR_VERSION 宏。
-    与 #include 一样，#if 也是用于与编译器对话的宏。在本例中，它表示如果 SDL_ttf 未定义，则忽略这段代码
-    */
     //Creates image from font string
     // SDL_ttf 的工作方式是根据字体和颜色创建新图像。对于纹理类来说，这意味着将从 SDL_ttf 渲染的文本而不是文件中加载图像
-    bool loadFromRenderedText(std::string textureText, SDL_Color textColor);
+    bool loadFromRenderedText(SDL_Renderer* gRenderer, TTF_Font* gFont, std::string textureText, SDL_Color textColor);
     #endif
 
     //Loads image into pixel buffer  加载像素 
