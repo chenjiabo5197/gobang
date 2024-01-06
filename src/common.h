@@ -21,9 +21,9 @@ typedef enum {
 
 typedef enum {
 	GAME_KIND_DEFAULT,
-	ONE_PLAYER_GAME,    // 单人游戏
+	ONE_PLAYER_GAME,     // 单人游戏
 	TWO_PLAYERS_GAME,    // 双人游戏
-	PLAYER_INTERNET    // 网络对战
+	PLAYER_INTERNET      // 网络对战
 } game_kind;
 
 // 棋子位置

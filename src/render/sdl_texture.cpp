@@ -52,7 +52,8 @@ bool SDLTexture::loadFromRenderedText(SDL_Renderer* gRenderer, TTF_Font* gFont, 
         ERRORLOG("gFont nullptr");
         return false;
     }
-    SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);
+    SDL_Surface* textSurface = TTF_RenderUTF8_Solid(gFont, textureText.c_str(), textColor);
+    // SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);
     if(textSurface == nullptr)
     {
         ERRORLOG("Unable to render text surface! SDL_ttf Error={}", TTF_GetError());
@@ -226,7 +227,7 @@ void SDLTexture::render(SDL_Renderer* gRenderer, int x, int y, float multiple, S
         renderQuad.h = clip->h;
     }
 
-    // 使用倍数来缩放加载的图像
+    // 使用倍数来缩放加载的图像,最好用于缩小，放大图片容易造成像素点过大
     renderQuad.w = (int)mWidth * multiple;
     renderQuad.h = (int)mHeight * multiple;
     /*

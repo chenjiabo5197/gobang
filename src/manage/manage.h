@@ -30,6 +30,7 @@ private:
     SDL_Renderer* gRenderer;
     TTF_Font* gResultFont; 
     std::string ttf_result_path;
+    int ttf_result_ptsize;
 
     // 棋盘
     Chessboard* chessboard;
@@ -43,8 +44,10 @@ private:
     // 玩家
     Player* single_player;
 
-    // 结算页面的渲染
-    TTFResultInterface* ttf_result_interface;
+    // 玩家赢结算页面的渲染
+    TTFResultInterface* player_win_interface;
+    // 玩家输结算页面的渲染
+    TTFResultInterface* player_lose_interface;
 
     //棋盘中心的坐标
     int chessboard_x;

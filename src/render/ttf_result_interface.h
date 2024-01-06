@@ -17,15 +17,27 @@ class TTFResultInterface
 private:
     SDLTexture* sdl_texture;
 
+    // 是否已经加载渲染文字
     bool is_load_text;
 
+    // 字体的缩放倍数
     float ttf_result_multiple;
+
+    // 渲染的参数
+    int render_r;
+    int render_g;
+    int render_b;
+    int render_alpha;
+    // 渲染文字
+    std::string render_text;
 public:
-    TTFResultInterface(const Config& config);
+    TTFResultInterface(const Config& config, const std::string& config_prefix);
     ~TTFResultInterface();
 
-    bool loadRenderText(SDL_Renderer* gRenderer, TTF_Font* gFont, const std::string& textureText, SDL_Color textColor);
+    // 加载渲染文字
+    bool loadRenderText(SDL_Renderer* gRenderer, TTF_Font* gFont);
 
+    // 渲染
     bool ttfRender(SDL_Renderer* gRenderer, const int& x, const int& y);
 };
 

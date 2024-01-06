@@ -23,4 +23,15 @@ chessboard_lattice_size=60
 
 #ttf
 ttf_result_resource_path=resources/STXingkai.ttf
-ttf_result_multiple=10.0
+ttf_result_ptsize=650
+ttf_result_player_win=胜
+ttf_result_player_lose=败
+ttf_result_player_win_r=0
+ttf_result_player_win_g=0
+ttf_result_player_win_b=0
+ttf_result_player_win_alpha=255
+ttf_result_player_lose_r=0
+ttf_result_player_lose_g=0
+ttf_result_player_lose_b=0
+ttf_result_player_lose_alpha=255
+ttf_result_multiple=1.0

@@ -16,15 +16,17 @@ Manage::Manage(const Config& config)
     this->width = config.Read("screen_width", 0);
     this->height = config.Read("screen_height", 0);
     this->ttf_result_path = config.Read("ttf_result_resource_path", temp);
+    this->ttf_result_ptsize = config.Read("ttf_result_ptsize", 0);
     this->render_type = DEFAULT_INTERFACE;
     this->chessboard = new Chessboard(config);
     this->machine = new Machine(this->chessboard);
     this->single_player = new Player(this->chessboard, "single_player", CHESS_BLACK);
-    this->ttf_result_interface = new TTFResultInterface(config);
+    this->player_win_interface = new TTFResultInterface(config, "ttf_result_player_win");
+    this->player_lose_interface = new TTFResultInterface(config, "ttf_result_player_lose");
     this->chessboard_x = this->chessboard->get_chessboard_center_x();
     this->chessboard_y = this->chessboard->get_chessboard_center_y();
-    DEBUGLOG("Manage construct success||width={}||height={}||render_type={}||ttf_result_path={}||chessboard_x={}||chessboard_y={}", 
-    this->width, this->height, (int)this->render_type, this->ttf_result_path, this->chessboard_x, this->chessboard_y);
+    DEBUGLOG("Manage construct success||width={}||height={}||render_type={}||ttf_result_path={}||chessboard_x={}||chessboard_y={}||ttf_result_ptsize={}", 
+    this->width, this->height, (int)this->render_type, this->ttf_result_path, this->chessboard_x, this->chessboard_y, this->ttf_result_ptsize);
 }
 
 Manage::~Manage()
@@ -32,7 +34,8 @@ Manage::~Manage()
     delete chessboard;
     delete machine;
     delete single_player;
-    delete ttf_result_interface;
+    delete player_win_interface;
+    delete player_lose_interface;
     DEBUGLOG("~Manage success||release resource");
 }
 
@@ -93,7 +96,7 @@ void Manage::start()
                 this->setRendererType(PLAYER_LOSE_INTERFACE);
                 break;
             }
-            else
+            else if(this->render_type == PLAYCHESS_INTERFACE)
             {
                 if(this->handleMouseClick(&e) && this->chessboard->get_player_flag_type() == MACHINE_PLAYER)
                 {
@@ -104,18 +107,18 @@ void Manage::start()
         //Clear screen
         SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderClear(gRenderer);
-        SDL_Color textColor = {0, 0, 0, 255};
         switch (this->render_type)
         {
         case PLAYCHESS_INTERFACE:
             this->chessboard->render(gWindow, gRenderer);
             break;
         case PLAYER_WIN_INTERFACE:
-            // this->chessboard->render(gWindow, gRenderer);
+            this->player_win_interface->loadRenderText(gRenderer, gResultFont);
+            this->player_win_interface->ttfRender(gRenderer, chessboard_x, chessboard_y);
             break;
         case PLAYER_LOSE_INTERFACE:
-            this->ttf_result_interface->loadRenderText(gRenderer, gResultFont, "lose", textColor);
-            this->ttf_result_interface->ttfRender(gRenderer, chessboard_x, chessboard_y);
+            this->player_lose_interface->loadRenderText(gRenderer, gResultFont);
+            this->player_lose_interface->ttfRender(gRenderer, chessboard_x, chessboard_y);
             break;
         default:
             break;
@@ -137,13 +140,6 @@ bool Manage::initRender()
         return false;
     }
     DEBUGLOG("SDL initialize success!");
-    //Initialize SDL_ttf
-    if(TTF_Init() == -1)
-    {
-        ERRORLOG("SDL_ttf could not initialize||SDL_ttf Error:", TTF_GetError());
-        return false;
-    }
-    DEBUGLOG("SDL_ttf initialize success");
     //Set texture filtering to linear
     if(!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
     {
@@ -165,17 +161,6 @@ bool Manage::initRender()
         return false;
     }
     DEBUGLOG("Create renderer success!");
-    //使用 TTF_OpenFont 加载字体。这需要输入字体文件的路径和我们要渲染的点尺寸
-    this->gResultFont = TTF_OpenFont(this->ttf_result_path.c_str(), 42);
-    if( gResultFont == nullptr )
-    {
-        ERRORLOG("Failed to load STXingkai font! SDL_ttf Error={}", TTF_GetError());
-        return false;
-    }
-    DEBUGLOG("Create font success!");
-    //Initialize renderer color
-    SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
     //Initialize PNG loading
     int imgFlags = IMG_INIT_PNG;
     if(!(IMG_Init(imgFlags) & imgFlags))
@@ -184,6 +169,21 @@ bool Manage::initRender()
         return false;
     }
     DEBUGLOG("SDL_image initialize success");
+    //Initialize SDL_ttf
+    if(TTF_Init() == -1)
+    {
+        ERRORLOG("SDL_ttf could not initialize||SDL_ttf Error:", TTF_GetError());
+        return false;
+    }
+    DEBUGLOG("SDL_ttf initialize success");
+    //使用 TTF_OpenFont 加载字体。这需要输入字体文件的路径和要渲染的点尺寸
+    this->gResultFont = TTF_OpenFont(this->ttf_result_path.c_str(), this->ttf_result_ptsize);
+    if( gResultFont == nullptr )
+    {
+        ERRORLOG("Failed to load STXingkai font! SDL_ttf Error={}", TTF_GetError());
+        return false;
+    }
+    DEBUGLOG("Create font success!");
     INFOLOG("initRender success!");
     return true;
 }
