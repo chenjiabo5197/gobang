@@ -15,6 +15,7 @@
 #include "../render/sdl_texture.h"
 #include "../chess/chessboard.h"
 #include "../player/machine.h"
+#include "../player/player.h"
 
 class Manage
 {
@@ -34,6 +35,9 @@ private:
 
     // 电脑AI
     Machine* machine;
+
+    // 玩家
+    Player* single_player;
     
 public:
     Manage(const Config& config);

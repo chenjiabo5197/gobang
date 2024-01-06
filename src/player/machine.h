@@ -39,7 +39,7 @@ public:
     // 初始化，评分数组初始化
     void init();
 	// 友元函数，用于做线程函数，访问Machine类内部变量
-	friend int go(void* data);
+	friend int machineChessDown(void* data);
 };
 
 

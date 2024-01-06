@@ -304,6 +304,12 @@ void Chessboard::set_player_flag_type(const player_flag_type& type)
 	this->player_flag = type;
 }
 
+player_flag_type Chessboard::get_player_flag_type()
+{
+	INFOLOG("get_player_flag_type||type={}", (int)this->player_flag);
+	return this->player_flag;
+}
+
 bool Chessboard::checkOver()
 {
 	if (checkWin())

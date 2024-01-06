@@ -8,22 +8,27 @@ private:
     // 棋盘数据，对哪个棋盘下棋
     Chessboard* chessboard;    
 
-    // 单人游戏玩家棋子数量
-	int chessNum;
+    // 当前棋子数量，用于制作单人玩家游戏排行榜
+	int chess_num;
 
-	std::string playerName;
+	// 当前的玩家名，主要用于双人游戏
+	std::string player_name;
 
-	chess_kind_type chessKind;
+	// 当前玩家的棋子类型，用于双人游戏
+	chess_kind_type chess_kind;
 public:
-    Player(Chessboard* chessboard);
+    Player(Chessboard* chessboard, const std::string& player_name, const chess_kind_type& chess_kind);
     ~Player();
 
-	void init(Chess* chess, std::string playerName, chess_kind_type chessKind = CHESS_BLACK);
+	void init();
 
 	// 每次游戏完后，重开游戏需要设置的参数
 	void resetPlayer();
+
+	// 下棋成功，棋子数+1
+	void addChessNum();
 	
-	bool go(int x, int y, chess_kind_type kind = CHESS_BLACK);
+	friend int playerChessDown(void* data);
 };
 
 

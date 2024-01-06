@@ -28,7 +28,7 @@ file(GLOB_RECURSE SOURCES_FILES
     src/chess/chess.*
     src/chess/chessboard.*
     src/manage/manage.*
-    src/player/machine*
+    src/player/*
     # third_party/spdlog/*
 )
 

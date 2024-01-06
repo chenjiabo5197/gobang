@@ -61,6 +61,8 @@ public:
 	// 设置当前的下棋方
 	void set_player_flag_type(const player_flag_type& type);
 
+	player_flag_type get_player_flag_type();
+
 	// // 悔棋,悔棋需要记录每一步的顺序和下棋位置
 	// void playerWithDraw();
 

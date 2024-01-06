@@ -326,6 +326,11 @@ ChessPos Machine::think()
 			}
 		}
 	}
+	// 输出最大值数组
+	for (std::vector<ChessPos>::iterator it = maxPoints.begin(); it != maxPoints.end(); it++)
+	{
+		DEBUGLOG("Machine::think||maxPoints||row={}||col={}", it->chess_row, it->chess_col);
+	}
 
 	//随机落子，多个点 
 	int index = rand() % maxPoints.size();

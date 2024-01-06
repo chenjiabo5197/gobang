@@ -1,14 +1,18 @@
 #pragma once
+#include "SDL2/SDL.h"
+
+#define PLAYER_WIN_EVENT	(SDL_USEREVENT+1)
+#define PLAYER_LOSE_EVENT	(SDL_USEREVENT+2)
 
 typedef enum {
-    CHESS_DEFAULT,  // 空白
+    CHESS_DEFAULT,  // 默认
 	CHESS_WHITE,    // 白方
 	CHESS_BLACK		// 黑方
 } chess_kind_type;
 
 // 鼠标点击时在棋盘格子的周围四个角
 typedef enum {
-	COORD_DEFAULT,		   // 初始位置
+	COORD_DEFAULT,	    // 初始位置
 	LEFTTOP,           //左上     
 	RIGHTTOP,          //右上
 	LEFTBOTTOM,        //左下
@@ -60,7 +64,7 @@ typedef enum {
 	BEST_SCORE_INTERFACE          // 输出排行榜分数
 } interface_kind_type;
 
-// 下棋方的枚举值
+// 当前下棋方的枚举值
 typedef enum {
     DEFAULT_PLAYER,
     MACHINE_PLAYER,         // 单人游戏，电脑
@@ -68,6 +72,8 @@ typedef enum {
     BLACK_PLAYER,           // 双人游戏，黑棋
     WHITE_PLAYER            // 双人游戏，白棋
 } player_flag_type;
+
+
 
 
 

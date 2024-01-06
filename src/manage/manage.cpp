@@ -17,6 +17,7 @@ Manage::Manage(const Config& config)
     this->render_type = DEFAULT_INTERFACE;
     this->chessboard = new Chessboard(config);
     this->machine = new Machine(this->chessboard);
+    this->single_player = new Player(this->chessboard, "single_player", CHESS_BLACK);
     DEBUGLOG("Manage construct success||width={}||height={}||render_type={}", this->width, this->height, (int)this->render_type);
 }
 
@@ -24,20 +25,26 @@ Manage::~Manage()
 {
     delete chessboard;
     delete machine;
-    DEBUGLOG("~Manage success, release chessboard");
+    delete single_player;
+    DEBUGLOG("~Manage success||release resource");
 }
 
 // Machine类的友元函数
-int go(void* data)
+int machineChessDown(void* data)
 {
 	Machine* machine = (Machine *)(data);
-    SDL_AtomicLock(&player_machine_lock);
     ChessPos pos = machine->think();
     // 程序休眠1s，假装在思考
     MyUtils::sleep_seconds(1);
 	// mciSendString("play res/chess_down.mp3", 0, 0, 0);
 	machine->chessboard->chessDown(pos, CHESS_WHITE);
-    machine->chessboard->checkOver();
+    if(machine->chessboard->checkOver())
+    {
+        DEBUGLOG("machine");
+        SDL_Event event;
+        event.type = PLAYER_LOSE_EVENT;
+        SDL_PushEvent(&event);
+    }
     machine->chessboard->set_player_flag_type(SINGLE_PLAYER);
     SDL_AtomicUnlock(&player_machine_lock);
     DEBUGLOG("Machine::go||Machine chess down success");
@@ -52,115 +59,118 @@ void Manage::start()
     if(!this->initRender())
     {
         ERRORLOG("Failed to initialize!");
+        return;
     }
-    else
+    //Hack to get window to stay up
+    SDL_Event e;
+    bool quit = false;
+    SDL_Thread* machine_thread = nullptr;
+    SDL_Thread* single_player_thread = nullptr;
+    //While application is running
+    while(!quit)
     {
-        //Hack to get window to stay up
-        SDL_Event e;
-        bool quit = false;
-        SDL_Thread* machine_thread = nullptr;
-        //While application is running
-        while(!quit)
+        //Handle events on queue
+        while(SDL_PollEvent(&e) != 0)
         {
-            //Handle events on queue
-            while(SDL_PollEvent(&e) != 0)
+            //User requests quit
+            if(e.type == SDL_QUIT)
             {
-                //User requests quit
-                if(e.type == SDL_QUIT)
-                {
-                    quit = true;
-                }
-                else
-                {
-                    if(this->handleMouseClick(&e))
-                    {
-                        machine_thread = SDL_CreateThread(go, "machine player", this->machine);
-                    }
-                }
+                quit = true;
             }
-            //Clear screen
-            SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-            SDL_RenderClear(gRenderer);
-            switch (this->render_type)
+            else if (e.type == PLAYER_WIN_EVENT)
             {
-            case PLAYCHESS_INTERFACE:
-                this->chessboard->render(gWindow, gRenderer);
-                break;
-            default:
+                this->setRendererType(PLAYER_WIN_INTERFACE);
                 break;
             }
-            //Update screen
-            SDL_RenderPresent(gRenderer);
+            else if (e.type == PLAYER_LOSE_EVENT)
+            {
+                DEBUGLOG("machine2");
+                this->setRendererType(PLAYER_LOSE_INTERFACE);
+                break;
+            }
+            else
+            {
+                if(this->handleMouseClick(&e) && this->chessboard->get_player_flag_type() == MACHINE_PLAYER)
+                {
+                    machine_thread = SDL_CreateThread(machineChessDown, "machine player", this->machine);
+                }
+            }
         }
-        SDL_WaitThread(machine_thread, nullptr);
-        //Free resources and close SDL
-        this->closeRender();
+        //Clear screen
+        SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        SDL_RenderClear(gRenderer);
+        switch (this->render_type)
+        {
+        case PLAYCHESS_INTERFACE:
+            this->chessboard->render(gWindow, gRenderer);
+            break;
+        case PLAYER_WIN_INTERFACE:
+            // this->chessboard->render(gWindow, gRenderer);
+            break;
+        case PLAYER_LOSE_INTERFACE:
+            DEBUGLOG("machine3");
+            // this->chessboard->render(gWindow, gRenderer);
+            break;
+        default:
+            break;
+        }
+        //Update screen
+        SDL_RenderPresent(gRenderer);
     }
+    SDL_WaitThread(machine_thread, nullptr);
+    //Free resources and close SDL
+    this->closeRender();
 }
 
 bool Manage::initRender()
 {
-    //Initialization flag
-    bool success = true;
     //Initialize SDL
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
     {
         ERRORLOG("SDL could not initialize||SDL_Error: ", SDL_GetError());
-        success = false;
+        return false;
     }
-    else
+    DEBUGLOG("SDL initialize success!");
+    //Set texture filtering to linear
+    if(!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
     {
-        DEBUGLOG("SDL initialize success!");
-        //Set texture filtering to linear
-        if(!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
-        {
-            ERRORLOG("Warning: Linear texture filtering not enabled!");
-        }
-        //Create window
-        this->gWindow = SDL_CreateWindow("五子棋", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->width, this->height, SDL_WINDOW_SHOWN);
-        if(gWindow == nullptr)
-        {
-            ERRORLOG("Window could not be created||SDL_Error: ", SDL_GetError());
-            success = false;
-        }
-        else
-        {
-            DEBUGLOG("Create window success||width={}||height={}", this->width, this->height);
-            //为窗口创建垂直同步渲染器
-            /*
-            垂直同步,VSync 可以让渲染与显示器在垂直刷新时的更新同步进行。在本教程中，它将确保动画的运行速度不会太快。
-            大多数显示器的运行速度约为每秒 60 帧，这也是我们的假设。如果你的显示器刷新率不同，这就能解释为什么动画运行得过快或过慢
-            */
-            this->gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-            if(gRenderer == nullptr)
-            {
-                ERRORLOG("Renderer could not be created||SDL Error:", SDL_GetError());
-                success = false;
-            }
-            else
-            {
-                DEBUGLOG("Create renderer success!");
-                //Initialize renderer color
-                SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
-                //Initialize PNG loading
-                int imgFlags = IMG_INIT_PNG;
-                if(!(IMG_Init(imgFlags) & imgFlags))
-                {
-                    ERRORLOG("SDL_image could not initialize||SDL_image Error:", IMG_GetError());
-                    success = false;
-                }
-                // //Initialize SDL_ttf
-                // if(TTF_Init() == -1)
-                // {
-                //     ERRORLOG("SDL_ttf could not initialize||SDL_ttf Error:", TTF_GetError());
-                //     success = false;
-                // }
-            }
-        }
+        WARNLOG("Warning: Linear texture filtering not enabled!");
     }
+    //Create window
+    this->gWindow = SDL_CreateWindow("五子棋", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->width, this->height, SDL_WINDOW_SHOWN);
+    if(gWindow == nullptr)
+    {
+        ERRORLOG("Window could not be created||SDL_Error: ", SDL_GetError());
+        return false;
+    }
+    DEBUGLOG("Create window success||width={}||height={}", this->width, this->height);
+    //为窗口创建垂直同步渲染器
+    this->gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if(gRenderer == nullptr)
+    {
+        ERRORLOG("Renderer could not be created||SDL Error:", SDL_GetError());
+        return false;
+    }
+    DEBUGLOG("Create renderer success!");
+    //Initialize renderer color
+    SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
+    //Initialize PNG loading
+    int imgFlags = IMG_INIT_PNG;
+    if(!(IMG_Init(imgFlags) & imgFlags))
+    {
+        ERRORLOG("SDL_image could not initialize||SDL_image Error:", IMG_GetError());
+        return false;
+    }
+    DEBUGLOG("SDL_image initialize success");
+    // //Initialize SDL_ttf
+    // if(TTF_Init() == -1)
+    // {
+    //     ERRORLOG("SDL_ttf could not initialize||SDL_ttf Error:", TTF_GetError());
+    //     success = false;
+    // }
     INFOLOG("initRender success!");
-    return success;
+    return true;
 }
 
 void Manage::closeRender()
@@ -181,7 +191,7 @@ void Manage::closeRender()
 bool Manage::handleMouseClick(SDL_Event* e)
 {
     SDL_AtomicLock(&player_machine_lock);
-    if (e->type == SDL_MOUSEBUTTONDOWN)  // 鼠标点击事件
+    if (e->type == SDL_MOUSEBUTTONDOWN && this->chessboard->get_player_flag_type() == SINGLE_PLAYER)  // 鼠标点击事件
     {
         //获取鼠标位置
         int x, y;
@@ -192,9 +202,15 @@ bool Manage::handleMouseClick(SDL_Event* e)
         if (is_valid_click)
         {
             this->chessboard->chessDown(pos, CHESS_BLACK);
-            this->chessboard->checkOver();
+            this->single_player->addChessNum();
+            if(this->chessboard->checkOver())
+            {
+                SDL_Event event;
+                event.type = PLAYER_WIN_EVENT;
+                SDL_PushEvent(&event);
+            }
+            this->chessboard->set_player_flag_type(MACHINE_PLAYER);
         }
-        this->chessboard->set_player_flag_type(MACHINE_PLAYER);
         SDL_AtomicUnlock(&player_machine_lock);
         return is_valid_click;
     }
