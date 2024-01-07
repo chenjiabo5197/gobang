@@ -93,6 +93,7 @@ void Manage::start()
     bool quit = false;
     SDL_Thread* machine_thread = nullptr;
     SDL_Thread* single_player_thread = nullptr;
+    interface_kind_type last_render_type = DEFAULT_INTERFACE;
     //While application is running
     while(!quit)
     {
@@ -111,7 +112,7 @@ void Manage::start()
             }
             else if (e.type == PLAYER_LOSE_EVENT)
             {
-                this->setRendererType(PLAYER_LOSE_INTERFACE);
+                this->setRendererType(PLAYER_LOSE_PRE_INTERFACE);
                 break;
             }
             else if(this->render_type == PLAYCHESS_INTERFACE)
@@ -122,6 +123,10 @@ void Manage::start()
                 }
             }
         }
+        if (last_render_type == PLAYER_LOSE_PRE_INTERFACE)
+        {
+            this->setRendererType(PLAYER_LOSE_INTERFACE);
+        } 
         //Clear screen
         SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderClear(gRenderer);
@@ -130,15 +135,31 @@ void Manage::start()
         case PLAYCHESS_INTERFACE:
             this->chessboard->render(gWindow, gRenderer);
             break;
+        case PLAYER_LOSE_PRE_INTERFACE:
+            this->chessboard->render(gWindow, gRenderer);
+            break;
         case PLAYER_WIN_INTERFACE:
+        {
+            if (last_render_type != this->render_type)
+            {
+                MyUtils::sleep_seconds(1.5);
+            }
             this->player_win_interface->ttfRender(gRenderer, chessboard_x, chessboard_y);
             break;
+        }
         case PLAYER_LOSE_INTERFACE:
+        {
+            if (last_render_type != this->render_type)
+            {
+                MyUtils::sleep_seconds(1.5);
+            }
             this->player_lose_interface->ttfRender(gRenderer, chessboard_x, chessboard_y);
             break;
+        }
         default:
             break;
         }
+        last_render_type = this->render_type;
         //Update screen
         SDL_RenderPresent(gRenderer);
     }
