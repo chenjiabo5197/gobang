@@ -92,7 +92,6 @@ void Manage::start()
     SDL_Event e;
     bool quit = false;
     SDL_Thread* machine_thread = nullptr;
-    SDL_Thread* single_player_thread = nullptr;
     interface_kind_type last_render_type = DEFAULT_INTERFACE;
     //While application is running
     while(!quit)
@@ -107,7 +106,7 @@ void Manage::start()
             }
             else if (e.type == PLAYER_WIN_EVENT)
             {
-                this->setRendererType(PLAYER_WIN_INTERFACE);
+                this->setRendererType(PLAYER_WIN_PRE_INTERFACE);
                 break;
             }
             else if (e.type == PLAYER_LOSE_EVENT)
@@ -115,11 +114,21 @@ void Manage::start()
                 this->setRendererType(PLAYER_LOSE_PRE_INTERFACE);
                 break;
             }
-            else if(this->render_type == PLAYCHESS_INTERFACE)
+            else
             {
-                if(this->handleMouseClick(&e) && this->chessboard->get_player_flag_type() == MACHINE_PLAYER)
+                if(this->render_type == PLAYCHESS_INTERFACE)
                 {
-                    machine_thread = SDL_CreateThread(machineChessDown, "machine player", this->machine);
+                    if(this->handleMouseClick(&e) && this->chessboard->get_player_flag_type() == MACHINE_PLAYER)
+                    {
+                        machine_thread = SDL_CreateThread(machineChessDown, "machine player", this->machine);
+                    }
+                    this->back_menu_button->handleButtonEvent(&e);
+                    this->withdraw_button->handleButtonEvent(&e);
+                }
+                else if (this->render_type == PLAYER_WIN_INTERFACE || this->render_type == PLAYER_LOSE_INTERFACE)
+                {
+                    this->back_menu_button->handleButtonEvent(&e);
+                    this->again_game_button->handleButtonEvent(&e);
                 }
             }
         }
@@ -127,6 +136,10 @@ void Manage::start()
         {
             this->setRendererType(PLAYER_LOSE_INTERFACE);
         } 
+        if (last_render_type == PLAYER_WIN_PRE_INTERFACE)
+        {
+            this->setRendererType(PLAYER_WIN_INTERFACE);
+        }
         //Clear screen
         SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderClear(gRenderer);
@@ -134,8 +147,13 @@ void Manage::start()
         {
         case PLAYCHESS_INTERFACE:
             this->chessboard->render(gWindow, gRenderer);
+            this->withdraw_button->buttonRender(gRenderer);
+            this->back_menu_button->buttonRender(gRenderer);
             break;
         case PLAYER_LOSE_PRE_INTERFACE:
+            this->chessboard->render(gWindow, gRenderer);
+            break;
+        case PLAYER_WIN_PRE_INTERFACE:
             this->chessboard->render(gWindow, gRenderer);
             break;
         case PLAYER_WIN_INTERFACE:
@@ -145,6 +163,8 @@ void Manage::start()
                 MyUtils::sleep_seconds(1.5);
             }
             this->player_win_interface->ttfRender(gRenderer, chessboard_x, chessboard_y);
+            this->back_menu_button->buttonRender(gRenderer);
+            this->again_game_button->buttonRender(gRenderer);
             break;
         }
         case PLAYER_LOSE_INTERFACE:
@@ -154,6 +174,8 @@ void Manage::start()
                 MyUtils::sleep_seconds(1.5);
             }
             this->player_lose_interface->ttfRender(gRenderer, chessboard_x, chessboard_y);
+            this->back_menu_button->buttonRender(gRenderer);
+            this->again_game_button->buttonRender(gRenderer);
             break;
         }
         default:
@@ -230,6 +252,9 @@ bool Manage::loadResource()
     DEBUGLOG("Create font success!");
     this->player_win_interface->loadRenderText(gRenderer, gResultFont);
     this->player_lose_interface->loadRenderText(gRenderer, gResultFont);
+    this->again_game_button->loadResource(gWindow, gRenderer);
+    this->withdraw_button->loadResource(gWindow, gRenderer);
+    this->back_menu_button->loadResource(gWindow, gRenderer);
     INFOLOG("loadResource success!");
     return true;
 }

@@ -119,29 +119,25 @@ bool SDLTexture::loadFromPixels(SDL_Renderer* gRenderer)
     if(mSurfacePixels == nullptr)
     {
         ERRORLOG("No pixels loaded!");
+        return false;
     }
-    else
+    //Color key image
+    SDL_SetColorKey(mSurfacePixels, SDL_TRUE, SDL_MapRGB(mSurfacePixels->format, 0xff, 0xff, 0xff));
+
+    //Create texture from surface pixels
+    mTexture = SDL_CreateTextureFromSurface(gRenderer, mSurfacePixels);
+    if(mTexture == nullptr)
     {
-        //Color key image
-        SDL_SetColorKey(mSurfacePixels, SDL_TRUE, SDL_MapRGB(mSurfacePixels->format, 0xff, 0xff, 0xff));
-
-        //Create texture from surface pixels
-        mTexture = SDL_CreateTextureFromSurface(gRenderer, mSurfacePixels);
-        if(mTexture == nullptr)
-        {
-            ERRORLOG("Unable to create texture from loaded pixels! SDL Error={}", SDL_GetError());
-        }
-        else
-        {
-            //Get image dimensions
-            mWidth = mSurfacePixels->w;
-            mHeight = mSurfacePixels->h;
-        }
-
-        //Get rid of old loaded surface
-        SDL_FreeSurface(mSurfacePixels);
-        mSurfacePixels = nullptr;
+        ERRORLOG("Unable to create texture from loaded pixels! SDL Error={}", SDL_GetError());
+        return false;
     }
+    //Get image dimensions
+    mWidth = mSurfacePixels->w;
+    mHeight = mSurfacePixels->h;
+
+    //Get rid of old loaded surface
+    SDL_FreeSurface(mSurfacePixels);
+    mSurfacePixels = nullptr;
 
     //Return success
     return mTexture != nullptr;
@@ -155,14 +151,13 @@ bool SDLTexture::loadFromFile(SDL_Window * gWindow, SDL_Renderer* gRenderer, con
     if(!loadPixelsFromFile(gWindow, path))
     {
         ERRORLOG("Failed to load pixels, path={}", path.c_str());
+        return false;
     }
-    else
+    //Load texture from pixels
+    if(!loadFromPixels(gRenderer))
     {
-        //Load texture from pixels
-        if(!loadFromPixels(gRenderer))
-        {
-            ERRORLOG("Failed to texture from pixels, path={}", path.c_str());
-        }
+        ERRORLOG("Failed to texture from pixels, path={}", path.c_str());
+        return false;
     }
     return mTexture != nullptr;
 }
@@ -217,8 +212,8 @@ void SDLTexture::render(SDL_Renderer* gRenderer, int x, int y, float multiple, S
 {
     //设置渲染区域并渲染到屏幕
     SDL_Rect renderQuad = {x, y, mWidth, mHeight};
-    /* 在特定位置渲染纹理时，需要指定一个目标矩形，该矩形可设置 x/y 位置和宽度/高度。在不知道原始图像尺寸的情况下，我们无法指定宽度/高度。
-    因此，当我们渲染纹理时，我们会创建一个包含位置参数和成员宽度/高度的矩形，并将此矩形传递给 SDL_RenderCopy
+    /* 在特定位置渲染纹理时，需要指定一个目标矩形，该矩形可设置 x/y 位置和宽度/高度。在不知道原始图像尺寸的情况下，无法指定宽度/高度。
+    因此，当渲染纹理时，创建一个包含位置参数和成员宽度/高度的矩形，并将此矩形传递给 SDL_RenderCopy
     */
 
     //Set clip rendering dimensions
@@ -229,8 +224,12 @@ void SDLTexture::render(SDL_Renderer* gRenderer, int x, int y, float multiple, S
     }
 
     // 使用倍数来缩放加载的图像,最好用于缩小，放大图片容易造成像素点过大
-    renderQuad.w = (int)mWidth * multiple;
-    renderQuad.h = (int)mHeight * multiple;
+    if (multiple != 1.0)
+    {
+        renderQuad.w = (int)renderQuad.w * multiple;
+        renderQuad.h = (int)renderQuad.h * multiple;
+    }
+    
     /*
     在剪辑时，如果使用的是剪辑矩形的尺寸而不是纹理的尺寸，我们将把目标矩形（此处称为 renderQuad）的宽度/高度设置为剪辑矩形的尺寸。
     我们要将剪辑矩形作为源矩形传递给 SDL_RenderCopy。源矩形定义了要渲染纹理的哪一部分。当源矩形为空时，将渲染整个纹理。
@@ -304,7 +303,7 @@ bool SDLTexture::createBlank(SDL_Renderer* gRenderer, int width, int height, SDL
 
     //Create uninitialized texture
     mTexture = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, access, width, height);
-    if(mTexture == NULL)
+    if(mTexture == nullptr)
     {
         ERRORLOG("Unable to create streamable blank texture! SDL Error={}", SDL_GetError());
     }
@@ -314,7 +313,7 @@ bool SDLTexture::createBlank(SDL_Renderer* gRenderer, int width, int height, SDL
         mHeight = height;
     }
 
-    return mTexture != NULL;
+    return mTexture != nullptr;
 }
 
 // 对纹理进行渲染，将其设置为渲染目标

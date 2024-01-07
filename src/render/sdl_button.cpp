@@ -10,7 +10,7 @@ SDLButton::SDLButton(const Config& config, const std::string button_name)
     this->button_position.y = config.Read(button_name+"_y", 0);
     this->button_width = config.Read(button_name+"_width", 0);
     this->button_height = config.Read(button_name+"_height", 0);
-    this->button_multiple = config.Read(button_name+"_multiple", 0);
+    this->button_multiple = config.Read(button_name+"_multiple", 0.0);
     this->button_resource_path = config.Read(button_name+"_resourece_path", temp);
     this->is_load_resource = false;
     INFOLOG("SDLButton construct success||button_name={}||position_x={}||position_y={}||width={}||height={}||multiple={}||resource_path={}", 
@@ -21,11 +21,11 @@ SDLButton::~SDLButton()
 {
     this->sdl_texture->free();
     delete sdl_texture;
-    INFOLOG("~SDLButton, release resource");
+    INFOLOG("~SDLButton, release resource||button_name={}", this->button_name);
 }
 
 // 该函数将在事件循环中调用，处理从事件队列中提取的单个按钮事件
-void SDLButton::handleEvent(SDL_Event* e)
+void SDLButton::handleButtonEvent(SDL_Event* e)
 {
     //If mouse event happened
     // 首先，检查输入的事件是否是鼠标事件，具体包括鼠标移动事件（鼠标移动时）、鼠标按键下移事件（点击鼠标按键时）或鼠标按键上移事件（释放鼠标点击时）
@@ -50,7 +50,7 @@ void SDLButton::handleEvent(SDL_Event* e)
             inside = false;
         }
         //Mouse is right of the button
-        else if(x > button_position.x + this->button_width)
+        else if(x > button_position.x + (int)this->button_width*this->button_multiple)
         {
             inside = false;
         }
@@ -60,7 +60,7 @@ void SDLButton::handleEvent(SDL_Event* e)
             inside = false;
         }
         //Mouse below the button
-        else if(y > button_position.y + this->button_height)
+        else if(y > button_position.y + (int)this->button_height*this->button_multiple)
         {
             inside = false;
         }
@@ -94,6 +94,7 @@ void SDLButton::handleEvent(SDL_Event* e)
                 break;
             }
         }
+        // DEBUGLOG("handleButtonEvent||button_name={}||mCurrentSprite={}", this->button_name, (int)this->mCurrentSprite);
     }
 }
 
@@ -102,7 +103,7 @@ bool SDLButton::loadResource(SDL_Window * gWindow, SDL_Renderer* gRenderer)
    //Load data
     if(!this->sdl_texture->loadPixelsFromFile(gWindow, this->button_resource_path))
     {        
-        ERRORLOG("Failed to load texture!");
+        ERRORLOG("Failed to load texture||button_name={}", this->button_name);
         return false;
     }
     //Get pixel data
@@ -124,7 +125,7 @@ bool SDLButton::loadResource(SDL_Window * gWindow, SDL_Renderer* gRenderer)
     //Create texture from manually color keyed pixels
     if(!this->sdl_texture->loadFromPixels(gRenderer))
     {
-        ERRORLOG("Unable to load texture from surface!");
+        ERRORLOG("Unable to load texture from surface||button_name={}", this->button_name);
         return false;
     }
     //设置精灵
@@ -132,7 +133,7 @@ bool SDLButton::loadResource(SDL_Window * gWindow, SDL_Renderer* gRenderer)
     {
         // 根据坐标取出button.png图像中不同区域的图像
         gSpriteClips[i].x = i * this->button_width;
-        if (i == BUTTON_SPRITE_TOTAL)  // 将按键释放后的图像与鼠标在按键外的图像设置为同一个
+        if (i == BUTTON_SPRITE_TOTAL - 1)  // 将按键释放后的图像与鼠标在按键外的图像设置为同一个
         {
             gSpriteClips[i].x = 0;
         }
@@ -149,11 +150,13 @@ bool SDLButton::buttonRender(SDL_Renderer* gRenderer)
 {
     if (!this->is_load_resource)
     {
-        ERRORLOG("button not load resource, please load resource");
+        ERRORLOG("button not load resource, please load resource||button_name={}", this->button_name);
         return false;
     }
     //Show current button sprite
     this->sdl_texture->render(gRenderer, button_position.x, button_position.y, this->button_multiple, &gSpriteClips[mCurrentSprite]);
+    // DEBUGLOG("buttonRender||x={}||y={}||gSpriteClips.x={}||gSpriteClips.y={}||gSpriteClips.w={}||gSpriteClips.h={}", button_position.x,
+    // button_position.y, gSpriteClips[mCurrentSprite].x, gSpriteClips[mCurrentSprite].y, gSpriteClips[mCurrentSprite].w, gSpriteClips[mCurrentSprite].h);
     return true;
 }
 

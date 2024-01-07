@@ -57,6 +57,7 @@ typedef enum {
 	SELECT_PLAY_INTERFACE,        // 选择单人游戏，双人游戏，网络对战
 	PLAYCHESS_INTERFACE,          // 对战中菜单，棋盘和退出游戏，悔棋
 	PLAYER_WIN_INTERFACE,         // 单人游戏赢了，选择再来一局或者退出游戏
+	PLAYER_WIN_PRE_INTERFACE,     // 单人游戏赢了前一帧，与输了保持一致
 	PLAYER_LOSE_INTERFACE,        // 单人游戏输了，选择再来一局或者退出游戏
 	PLAYER_LOSE_PRE_INTERFACE,    // 单人游戏输了前一帧，为了确保能将电脑最后一步下的棋渲染出来
 	PLAYER_DRAW_INTERFACE,        // 平局，棋盘落满棋子还未决出胜负

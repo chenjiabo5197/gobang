@@ -15,7 +15,7 @@ public:
     ~SDLButton();
 
     //用于事件循环的事件处理函数
-    void handleEvent(SDL_Event* e);
+    void handleButtonEvent(SDL_Event* e);
 
     //渲染函数
     bool buttonRender(SDL_Renderer* gRenderer);
