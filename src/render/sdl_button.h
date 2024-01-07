@@ -17,7 +17,7 @@ public:
     //用于事件循环的事件处理函数
     void handleButtonEvent(SDL_Event* e);
 
-    //渲染函数
+    //渲染函数,默认缩放倍数1.0，一般使用config中的倍数，当一个图片在不同地方使用时，需要外传此倍数
     bool buttonRender(SDL_Renderer* gRenderer);
 
     // 加载资源

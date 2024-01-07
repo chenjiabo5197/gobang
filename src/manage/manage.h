@@ -64,6 +64,7 @@ private:
     SDLButton* single_player_button;
     SDLButton* two_players_button;
     SDLButton* withdraw_button;
+    SDLButton* normal_back_menu_button;
     
 public:
     Manage(const Config& config);

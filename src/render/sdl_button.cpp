@@ -154,7 +154,7 @@ bool SDLButton::buttonRender(SDL_Renderer* gRenderer)
         return false;
     }
     //Show current button sprite
-    this->sdl_texture->render(gRenderer, button_position.x, button_position.y, this->button_multiple, &gSpriteClips[mCurrentSprite]);
+    this->sdl_texture->render(gRenderer, button_position.x, button_position.y, this->button_multiple, &gSpriteClips[mCurrentSprite]);   
     // DEBUGLOG("buttonRender||x={}||y={}||gSpriteClips.x={}||gSpriteClips.y={}||gSpriteClips.w={}||gSpriteClips.h={}", button_position.x,
     // button_position.y, gSpriteClips[mCurrentSprite].x, gSpriteClips[mCurrentSprite].y, gSpriteClips[mCurrentSprite].w, gSpriteClips[mCurrentSprite].h);
     return true;

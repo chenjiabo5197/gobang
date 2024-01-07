@@ -27,6 +27,7 @@ Manage::Manage(const Config& config)
     this->single_player_button = new SDLButton(config, "single_player");
     this->two_players_button = new SDLButton(config, "two_players");
     this->withdraw_button = new SDLButton(config, "withdraw");
+    this->normal_back_menu_button = new SDLButton(config, "normal_back_menu");
     std::string temp;
     this->width = config.Read("screen_width", 0);
     this->height = config.Read("screen_height", 0);
@@ -81,8 +82,7 @@ int machineChessDown(void* data)
 
 void Manage::start()
 {
-    this->render_type = PLAYCHESS_INTERFACE;
-    this->chessboard->set_player_flag_type(SINGLE_PLAYER);
+    this->setRendererType(MAIN_MENU_INTERFACE);
     //Start up SDL and create window
     if(!this->initRender())
     {
@@ -131,6 +131,19 @@ void Manage::start()
                     this->back_menu_button->handleButtonEvent(&e);
                     this->again_game_button->handleButtonEvent(&e);
                 }
+                else if (this->render_type == MAIN_MENU_INTERFACE)
+                {
+                    this->start_game_button->handleButtonEvent(&e);
+                    this->best_scores_button->handleButtonEvent(&e);
+                    this->exit_game_button->handleButtonEvent(&e);
+                }
+                else if (this->render_type == SELECT_PLAY_INTERFACE)
+                {
+                    this->single_player_button->handleButtonEvent(&e);
+                    this->two_players_button->handleButtonEvent(&e);
+                    this->play_internet_button->handleButtonEvent(&e);
+                    this->normal_back_menu_button->handleButtonEvent(&e);
+                }
             }
         }
         if (last_render_type == PLAYER_LOSE_PRE_INTERFACE)
@@ -177,26 +190,86 @@ void Manage::start()
             this->again_game_button->buttonRender(gRenderer);
             break;
         }
+        case MAIN_MENU_INTERFACE:
+            this->start_game_button->buttonRender(gRenderer);
+            this->best_scores_button->buttonRender(gRenderer);
+            this->exit_game_button->buttonRender(gRenderer);
+            break;
+        case SELECT_PLAY_INTERFACE:
+            this->single_player_button->buttonRender(gRenderer);
+            this->two_players_button->buttonRender(gRenderer);
+            this->play_internet_button->buttonRender(gRenderer);
+            this->normal_back_menu_button->buttonRender(gRenderer);
+            break;
         default:
             break;
         }
         last_render_type = this->render_type;
         //Update screen
         SDL_RenderPresent(gRenderer);
-        if((this->render_type == PLAYER_WIN_INTERFACE || this->render_type == PLAYER_LOSE_INTERFACE) && this->again_game_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+        // 单人游戏结算界面
+        if(this->render_type == PLAYER_WIN_INTERFACE || this->render_type == PLAYER_LOSE_INTERFACE)
         {
-            this->setRendererType(PLAYCHESS_INTERFACE);
-            this->again_game_button->initButtonCurrentSprite();
-            this->chessboard->initChessMap();
-        }
-        if(this->render_type == PLAYCHESS_INTERFACE && this->chessboard->get_player_flag_type() == SINGLE_PLAYER && this->withdraw_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
-        {
-            this->withdraw_button->initButtonCurrentSprite();
-            if(this->chessboard->is_can_withdraw())
+            if (this->again_game_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
             {
-                this->chessboard->set_chessboard_withdraw();
+                this->setRendererType(PLAYCHESS_INTERFACE);
+                this->again_game_button->initButtonCurrentSprite();
+                this->chessboard->initChessMap();
+            }
+            if (this->back_menu_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+            {
+                this->setRendererType(MAIN_MENU_INTERFACE);
+                this->back_menu_button->initButtonCurrentSprite();
+                this->chessboard->initChessMap();
             }
         }
+        // 下棋界面
+        if(this->render_type == PLAYCHESS_INTERFACE)
+        {
+            if (this->chessboard->get_player_flag_type() == SINGLE_PLAYER && this->withdraw_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+            {
+                this->withdraw_button->initButtonCurrentSprite();
+                if(this->chessboard->is_can_withdraw())
+                {
+                    this->chessboard->set_chessboard_withdraw();
+                }
+            }
+            if (this->back_menu_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+            {
+                this->setRendererType(MAIN_MENU_INTERFACE);
+                this->back_menu_button->initButtonCurrentSprite();
+                this->chessboard->initChessMap();
+            }
+        }
+        // 主菜单界面
+        if(this->render_type == MAIN_MENU_INTERFACE)
+        {
+            if (this->exit_game_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+            {
+                quit = true;
+            }
+            if (this->start_game_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+            {
+                this->setRendererType(SELECT_PLAY_INTERFACE);
+                this->start_game_button->initButtonCurrentSprite();
+            }
+        }
+        // 选择游戏方式界面
+        if (this->render_type == SELECT_PLAY_INTERFACE)
+        {
+            if (this->single_player_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+            {
+                this->setRendererType(PLAYCHESS_INTERFACE);
+                this->single_player_button->initButtonCurrentSprite();
+                this->chessboard->set_player_flag_type(SINGLE_PLAYER);
+            }
+            if (this->normal_back_menu_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+            {
+                this->setRendererType(MAIN_MENU_INTERFACE);
+                this->normal_back_menu_button->initButtonCurrentSprite();
+            }
+        }
+        
     }
     SDL_WaitThread(machine_thread, nullptr);
     //Free resources and close SDL
@@ -268,6 +341,13 @@ bool Manage::loadResource()
     this->again_game_button->loadResource(gWindow, gRenderer);
     this->withdraw_button->loadResource(gWindow, gRenderer);
     this->back_menu_button->loadResource(gWindow, gRenderer);
+    this->single_player_button->loadResource(gWindow, gRenderer);
+    this->two_players_button->loadResource(gWindow, gRenderer);
+    this->play_internet_button->loadResource(gWindow, gRenderer);
+    this->best_scores_button->loadResource(gWindow, gRenderer);
+    this->start_game_button->loadResource(gWindow, gRenderer);
+    this->exit_game_button->loadResource(gWindow, gRenderer);
+    this->normal_back_menu_button ->loadResource(gWindow, gRenderer);
     INFOLOG("loadResource success!");
     return true;
 }
