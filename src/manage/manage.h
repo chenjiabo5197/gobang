@@ -14,6 +14,7 @@
 #include "../logger/logger.h"
 #include "../utils/config.h"
 #include "../render/sdl_texture.h"
+#include "../render/sdl_button.h"
 #include "../render/ttf_result_interface.h"
 #include "../chess/chessboard.h"
 #include "../player/machine.h"
@@ -52,6 +53,17 @@ private:
     //棋盘中心的坐标
     int chessboard_x;
     int chessboard_y;
+
+    // 按键
+    SDLButton* start_game_button;
+    SDLButton* again_game_button;
+    SDLButton* back_menu_button;
+    SDLButton* best_scores_button;
+    SDLButton* exit_game_button;
+    SDLButton* play_internet_button;
+    SDLButton* single_player_button;
+    SDLButton* two_players_button;
+    SDLButton* withdraw_button;
     
 public:
     Manage(const Config& config);
@@ -61,6 +73,9 @@ public:
 
     // 初始化渲染
     bool initRender();
+
+    // 加载资源
+    bool loadResource();
 
     // 关闭渲染，释放资源
     void closeRender();

@@ -23,7 +23,7 @@ Chess::~Chess()
 
 bool Chess::loadResource(SDL_Window * gWindow, SDL_Renderer* gRenderer)
 {
-    //Load data stream
+    //Load data
     if(!this->sdl_texture->loadPixelsFromFile(gWindow, this->chess_resource_path))
     {        
         ERRORLOG("Failed to load texture!");
@@ -72,5 +72,5 @@ bool Chess::chessRender(SDL_Renderer* gRenderer, const int& x, const int& y)
     int chess_y = y * this->lattice_size + this->origin_y - y_offset;
     this->sdl_texture->render(gRenderer, chess_x, chess_y, this->chess_multiple);
     // DEBUGLOG("chessRender||chess_name={}||x={}||y={}||chess_x={}||chess_y={}",this->chess_name, x, y, chess_x, chess_y);
-    return false;
+    return true;
 }

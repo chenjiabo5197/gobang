@@ -24,8 +24,8 @@ file(GLOB_RECURSE SOURCES_FILES
     src/common.h
     src/logger/*
     src/utils/*
-    src/render/sdl_texture.*
     src/render/ttf_result_interface.*
+    src/render/sdl*
     src/chess/chess.*
     src/chess/chessboard.*
     src/manage/manage.*

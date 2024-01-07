@@ -73,7 +73,13 @@ typedef enum {
     WHITE_PLAYER            // 双人游戏，白棋
 } player_flag_type;
 
-
+typedef enum {
+    BUTTON_SPRITE_MOUSE_OUT,            // 鼠标不在按键上，一般用于默认值
+    BUTTON_SPRITE_MOUSE_OVER_MOTION,	// 鼠标在按键上
+    BUTTON_SPRITE_MOUSE_DOWN,			// 鼠标在按键上，且按下
+    BUTTON_SPRITE_MOUSE_UP,				// 鼠标在按键上，释放按键
+    BUTTON_SPRITE_TOTAL
+} sdl_button_sprite;
 
 
 

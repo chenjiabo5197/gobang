@@ -22,6 +22,7 @@ SDLTexture::~SDLTexture()
 {
     //Deallocate
     free();
+    INFOLOG("~SDLTexture, release resource");
 }
 
 void SDLTexture::setColor(Uint8 red, Uint8 green, Uint8 blue)

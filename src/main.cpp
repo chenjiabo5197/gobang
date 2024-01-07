@@ -59,16 +59,6 @@ int main()
     Manage manage(config);
     manage.start();
 
-    // PictureDraw pictureDraw(13, 44, 43, 67.4);
-
-	// Chess chess(13, 44, 43, 67.4, &pictureDraw);
-	// Player player1;
-	// Player player2;
-	// AI ai;
-	// Management game(&player1, &player2, &ai, &chess, &pictureDraw);
-
-	// game.play();
-
 	return 0;
 }
 

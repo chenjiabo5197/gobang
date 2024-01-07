@@ -12,17 +12,26 @@ SDL_SpinLock player_machine_lock = 0;
 
 Manage::Manage(const Config& config)
 {
+    this->render_type = DEFAULT_INTERFACE;
+    this->chessboard = new Chessboard(config);
+    this->machine = new Machine(this->chessboard);
+    this->player_win_interface = new TTFResultInterface(config, "ttf_result_player_win");
+    this->player_lose_interface = new TTFResultInterface(config, "ttf_result_player_lose");
+    this->single_player = new Player(this->chessboard, "single_player", CHESS_BLACK);
+    this->start_game_button = new SDLButton(config, "start_game");
+    this->again_game_button = new SDLButton(config, "again_game");
+    this->back_menu_button = new SDLButton(config, "back_menu");
+    this->best_scores_button = new SDLButton(config, "best_scores");
+    this->exit_game_button = new SDLButton(config, "exit_game");
+    this->play_internet_button = new SDLButton(config, "play_internet");
+    this->single_player_button = new SDLButton(config, "single_player");
+    this->two_players_button = new SDLButton(config, "two_players");
+    this->withdraw_button = new SDLButton(config, "withdraw");
     std::string temp;
     this->width = config.Read("screen_width", 0);
     this->height = config.Read("screen_height", 0);
     this->ttf_result_path = config.Read("ttf_result_resource_path", temp);
     this->ttf_result_ptsize = config.Read("ttf_result_ptsize", 0);
-    this->render_type = DEFAULT_INTERFACE;
-    this->chessboard = new Chessboard(config);
-    this->machine = new Machine(this->chessboard);
-    this->single_player = new Player(this->chessboard, "single_player", CHESS_BLACK);
-    this->player_win_interface = new TTFResultInterface(config, "ttf_result_player_win");
-    this->player_lose_interface = new TTFResultInterface(config, "ttf_result_player_lose");
     this->chessboard_x = this->chessboard->get_chessboard_center_x();
     this->chessboard_y = this->chessboard->get_chessboard_center_y();
     DEBUGLOG("Manage construct success||width={}||height={}||render_type={}||ttf_result_path={}||chessboard_x={}||chessboard_y={}||ttf_result_ptsize={}", 
@@ -36,6 +45,15 @@ Manage::~Manage()
     delete single_player;
     delete player_win_interface;
     delete player_lose_interface;
+    delete start_game_button;
+    delete again_game_button;
+    delete back_menu_button;
+    delete best_scores_button;
+    delete exit_game_button;
+    delete play_internet_button;
+    delete single_player_button;
+    delete two_players_button;
+    delete withdraw_button;
     DEBUGLOG("~Manage success||release resource");
 }
 
@@ -113,11 +131,9 @@ void Manage::start()
             this->chessboard->render(gWindow, gRenderer);
             break;
         case PLAYER_WIN_INTERFACE:
-            this->player_win_interface->loadRenderText(gRenderer, gResultFont);
             this->player_win_interface->ttfRender(gRenderer, chessboard_x, chessboard_y);
             break;
         case PLAYER_LOSE_INTERFACE:
-            this->player_lose_interface->loadRenderText(gRenderer, gResultFont);
             this->player_lose_interface->ttfRender(gRenderer, chessboard_x, chessboard_y);
             break;
         default:
@@ -176,15 +192,24 @@ bool Manage::initRender()
         return false;
     }
     DEBUGLOG("SDL_ttf initialize success");
+    INFOLOG("initRender success!");
+    this->loadResource();
+    return true;
+}
+
+bool Manage::loadResource()
+{
     //使用 TTF_OpenFont 加载字体。这需要输入字体文件的路径和要渲染的点尺寸
     this->gResultFont = TTF_OpenFont(this->ttf_result_path.c_str(), this->ttf_result_ptsize);
-    if( gResultFont == nullptr )
+    if(gResultFont == nullptr)
     {
         ERRORLOG("Failed to load STXingkai font! SDL_ttf Error={}", TTF_GetError());
         return false;
     }
     DEBUGLOG("Create font success!");
-    INFOLOG("initRender success!");
+    this->player_win_interface->loadRenderText(gRenderer, gResultFont);
+    this->player_lose_interface->loadRenderText(gRenderer, gResultFont);
+    INFOLOG("loadResource success!");
     return true;
 }
 
