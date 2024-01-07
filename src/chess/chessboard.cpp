@@ -37,6 +37,19 @@ Chessboard::~Chessboard()
     INFOLOG("~Chessboard success||release resources");
 }
 
+void Chessboard::initChessMap()
+{
+	// 重置棋盘，棋盘每个位置都为0，表示空白，标准五子棋盘为15*15
+	for (int i = 0; i < chessMap.size(); i++)
+	{
+		for (int j = 0; j < chessMap[i].size(); j++)
+		{
+			chessMap[i][j] = 0;
+		}
+	}
+    INFOLOG("Chessboard init success");
+}
+
 void Chessboard::initChessBoardBoundary()
 {
 	this->chessboard_boundary = new ChessBoardBoundary();
@@ -245,12 +258,12 @@ bool Chessboard::clickBoard(const int& x, const int& y, ChessPos* pos)
 	return selectPos;
 }
 
-void Chessboard::chessDown(const ChessPos& chessPos, const chess_kind_type& kind, bool isRecord)
+void Chessboard::chessDown(const ChessPos& chessPos, const chess_kind_type& kind)
 {
     if (kind == CHESS_WHITE)
     {
         this->chessMap[chessPos.chess_row][chessPos.chess_col] = 1;
-        DEBUGLOG("chessDown||WHITE_CHESS||row={}||col={}", chessPos.chess_row, chessPos.chess_col);     
+        DEBUGLOG("chessDown||WHITE_CHESS||row={}||col={}", chessPos.chess_row, chessPos.chess_col);
     }
     else
     {
@@ -259,6 +272,9 @@ void Chessboard::chessDown(const ChessPos& chessPos, const chess_kind_type& kind
     }
 	this->last_chess_pos->chess_row = chessPos.chess_row;
 	this->last_chess_pos->chess_col = chessPos.chess_col;
+	ChessData temp{chessPos.chess_row, chessPos.chess_col, kind};
+	this->chessboard_data.push_back(temp);
+	INFOLOG("chessDown||chessboard_data.size={}", chessboard_data.size());
 }
 
 void Chessboard::render(SDL_Window * gWindow, SDL_Renderer* gRenderer)
@@ -267,20 +283,20 @@ void Chessboard::render(SDL_Window * gWindow, SDL_Renderer* gRenderer)
     this->renderPlayChessInterface(gRenderer);
     this->white_chess->loadResource(gWindow, gRenderer);
     this->black_chess->loadResource(gWindow, gRenderer);
-    for (int i = 0; i < chessMap.size(); i++)
-    {
-        for (int j = 0; j < chessMap[i].size(); j++)
-        {
-            if (chessMap[i][j] == 1)
-            {
-                this->white_chess->chessRender(gRenderer, i, j);
-            }
-            else if (chessMap[i][j] == 2)
-            {
-                this->black_chess->chessRender(gRenderer, i, j);
-            }
-        }
-    }
+	for (int i = 0; i < chessMap.size(); i++)
+	{
+		for (int j = 0; j < chessMap[i].size(); j++)
+		{
+			if (chessMap[i][j] == 1)
+			{
+				this->white_chess->chessRender(gRenderer, i, j);
+			}
+			else if (chessMap[i][j] == 2)
+			{
+				this->black_chess->chessRender(gRenderer, i, j);
+			}
+		}
+	}
 }
 
 int Chessboard::getChessBoardSize()
@@ -306,7 +322,7 @@ void Chessboard::set_player_flag_type(const player_flag_type& type)
 
 player_flag_type Chessboard::get_player_flag_type()
 {
-	INFOLOG("get_player_flag_type||type={}", (int)this->player_flag);
+	// INFOLOG("get_player_flag_type||type={}", (int)this->player_flag);
 	return this->player_flag;
 }
 
@@ -411,4 +427,27 @@ int Chessboard::get_chessboard_center_y()
 	}
 	INFOLOG("get_chessboard_center_y||center_y={}", center_y);
 	return center_y;
+}
+
+void Chessboard::set_chessboard_withdraw()
+{
+	// 循环删除最后两个数据
+	for (int i = 0; i < 2; i++)
+	{
+		ChessData temp = this->chessboard_data.back();
+		this->chessMap[temp.chessPos.chess_row][temp.chessPos.chess_col] = 0;
+		this->chessboard_data.pop_back();
+	}
+	INFOLOG("set_chessboard_withdraw success||chessboard_data.size={}", chessboard_data.size());
+}
+
+bool Chessboard::is_can_withdraw()
+{
+	if (this->chessboard_data.size() < 2)
+	{
+		INFOLOG("is_can_withdraw fail||too less data");
+		return false;
+	}
+	INFOLOG("is_can_withdraw success||chessboard_data.size={}", chessboard_data.size());
+	return true;
 }

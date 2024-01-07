@@ -23,6 +23,12 @@ public:
     // 加载资源
     bool loadResource(SDL_Window * gWindow, SDL_Renderer* gRenderer);
 
+    // 获取按键当前枚举值
+    sdl_button_sprite getButtonCurrentSprite();
+
+    // 重置按键枚举值
+    void initButtonCurrentSprite();
+
 private:
     bool is_load_resource;
 

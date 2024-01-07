@@ -34,7 +34,7 @@ struct ChessPos {
 
 // 储存每一步棋子位置和棋子类型的结构体
 struct ChessData {
-	ChessPos* chessPos;
+	ChessPos chessPos;
 	chess_kind_type chess_type;
 };
 

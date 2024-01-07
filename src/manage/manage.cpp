@@ -60,6 +60,7 @@ Manage::~Manage()
 // Machine类的友元函数
 int machineChessDown(void* data)
 {
+    SDL_AtomicLock(&player_machine_lock);
 	Machine* machine = (Machine *)(data);
     ChessPos pos = machine->think();
     // 程序休眠1s，假装在思考
@@ -151,8 +152,6 @@ void Manage::start()
             this->back_menu_button->buttonRender(gRenderer);
             break;
         case PLAYER_LOSE_PRE_INTERFACE:
-            this->chessboard->render(gWindow, gRenderer);
-            break;
         case PLAYER_WIN_PRE_INTERFACE:
             this->chessboard->render(gWindow, gRenderer);
             break;
@@ -184,6 +183,20 @@ void Manage::start()
         last_render_type = this->render_type;
         //Update screen
         SDL_RenderPresent(gRenderer);
+        if((this->render_type == PLAYER_WIN_INTERFACE || this->render_type == PLAYER_LOSE_INTERFACE) && this->again_game_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+        {
+            this->setRendererType(PLAYCHESS_INTERFACE);
+            this->again_game_button->initButtonCurrentSprite();
+            this->chessboard->initChessMap();
+        }
+        if(this->render_type == PLAYCHESS_INTERFACE && this->chessboard->get_player_flag_type() == SINGLE_PLAYER && this->withdraw_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+        {
+            this->withdraw_button->initButtonCurrentSprite();
+            if(this->chessboard->is_can_withdraw())
+            {
+                this->chessboard->set_chessboard_withdraw();
+            }
+        }
     }
     SDL_WaitThread(machine_thread, nullptr);
     //Free resources and close SDL

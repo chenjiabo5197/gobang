@@ -20,8 +20,8 @@ public:
 
     ~Chessboard();
 
-	// 棋盘的初始化，加载棋盘的图片资源，初始化棋盘的相关数据
-	void init();
+	// 重置棋盘数据
+	void initChessMap();
 
     // 渲染棋盘初始界面
     bool renderPlayChessInterface(SDL_Renderer* gRenderer);
@@ -33,8 +33,8 @@ public:
 	// 如果是有效点击，返回true，把有效点击的位置(x,y)保存到参数pos中，否则返回false
 	bool clickBoard(const int& x, const int& y, ChessPos* pos);
 
-	// 在棋盘的x行、y列，落子kind, isRecord表示是否要将棋子记录到chessBoardData中，默认需要记录，只有悔棋时下棋数据不用记录
-	void chessDown(const ChessPos& chessPos, const chess_kind_type& kind, bool isRecord = true);
+	// 在棋盘的x行、y列，落子kind
+	void chessDown(const ChessPos& chessPos, const chess_kind_type& kind);
 
     // 棋盘渲染当前对局，渲染棋盘，渲染当前已下的棋子
     void render(SDL_Window * gWindow, SDL_Renderer* gRenderer);
@@ -67,8 +67,11 @@ public:
 	int get_chessboard_center_x();
 	int get_chessboard_center_y();
 
-	// // 悔棋,悔棋需要记录每一步的顺序和下棋位置
-	// void playerWithDraw();
+	// 设置悔棋渲染
+	void set_chessboard_withdraw();
+
+	// 判断是否可以进行悔棋
+	bool is_can_withdraw();
 
 private:
 	// 储存当前棋盘大小，当前默认为15
@@ -91,4 +94,7 @@ private:
 
 	// 当前的下棋方
 	player_flag_type player_flag;
+
+	// 储存当前棋盘上所有棋子数据
+	std::vector<ChessData> chessboard_data;
 };

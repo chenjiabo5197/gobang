@@ -160,4 +160,14 @@ bool SDLButton::buttonRender(SDL_Renderer* gRenderer)
     return true;
 }
 
+sdl_button_sprite SDLButton::getButtonCurrentSprite()
+{
+    return this->mCurrentSprite;
+}
+
+void SDLButton::initButtonCurrentSprite()
+{
+    this->mCurrentSprite = BUTTON_SPRITE_MOUSE_OUT;
+}
+
 
