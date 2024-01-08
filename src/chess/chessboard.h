@@ -11,10 +11,6 @@
 class Chessboard
 {
 public:
-    // 棋子
-    Chess* white_chess;
-    Chess* black_chess;
-
     // 传入棋盘左上角的坐标origin_x，origin_y，棋盘中单个格子大小，每种棋子原素材的缩放倍数，默认不缩放
     Chessboard(const Config& config);
 
@@ -74,6 +70,12 @@ public:
 	bool is_can_withdraw();
 
 private:
+	// 棋子
+    Chess* white_chess;
+	Chess* white_current_chess;
+    Chess* black_chess;
+	Chess* black_current_chess;
+
 	// 储存当前棋盘大小，当前默认为15
 	int chessboard_size;
 
@@ -89,12 +91,19 @@ private:
 	// 棋盘边界的结构体
 	ChessBoardBoundary* chessboard_boundary;
 
-	// 最近的落子位置
+	// 最近的落子位置，不分黑白棋
 	ChessPos* last_chess_pos;
+
+	// 最近落子位置，区分黑白棋，目的是为了分别渲染最近一次落子位置
+	ChessPos* black_current_chess_pos;
+	ChessPos* white_current_chess_pos;
 
 	// 当前的下棋方
 	player_flag_type player_flag;
 
 	// 储存当前棋盘上所有棋子数据
 	std::vector<ChessData> chessboard_data;
+
+	// 根据悔棋，更新black_current_chess_pos和white_current_chess_pos
+	void updateCurrentChessPos();
 };

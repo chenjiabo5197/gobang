@@ -1,11 +1,12 @@
 #include "chess.h"
 
-Chess::Chess(const Config& config, const std::string& chess_name, const std::string& chess_resource_path, const int& origin_x, const int& origin_y, const int& lattice_size)
+Chess::Chess(const Config& config, const std::string& chess_name, const int& origin_x, const int& origin_y, const int& lattice_size)
 {
-    this->chess_resource_path = chess_resource_path;
+    std::string temp;
     this->chess_name = chess_name;
-    this->chess_multiple = config.Read("chess_multiple", 0.0);
-    this->chess_origin_size = config.Read("chess_origin_size", 0);
+    this->chess_resource_path = config.Read(chess_name+"_resource_path", temp);
+    this->chess_multiple = config.Read(chess_name+"_multiple", 0.0);
+    this->chess_origin_size = config.Read(chess_name+"_origin_size", 0);
     this->origin_x = origin_x;
     this->origin_y = origin_y;
     this->lattice_size = lattice_size;

@@ -12,9 +12,17 @@ screen_height=960
 
 #chess
 white_chess_resource_path=resources/white.png
+white_chess_multiple=0.5
+white_chess_origin_size=83
 black_chess_resource_path=resources/black.png
-chess_multiple=0.5
-chess_origin_size=83
+black_chess_multiple=0.5
+black_chess_origin_size=83
+white_current_chess_resource_path=resources/white_current.png
+white_current_chess_multiple=0.5
+white_current_chess_origin_size=83
+black_current_chess_resource_path=resources/black_current.png
+black_current_chess_multiple=0.5
+black_current_chess_origin_size=83
 
 #chessboard
 chessboard_origin_x=50

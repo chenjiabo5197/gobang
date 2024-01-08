@@ -2,16 +2,21 @@
 
 Chessboard::Chessboard(const Config& config)
 {
-    std::string temp;
     this->origin_x = config.Read("chessboard_origin_x", 0);
     this->origin_y = config.Read("chessboard_origin_y", 0);
     this->lattice_size = config.Read("chessboard_lattice_size", 0);
-    std::string white_chess_path = config.Read("white_chess_resource_path", temp);
-    std::string black_chess_path = config.Read("black_chess_resource_path", temp);
-    this->white_chess = new Chess(config, "white_chess", white_chess_path, origin_x, origin_y, lattice_size);
-    this->black_chess = new Chess(config, "black_chess", black_chess_path, origin_x, origin_y, lattice_size);
+    this->white_chess = new Chess(config, "white_chess", origin_x, origin_y, lattice_size);
+	this->white_current_chess = new Chess(config, "white_current_chess", origin_x, origin_y, lattice_size);
+    this->black_chess = new Chess(config, "black_chess", origin_x, origin_y, lattice_size);
+	this->black_current_chess = new Chess(config, "black_current_chess", origin_x, origin_y, lattice_size);
 	this->chessboard_size = 15;
 	this->last_chess_pos = new ChessPos(); 
+	this->black_current_chess_pos = new ChessPos();
+	this->white_current_chess_pos = new ChessPos();
+	this->black_current_chess_pos->chess_row = -1;
+	this->black_current_chess_pos->chess_col = -1;
+	this->white_current_chess_pos->chess_row = -1;
+	this->white_current_chess_pos->chess_col = -1;
 	this->player_flag = DEFAULT_PLAYER;
     // 初始化棋盘，棋盘每个位置都为0，表示空白，标准五子棋盘为15*15
 	for (int i = 0; i < chessboard_size; i++)
@@ -24,16 +29,20 @@ Chessboard::Chessboard(const Config& config)
 		chessMap.push_back(row);
 	}
 	this->initChessBoardBoundary();
-    INFOLOG("Chessboard construct success||origin_x={}||origin_y={}||lattice_size={}||white_chess_path={}||black_chess_path={}", 
-	this->origin_x, this->origin_y, this->lattice_size, white_chess_path, black_chess_path);
+    INFOLOG("Chessboard construct success||origin_x={}||origin_y={}||lattice_size={}", 
+	this->origin_x, this->origin_y, this->lattice_size);
 }
 
 Chessboard::~Chessboard()
 {
     delete white_chess;
+	delete white_current_chess;
     delete black_chess;
+	delete black_current_chess;
 	delete chessboard_boundary;
 	delete last_chess_pos;
+	delete black_current_chess_pos;
+	delete white_current_chess_pos;
     INFOLOG("~Chessboard success||release resources");
 }
 
@@ -264,11 +273,15 @@ void Chessboard::chessDown(const ChessPos& chessPos, const chess_kind_type& kind
     {
         this->chessMap[chessPos.chess_row][chessPos.chess_col] = 1;
         DEBUGLOG("chessDown||WHITE_CHESS||row={}||col={}", chessPos.chess_row, chessPos.chess_col);
+		this->white_current_chess_pos->chess_row = chessPos.chess_row;
+		this->white_current_chess_pos->chess_col = chessPos.chess_col;
     }
     else
     {
         this->chessMap[chessPos.chess_row][chessPos.chess_col] = 2; 
         DEBUGLOG("chessDown||BLACK_CHESS||row={}||col={}", chessPos.chess_row, chessPos.chess_col);
+		this->black_current_chess_pos->chess_row = chessPos.chess_row;
+		this->black_current_chess_pos->chess_col = chessPos.chess_col;
     }
 	this->last_chess_pos->chess_row = chessPos.chess_row;
 	this->last_chess_pos->chess_col = chessPos.chess_col;
@@ -282,7 +295,9 @@ void Chessboard::render(SDL_Window * gWindow, SDL_Renderer* gRenderer)
     // 先渲染棋盘，再渲染棋盘上的棋子
     this->renderPlayChessInterface(gRenderer);
     this->white_chess->loadResource(gWindow, gRenderer);
+	this->white_current_chess->loadResource(gWindow, gRenderer);
     this->black_chess->loadResource(gWindow, gRenderer);
+	this->black_current_chess->loadResource(gWindow, gRenderer);
 	for (int i = 0; i < chessMap.size(); i++)
 	{
 		for (int j = 0; j < chessMap[i].size(); j++)
@@ -296,6 +311,14 @@ void Chessboard::render(SDL_Window * gWindow, SDL_Renderer* gRenderer)
 				this->black_chess->chessRender(gRenderer, i, j);
 			}
 		}
+	}
+	if (this->white_current_chess_pos->chess_row != -1)
+	{
+		this->white_current_chess->chessRender(gRenderer, this->white_current_chess_pos->chess_row, this->white_current_chess_pos->chess_col);
+	}
+	if (this->black_current_chess_pos->chess_row != -1)
+	{
+		this->black_current_chess->chessRender(gRenderer, this->black_current_chess_pos->chess_row, this->black_current_chess_pos->chess_col);
 	}
 }
 
@@ -438,6 +461,7 @@ void Chessboard::set_chessboard_withdraw()
 		this->chessMap[temp.chessPos.chess_row][temp.chessPos.chess_col] = 0;
 		this->chessboard_data.pop_back();
 	}
+	this->updateCurrentChessPos();
 	INFOLOG("set_chessboard_withdraw success||chessboard_data.size={}", chessboard_data.size());
 }
 
@@ -450,4 +474,26 @@ bool Chessboard::is_can_withdraw()
 	}
 	INFOLOG("is_can_withdraw success||chessboard_data.size={}", chessboard_data.size());
 	return true;
+}
+
+void Chessboard::updateCurrentChessPos()
+{
+	int size = this->chessboard_data.size();
+	if (size < 2)
+	{
+		this->black_current_chess_pos->chess_row = -1;
+		this->black_current_chess_pos->chess_col = -1;
+		this->white_current_chess_pos->chess_row = -1;
+		this->white_current_chess_pos->chess_col = -1;
+		DEBUGLOG("updateCurrentChessPos||chessboard_data.size()<2||init current_chess_pos");
+		return;
+	}
+	// 现在都是玩家先下，即黑棋在前，白棋在后
+	ChessData white_temp = this->chessboard_data.back();
+	ChessData black_temp = this->chessboard_data.at(size - 2);
+	this->black_current_chess_pos->chess_row = black_temp.chessPos.chess_row;
+	this->black_current_chess_pos->chess_col = black_temp.chessPos.chess_col;
+	this->white_current_chess_pos->chess_row = white_temp.chessPos.chess_row;
+	this->white_current_chess_pos->chess_col = white_temp.chessPos.chess_col;
+	DEBUGLOG("updateCurrentChessPos||chessboard_data.size()>=2||update current_chess_pos");
 }
