@@ -33,6 +33,11 @@ private:
     std::string ttf_result_path;
     int ttf_result_ptsize;
 
+    // 普通字体
+    TTF_Font* normal_font;
+    std::string normal_ttf_path;
+    int normal_ttf_ptsize;
+
     // 棋盘
     Chessboard* chessboard;
 

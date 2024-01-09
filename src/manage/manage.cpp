@@ -33,6 +33,8 @@ Manage::Manage(const Config& config)
     this->height = config.Read("screen_height", 0);
     this->ttf_result_path = config.Read("ttf_result_resource_path", temp);
     this->ttf_result_ptsize = config.Read("ttf_result_ptsize", 0);
+    this->normal_ttf_path = config.Read("normal_ttf_resource_path", temp);
+    this->normal_ttf_ptsize = config.Read("normal_ttf_ptsize", 0);
     this->chessboard_x = this->chessboard->get_chessboard_center_x();
     this->chessboard_y = this->chessboard->get_chessboard_center_y();
     DEBUGLOG("Manage construct success||width={}||height={}||render_type={}||ttf_result_path={}||chessboard_x={}||chessboard_y={}||ttf_result_ptsize={}", 
@@ -333,6 +335,12 @@ bool Manage::loadResource()
     if(gResultFont == nullptr)
     {
         ERRORLOG("Failed to load STXingkai font! SDL_ttf Error={}", TTF_GetError());
+        return false;
+    }
+    this->normal_font = TTF_OpenFont(this->normal_ttf_path.c_str(), this->normal_ttf_ptsize);
+    if(normal_font == nullptr)
+    {
+        ERRORLOG("Failed to load STkaiti font! SDL_ttf Error={}", TTF_GetError());
         return false;
     }
     DEBUGLOG("Create font success!");

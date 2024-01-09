@@ -57,13 +57,13 @@ ttf_result_player_lose_g=0
 ttf_result_player_lose_b=0
 ttf_result_player_lose_alpha=255
 
-#ttf_normal
-ttf_normal_resource_path=resources/STKaiti.ttf
-ttf_normal_ptsize=10
-ttf_normal_r=0
-ttf_normal_g=0
-ttf_normal_b=0
-ttf_result_player_lose_alpha=255
+#normal_ttf
+normal_ttf_resource_path=resources/STKaiti.ttf
+normal_ttf_ptsize=10
+normal_ttf_r=0
+normal_ttf_g=0
+normal_ttf_b=0
+normal_ttf_player_lose_alpha=255
 
 #buttons
 start_game_resourece_path=resources/start_game.png

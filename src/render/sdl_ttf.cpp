@@ -44,13 +44,11 @@ bool SDLTTF::ttfRender(SDL_Renderer* gRenderer, const int& x, const int& y)
         ERRORLOG("ttf not load text, please load text");
         return false;
     }
-    int new_width = (int)(this->sdl_texture->getWidth() * this->ttf_result_multiple);
-    int new_height = (int)(this->sdl_texture->getHeight() * this->ttf_result_multiple);
-    int x_offset = new_width / 2;
-    int y_offset = new_height / 2;
+    int x_offset = this->sdl_texture->getWidth() / 2;
+    int y_offset = this->sdl_texture->getHeight() / 2;
     int ttf_result_x = x - x_offset;
     int ttf_result_y = y - y_offset;
-    this->sdl_texture->render(gRenderer, ttf_result_x, ttf_result_y, this->ttf_result_multiple);
-    DEBUGLOG("ttfRender||ttf_result_x={}||ttf_result_y={}", ttf_result_x, ttf_result_y);
+    this->sdl_texture->render(gRenderer, ttf_result_x, ttf_result_y, 1.0);
+    // DEBUGLOG("ttfRender||ttf_result_x={}||ttf_result_y={}", ttf_result_x, ttf_result_y);
     return false;
 }
