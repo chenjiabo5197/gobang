@@ -24,10 +24,16 @@ private:
     // 棋盘左上角坐标
     int origin_x, origin_y;
 
+    // 棋子直接被渲染到该位置
+    int chess_x;
+    int chess_y;
+
     // 标志该chess是否已经加载资源，以前出现了未加载资源去渲染结果没有数据，找了好久原因
     bool is_load_resource;
 public:
     Chess(const Config& config, const std::string& chess_name, const int& origin_x, const int& origin_y, const int& lattice_size);
+
+    Chess(const Config& config, const std::string& chess_name);
 
     ~Chess();
 
@@ -36,6 +42,9 @@ public:
 
     // 将棋子渲染在棋盘的x,y坐标，其中x，y是棋盘上以左上角为坐标原点的相对坐标
     bool chessRender(SDL_Renderer* gRenderer, const int& x, const int& y);
+
+    // 将棋子渲染,坐标和倍数由config实例化时读取配置文件获取
+    bool chessRender(SDL_Renderer* gRenderer);
 };
 
 

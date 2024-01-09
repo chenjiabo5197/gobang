@@ -53,6 +53,7 @@ bool SDLTexture::loadFromRenderedText(SDL_Renderer* gRenderer, TTF_Font* gFont, 
         ERRORLOG("gFont nullptr");
         return false;
     }
+    // linux下加载中文
     SDL_Surface* textSurface = TTF_RenderUTF8_Solid(gFont, textureText.c_str(), textColor);
     // SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);
     if(textSurface == nullptr)

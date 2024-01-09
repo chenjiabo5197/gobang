@@ -12,7 +12,23 @@ Chess::Chess(const Config& config, const std::string& chess_name, const int& ori
     this->lattice_size = lattice_size;
     this->sdl_texture = new SDLTexture(this->chess_name);
     this->is_load_resource = false;
-    INFOLOG("Chess construct success||chess_resource_path={}||chess_name={}||chess_multiple={}||chess_origin_size={}", this->chess_resource_path, this->chess_name, this->chess_multiple, this->chess_origin_size);
+    INFOLOG("Chess1 construct success||chess_resource_path={}||chess_name={}||chess_multiple={}||chess_origin_size={}", this->chess_resource_path, this->chess_name, this->chess_multiple, this->chess_origin_size);
+}
+
+Chess::Chess(const Config& config, const std::string& chess_name)
+{
+    std::string temp;
+    this->chess_name = chess_name;
+    this->chess_resource_path = config.Read(chess_name+"_resource_path", temp);
+    this->chess_multiple = config.Read(chess_name+"_multiple", 0.0);
+    this->chess_origin_size = config.Read(chess_name+"_origin_size", 0);
+    this->chess_x = config.Read(chess_name+"_x", 0);
+    this->chess_y = config.Read(chess_name+"_y", 0);
+    this->sdl_texture = new SDLTexture(this->chess_name);
+    this->is_load_resource = false;
+    INFOLOG("Chess2 construct success||chess_resource_path={}||chess_name={}||chess_multiple={}||chess_x={}||chess_y={}", 
+    this->chess_resource_path, this->chess_name, this->chess_multiple, this->chess_x, this->chess_y);
+
 }
 
 Chess::~Chess()
@@ -72,6 +88,20 @@ bool Chess::chessRender(SDL_Renderer* gRenderer, const int& x, const int& y)
     int chess_x = x * this->lattice_size + this->origin_x - x_offset;
     int chess_y = y * this->lattice_size + this->origin_y - y_offset;
     this->sdl_texture->render(gRenderer, chess_x, chess_y, this->chess_multiple);
+    // DEBUGLOG("chessRender||chess_name={}||x={}||y={}||chess_x={}||chess_y={}",this->chess_name, x, y, chess_x, chess_y);
+    return true;
+}
+
+bool Chess::chessRender(SDL_Renderer* gRenderer)
+{
+    if (!this->is_load_resource)
+    {
+        ERRORLOG("chess not load resource, please load resource");
+        return false;
+    }
+    int new_width = (int)this->chess_origin_size * this->chess_multiple;
+    int new_height = (int)this->chess_origin_size * this->chess_multiple;
+    this->sdl_texture->render(gRenderer, this->chess_x, this->chess_y, this->chess_multiple);
     // DEBUGLOG("chessRender||chess_name={}||x={}||y={}||chess_x={}||chess_y={}",this->chess_name, x, y, chess_x, chess_y);
     return true;
 }

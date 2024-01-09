@@ -15,8 +15,8 @@ Manage::Manage(const Config& config)
     this->render_type = DEFAULT_INTERFACE;
     this->chessboard = new Chessboard(config);
     this->machine = new Machine(this->chessboard);
-    this->player_win_interface = new TTFResultInterface(config, "ttf_result_player_win");
-    this->player_lose_interface = new TTFResultInterface(config, "ttf_result_player_lose");
+    this->player_win_interface = new SDLTTF(config, "ttf_result_player_win");
+    this->player_lose_interface = new SDLTTF(config, "ttf_result_player_lose");
     this->single_player = new Player(this->chessboard, "single_player", CHESS_BLACK);
     this->start_game_button = new SDLButton(config, "start_game");
     this->again_game_button = new SDLButton(config, "again_game");

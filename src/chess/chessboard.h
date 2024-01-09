@@ -71,10 +71,12 @@ public:
 
 private:
 	// 棋子
-    Chess* white_chess;
-	Chess* white_current_chess;
+    Chess* white_chess;   			// 棋盘上落子
+	Chess* white_current_chess;		// 棋盘上最后一步落子
+	Chess* symbol_white_chess;		// 棋盘旁边标注该棋子代表哪方
     Chess* black_chess;
 	Chess* black_current_chess;
+	Chess* symbol_black_chess;
 
 	// 储存当前棋盘大小，当前默认为15
 	int chessboard_size;

@@ -15,7 +15,7 @@
 #include "../utils/config.h"
 #include "../render/sdl_texture.h"
 #include "../render/sdl_button.h"
-#include "../render/ttf_result_interface.h"
+#include "../render/sdl_ttf.h"
 #include "../chess/chessboard.h"
 #include "../player/machine.h"
 #include "../player/player.h"
@@ -46,9 +46,9 @@ private:
     Player* single_player;
 
     // 玩家赢结算页面的渲染
-    TTFResultInterface* player_win_interface;
+    SDLTTF* player_win_interface;
     // 玩家输结算页面的渲染
-    TTFResultInterface* player_lose_interface;
+    SDLTTF* player_lose_interface;
 
     //棋盘中心的坐标
     int chessboard_x;

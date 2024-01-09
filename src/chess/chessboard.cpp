@@ -7,8 +7,10 @@ Chessboard::Chessboard(const Config& config)
     this->lattice_size = config.Read("chessboard_lattice_size", 0);
     this->white_chess = new Chess(config, "white_chess", origin_x, origin_y, lattice_size);
 	this->white_current_chess = new Chess(config, "white_current_chess", origin_x, origin_y, lattice_size);
+	this->symbol_white_chess = new Chess(config, "symbol_white_chess");
     this->black_chess = new Chess(config, "black_chess", origin_x, origin_y, lattice_size);
 	this->black_current_chess = new Chess(config, "black_current_chess", origin_x, origin_y, lattice_size);
+	this->symbol_black_chess = new Chess(config, "symbol_black_chess");
 	this->chessboard_size = 15;
 	this->last_chess_pos = new ChessPos(); 
 	this->black_current_chess_pos = new ChessPos();
@@ -43,6 +45,8 @@ Chessboard::~Chessboard()
 	delete last_chess_pos;
 	delete black_current_chess_pos;
 	delete white_current_chess_pos;
+	delete symbol_white_chess;
+	delete symbol_black_chess;
     INFOLOG("~Chessboard success||release resources");
 }
 
@@ -296,8 +300,12 @@ void Chessboard::render(SDL_Window * gWindow, SDL_Renderer* gRenderer)
     this->renderPlayChessInterface(gRenderer);
     this->white_chess->loadResource(gWindow, gRenderer);
 	this->white_current_chess->loadResource(gWindow, gRenderer);
+	this->symbol_white_chess->loadResource(gWindow, gRenderer);
     this->black_chess->loadResource(gWindow, gRenderer);
 	this->black_current_chess->loadResource(gWindow, gRenderer);
+	this->symbol_black_chess->loadResource(gWindow, gRenderer);
+	this->symbol_white_chess->chessRender(gRenderer);
+	this->symbol_black_chess->chessRender(gRenderer);
 	for (int i = 0; i < chessMap.size(); i++)
 	{
 		for (int j = 0; j < chessMap[i].size(); j++)

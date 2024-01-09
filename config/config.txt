@@ -23,6 +23,16 @@ white_current_chess_origin_size=83
 black_current_chess_resource_path=resources/black_current.png
 black_current_chess_multiple=0.5
 black_current_chess_origin_size=83
+symbol_white_chess_resource_path=resources/white.png
+symbol_white_chess_multiple=0.9
+symbol_white_chess_origin_size=83
+symbol_white_chess_x=950
+symbol_white_chess_y=50
+symbol_black_chess_resource_path=resources/black.png
+symbol_black_chess_multiple=0.9
+symbol_black_chess_origin_size=83
+symbol_black_chess_x=950
+symbol_black_chess_y=150
 
 #chessboard
 chessboard_origin_x=50
@@ -37,16 +47,23 @@ chessboard_lattice_size=60
 ttf_result_resource_path=resources/STXingkai.ttf
 ttf_result_ptsize=650
 ttf_result_player_win=胜
-ttf_result_player_lose=败
 ttf_result_player_win_r=0
 ttf_result_player_win_g=0
 ttf_result_player_win_b=0
 ttf_result_player_win_alpha=255
+ttf_result_player_lose=败
 ttf_result_player_lose_r=0
 ttf_result_player_lose_g=0
 ttf_result_player_lose_b=0
 ttf_result_player_lose_alpha=255
-ttf_result_multiple=1.0
+
+#ttf_normal
+ttf_normal_resource_path=resources/STKaiti.ttf
+ttf_normal_ptsize=10
+ttf_normal_r=0
+ttf_normal_g=0
+ttf_normal_b=0
+ttf_result_player_lose_alpha=255
 
 #buttons
 start_game_resourece_path=resources/start_game.png
