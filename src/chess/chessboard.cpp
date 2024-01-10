@@ -11,14 +11,11 @@ Chessboard::Chessboard(const Config& config)
     this->black_chess = new Chess(config, "black_chess", origin_x, origin_y, lattice_size);
 	this->black_current_chess = new Chess(config, "black_current_chess", origin_x, origin_y, lattice_size);
 	this->symbol_black_chess = new Chess(config, "symbol_black_chess");
+	this->chessboard_ttf = new SDLTTF("chessboard_ttf");
 	this->chessboard_size = 15;
 	this->last_chess_pos = new ChessPos(); 
 	this->black_current_chess_pos = new ChessPos();
 	this->white_current_chess_pos = new ChessPos();
-	this->black_current_chess_pos->chess_row = -1;
-	this->black_current_chess_pos->chess_col = -1;
-	this->white_current_chess_pos->chess_row = -1;
-	this->white_current_chess_pos->chess_col = -1;
 	this->player_flag = DEFAULT_PLAYER;
     // 初始化棋盘，棋盘每个位置都为0，表示空白，标准五子棋盘为15*15
 	for (int i = 0; i < chessboard_size; i++)
@@ -31,6 +28,7 @@ Chessboard::Chessboard(const Config& config)
 		chessMap.push_back(row);
 	}
 	this->initChessBoardBoundary();
+	this->initCurrentChessPos();
     INFOLOG("Chessboard construct success||origin_x={}||origin_y={}||lattice_size={}", 
 	this->origin_x, this->origin_y, this->lattice_size);
 }
@@ -60,6 +58,7 @@ void Chessboard::initChessMap()
 			chessMap[i][j] = 0;
 		}
 	}
+	this->initCurrentChessPos();
     INFOLOG("Chessboard init success");
 }
 
@@ -98,8 +97,10 @@ bool Chessboard::renderPlayChessInterface(SDL_Renderer* gRenderer)
     {
         // 横向的棋盘线
         SDL_RenderDrawLine(gRenderer, this->origin_x, this->lattice_size*i+this->origin_y, this->lattice_size*14+this->origin_x, this->lattice_size*i+this->origin_y);
-        // 纵向的棋盘线
+		// 纵向的棋盘线
         SDL_RenderDrawLine(gRenderer, this->lattice_size*i+this->origin_x, this->origin_y, this->lattice_size*i+this->origin_x, this->lattice_size*14+this->origin_y);
+		// 纵向的1-15
+		this->renderText(gRenderer, this->origin_font, std::to_string(i+1), this->origin_x-15, this->lattice_size*i+this->origin_y, 0.45);
     }
     // 渲染棋盘上五个圆点
     this->renderCircle(gRenderer, this->lattice_size*7+this->origin_x, this->lattice_size*7+this->origin_y, 5);
@@ -108,6 +109,11 @@ bool Chessboard::renderPlayChessInterface(SDL_Renderer* gRenderer)
     this->renderCircle(gRenderer, this->lattice_size*11+this->origin_x, this->lattice_size*3+this->origin_y, 5);
     this->renderCircle(gRenderer, this->lattice_size*11+this->origin_x, this->lattice_size*11+this->origin_y, 5);
     // DEBUGLOG("renderPlayChessInterface||render chessboard success!");
+	// 渲染右上角解释窗口
+	this->symbol_white_chess->chessRender(gRenderer);
+	this->symbol_black_chess->chessRender(gRenderer);
+	this->renderText(gRenderer, this->origin_font, "机器人", 1100, 90, 1.0);
+	this->renderText(gRenderer, this->origin_font, "玩家", 1100, 190, 1.0);
     return true;
 }
 
@@ -304,8 +310,6 @@ void Chessboard::render(SDL_Window * gWindow, SDL_Renderer* gRenderer)
     this->black_chess->loadResource(gWindow, gRenderer);
 	this->black_current_chess->loadResource(gWindow, gRenderer);
 	this->symbol_black_chess->loadResource(gWindow, gRenderer);
-	this->symbol_white_chess->chessRender(gRenderer);
-	this->symbol_black_chess->chessRender(gRenderer);
 	for (int i = 0; i < chessMap.size(); i++)
 	{
 		for (int j = 0; j < chessMap[i].size(); j++)
@@ -489,10 +493,7 @@ void Chessboard::updateCurrentChessPos()
 	int size = this->chessboard_data.size();
 	if (size < 2)
 	{
-		this->black_current_chess_pos->chess_row = -1;
-		this->black_current_chess_pos->chess_col = -1;
-		this->white_current_chess_pos->chess_row = -1;
-		this->white_current_chess_pos->chess_col = -1;
+		this->initCurrentChessPos();
 		DEBUGLOG("updateCurrentChessPos||chessboard_data.size()<2||init current_chess_pos");
 		return;
 	}
@@ -504,4 +505,26 @@ void Chessboard::updateCurrentChessPos()
 	this->white_current_chess_pos->chess_row = white_temp.chessPos.chess_row;
 	this->white_current_chess_pos->chess_col = white_temp.chessPos.chess_col;
 	DEBUGLOG("updateCurrentChessPos||chessboard_data.size()>=2||update current_chess_pos");
+}
+
+void Chessboard::initCurrentChessPos()
+{
+	this->black_current_chess_pos->chess_row = -1;
+	this->black_current_chess_pos->chess_col = -1;
+	this->white_current_chess_pos->chess_row = -1;
+	this->white_current_chess_pos->chess_col = -1;
+	INFOLOG("initCurrentChessPos||init current chess pos success!");
+}
+
+void Chessboard::setTTF(TTF_Font* ttf)
+{
+	this->origin_font = ttf;
+	INFOLOG("setTTF||origin_font set success");
+}
+
+void Chessboard::renderText(SDL_Renderer* gRenderer, TTF_Font* gFont, const std::string& texture_text, const int& x, const int& y, const float& multiple)
+{
+	SDL_Color color = {0, 0, 0, 0};
+	this->chessboard_ttf->loadRenderText(gRenderer, gFont, texture_text, color);
+	this->chessboard_ttf->ttfRender(gRenderer, x, y, multiple);
 }

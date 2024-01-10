@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include "chess.h"
+#include "../render/sdl_ttf.h"
 #include "../common.h"
 #include "../utils/myUtils.h"
 #include "../logger/logger.h"
@@ -69,6 +70,9 @@ public:
 	// 判断是否可以进行悔棋
 	bool is_can_withdraw();
 
+	// 传入已经初始化过的ttf
+	void setTTF(TTF_Font* ttf);
+
 private:
 	// 棋子
     Chess* white_chess;   			// 棋盘上落子
@@ -77,6 +81,10 @@ private:
     Chess* black_chess;
 	Chess* black_current_chess;
 	Chess* symbol_black_chess;
+
+	SDLTTF* chessboard_ttf;
+
+	TTF_Font* origin_font;
 
 	// 储存当前棋盘大小，当前默认为15
 	int chessboard_size;
@@ -100,6 +108,9 @@ private:
 	ChessPos* black_current_chess_pos;
 	ChessPos* white_current_chess_pos;
 
+	// 初始化/重置当前黑白棋位置参数
+	void initCurrentChessPos();
+
 	// 当前的下棋方
 	player_flag_type player_flag;
 
@@ -108,4 +119,7 @@ private:
 
 	// 根据悔棋，更新black_current_chess_pos和white_current_chess_pos
 	void updateCurrentChessPos();
+
+	// 渲染文字到指定位置
+	void renderText(SDL_Renderer* gRenderer, TTF_Font* gFont, const std::string& texture_text, const int& x, const int& y, const float& multiple);
 };

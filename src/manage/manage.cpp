@@ -57,6 +57,7 @@ Manage::~Manage()
     delete single_player_button;
     delete two_players_button;
     delete withdraw_button;
+    delete normal_back_menu_button;
     DEBUGLOG("~Manage success||release resource");
 }
 
@@ -344,6 +345,7 @@ bool Manage::loadResource()
         return false;
     }
     DEBUGLOG("Create font success!");
+    this->chessboard->setTTF(this->normal_font);
     this->player_win_interface->loadRenderText(gRenderer, gResultFont);
     this->player_lose_interface->loadRenderText(gRenderer, gResultFont);
     this->again_game_button->loadResource(gWindow, gRenderer);

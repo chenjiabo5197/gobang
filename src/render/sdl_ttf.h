@@ -33,14 +33,23 @@ private:
     // 渲染文字
     std::string render_text;
 public:
-    SDLTTF(const Config& config, const std::string& config_prefix);
+    SDLTTF(const Config& config, const std::string& name);
+
+    // 该初始化函数初始化之后，渲染的文字和颜色需要实时传入
+    SDLTTF(const std::string& name);
     ~SDLTTF();
 
     // 加载渲染文字
     bool loadRenderText(SDL_Renderer* gRenderer, TTF_Font* gFont);
 
+    // 加载渲染文字,输入要渲染的文字和颜色
+    bool loadRenderText(SDL_Renderer* gRenderer, TTF_Font* gFont, const std::string& texture_text, SDL_Color sdl_color);
+
     // 渲染
     bool ttfRender(SDL_Renderer* gRenderer, const int& x, const int& y);
+
+    // 渲染，加渲染倍数
+    bool ttfRender(SDL_Renderer* gRenderer, const int& x, const int& y, const float& multiple);
 };
 
 

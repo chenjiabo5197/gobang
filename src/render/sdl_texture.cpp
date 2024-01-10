@@ -230,6 +230,12 @@ void SDLTexture::render(SDL_Renderer* gRenderer, int x, int y, float multiple, S
         renderQuad.w = (int)renderQuad.w * multiple;
         renderQuad.h = (int)renderQuad.h * multiple;
     }
+
+    // 检查缩放倍数是否为0
+    if (multiple == 0)
+    {
+        ERRORLOG("render||multiple is zero||please check");
+    }
     
     /*
     在剪辑时，如果使用的是剪辑矩形的尺寸而不是纹理的尺寸，我们将把目标矩形（此处称为 renderQuad）的宽度/高度设置为剪辑矩形的尺寸。
