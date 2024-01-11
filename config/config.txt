@@ -58,7 +58,7 @@ ttf_result_player_lose_b=0
 ttf_result_player_lose_alpha=255
 
 #normal_ttf
-normal_ttf_resource_path=resources/STKaiti.ttf
+normal_ttf_resource_path=resources/STZhongsong.ttf
 normal_ttf_ptsize=50
 
 #buttons

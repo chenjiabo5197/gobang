@@ -92,6 +92,7 @@ bool Chessboard::renderPlayChessInterface(SDL_Renderer* gRenderer)
     SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);        
     SDL_RenderDrawRect(gRenderer, &chessboard_boundary);
     
+	char ch = 'A';
     //渲染棋盘网格线
     for (int i = 0; i < 15; i++)
     {
@@ -100,7 +101,11 @@ bool Chessboard::renderPlayChessInterface(SDL_Renderer* gRenderer)
 		// 纵向的棋盘线
         SDL_RenderDrawLine(gRenderer, this->lattice_size*i+this->origin_x, this->origin_y, this->lattice_size*i+this->origin_x, this->lattice_size*14+this->origin_y);
 		// 纵向的1-15
-		this->renderText(gRenderer, this->origin_font, std::to_string(i+1), this->origin_x-15, this->lattice_size*i+this->origin_y, 0.45);
+		this->renderText(gRenderer, this->origin_font, std::to_string(i+1), this->origin_x-15, this->lattice_size*i+this->origin_y, 0.4);
+		std::string temp = "";
+		temp += ch + i;
+		// 横向的A-
+		this->renderText(gRenderer, this->origin_font, temp, this->lattice_size*i+this->origin_x, this->lattice_size*14+this->origin_y+15, 0.4);
     }
     // 渲染棋盘上五个圆点
     this->renderCircle(gRenderer, this->lattice_size*7+this->origin_x, this->lattice_size*7+this->origin_y, 5);
