@@ -37,22 +37,32 @@ void MainMenuManage::init(SDL_Window* global_window, SDL_Renderer* global_render
 
 void MainMenuManage::startRender()
 {
-    SDL_SetRenderDrawColor(this->global_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    SDL_RenderClear(this->global_renderer);
     this->start_game_button->buttonRender(this->global_renderer);
     this->best_scores_button->buttonRender(this->global_renderer);
     this->exit_game_button->buttonRender(this->global_renderer);
-    //Update screen
-    SDL_RenderPresent(this->global_renderer);
     // DEBUGLOG("startRender");
 }
 
-bool MainMenuManage::handleEvents(SDL_Event* event)
+void MainMenuManage::handleEvents(SDL_Event* event)
 {
     this->start_game_button->handleButtonEvent(event);
     this->best_scores_button->handleButtonEvent(event);
     this->exit_game_button->handleButtonEvent(event);
-    return true;
+    if (this->exit_game_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+    {
+        SDL_Event event;
+        event.type = EXIT_GAME_EVENT;
+        SDL_PushEvent(&event);
+        INFOLOG("handleEvents||push event=EXIT_GAME_EVENT");
+    }
+    if (this->start_game_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+    {
+        SDL_Event event;
+        event.type = START_GAME_EVENT;
+        SDL_PushEvent(&event);
+        this->start_game_button->initButtonCurrentSprite();
+        INFOLOG("handleEvents||push event=START_GAME_EVENT");
+    }
 }
 
 

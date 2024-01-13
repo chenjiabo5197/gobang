@@ -308,14 +308,14 @@ void Chessboard::chessDown(const ChessPos& chessPos, const chess_kind_type& kind
 
 void Chessboard::render(SDL_Window * gWindow, SDL_Renderer* gRenderer)
 {
+	this->symbol_white_chess->loadResource(gWindow, gRenderer);
+	this->symbol_black_chess->loadResource(gWindow, gRenderer);
     // 先渲染棋盘，再渲染棋盘上的棋子
     this->renderPlayChessInterface(gRenderer);
     this->white_chess->loadResource(gWindow, gRenderer);
 	this->white_current_chess->loadResource(gWindow, gRenderer);
-	this->symbol_white_chess->loadResource(gWindow, gRenderer);
     this->black_chess->loadResource(gWindow, gRenderer);
 	this->black_current_chess->loadResource(gWindow, gRenderer);
-	this->symbol_black_chess->loadResource(gWindow, gRenderer);
 	for (int i = 0; i < chessMap.size(); i++)
 	{
 		for (int j = 0; j < chessMap[i].size(); j++)
@@ -448,25 +448,25 @@ bool Chessboard::checkWin()
 	return false;
 }
 
-int Chessboard::get_chessboard_center_x()
+int Chessboard::get_center_x()
 {
 	int center_x = 500;
 	if (this->chessboard_boundary != nullptr)
 	{
 		center_x = (this->chessboard_boundary->left_top_x+this->chessboard_boundary->right_top_x) / 2;
 	}
-	INFOLOG("get_chessboard_center_x||center_x={}", center_x);
+	INFOLOG("get_center_x||center_x={}", center_x);
 	return center_x;
 }
 
-int Chessboard::get_chessboard_center_y()
+int Chessboard::get_center_y()
 {
 	int center_y = 500;
 	if (this->chessboard_boundary != nullptr)
 	{
 		center_y = (this->chessboard_boundary->left_top_y+this->chessboard_boundary->left_bottom_y) / 2;
 	}
-	INFOLOG("get_chessboard_center_y||center_y={}", center_y);
+	INFOLOG("get_enter_y||center_y={}", center_y);
 	return center_y;
 }
 

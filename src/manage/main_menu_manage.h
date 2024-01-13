@@ -17,12 +17,12 @@ private:
 
     // 按键之间的间隔(上下间隔)
     int button_interval;
-public:
+
     // 按键
     SDLButton* start_game_button;
     SDLButton* best_scores_button;
     SDLButton* exit_game_button;
-
+public:
     MainMenuManage(const Config& config);
     ~MainMenuManage();
 
@@ -34,12 +34,6 @@ public:
     // 加载资源
     void loadResource();
 
-    // 关闭渲染，释放资源
-    void closeRender();
-
-    // 渲染主函数
-    void renderer();
-
     // 处理事件
-    bool handleEvents(SDL_Event* event);
+    void handleEvents(SDL_Event* event);
 };

@@ -41,22 +41,49 @@ void SelectPlayManage::init(SDL_Window* global_window, SDL_Renderer* global_rend
 
 void SelectPlayManage::startRender()
 {
-    SDL_SetRenderDrawColor(this->global_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    SDL_RenderClear(this->global_renderer);
     this->single_player_button->buttonRender(this->global_renderer);
     this->two_players_button->buttonRender(this->global_renderer);
     this->play_internet_button->buttonRender(this->global_renderer);
     this->normal_back_menu_button->buttonRender(this->global_renderer);
-    //Update screen
-    SDL_RenderPresent(this->global_renderer);
     // DEBUGLOG("startRender");
 }
 
-bool SelectPlayManage::handleEvents(SDL_Event* event)
+void SelectPlayManage::handleEvents(SDL_Event* event)
 {
     this->single_player_button->handleButtonEvent(event);
     this->two_players_button->handleButtonEvent(event);
     this->play_internet_button->handleButtonEvent(event);
     this->normal_back_menu_button->handleButtonEvent(event);
-    return true;
+    if (this->single_player_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+    {
+        SDL_Event event;
+        event.type = SINGLE_PLAYER_EVENT;
+        SDL_PushEvent(&event);
+        this->single_player_button->initButtonCurrentSprite();
+        INFOLOG("handleEvents||push event=SINGLE_PLAYER_EVENT");
+    }
+    if (this->two_players_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+    {
+        SDL_Event event;
+        event.type = TWO_PLAYER_EVENT;
+        SDL_PushEvent(&event);
+        this->two_players_button->initButtonCurrentSprite();
+        INFOLOG("handleEvents||push event=TWO_PLAYER_EVENT");
+    }
+    if (this->play_internet_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+    {
+        SDL_Event event;
+        event.type = PLAY_INTERNET_EVENT;
+        SDL_PushEvent(&event);
+        this->play_internet_button->initButtonCurrentSprite();
+        INFOLOG("handleEvents||push event=PLAY_INTERNET_EVENT");
+    }
+    if (this->normal_back_menu_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+    {
+        SDL_Event event;
+        event.type = BACK_MANU_EVENT;
+        SDL_PushEvent(&event);
+        this->normal_back_menu_button->initButtonCurrentSprite();
+        INFOLOG("handleEvents||push event=BACK_MANU_EVENT");
+    }
 }

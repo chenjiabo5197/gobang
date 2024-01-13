@@ -70,6 +70,7 @@ bool Chess::loadResource(SDL_Window * gWindow, SDL_Renderer* gRenderer)
         return false;
     }
     this->is_load_resource = true;
+    // DEBUGLOG("loadResource success||name={}", this->chess_name);
     return true;
 }
 
@@ -77,7 +78,7 @@ bool Chess::chessRender(SDL_Renderer* gRenderer, const int& x, const int& y)
 {
     if (!this->is_load_resource)
     {
-        ERRORLOG("chess not load resource, please load resource");
+        ERRORLOG("chess not load resource, please load resource||name={}", this->chess_name);
         return false;
     }
     
@@ -96,7 +97,7 @@ bool Chess::chessRender(SDL_Renderer* gRenderer)
 {
     if (!this->is_load_resource)
     {
-        ERRORLOG("chess not load resource, please load resource");
+        ERRORLOG("chess not load resource, please load resource||name={}", this->chess_name);
         return false;
     }
     int new_width = (int)this->chess_origin_size * this->chess_multiple;

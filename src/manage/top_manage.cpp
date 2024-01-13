@@ -54,20 +54,40 @@ void TopManage::start()
         while(SDL_PollEvent(&e) != 0)
         {
             //User requests quit
-            if(e.type == SDL_QUIT)
+            if(e.type == SDL_QUIT || e.type == EXIT_GAME_EVENT)
             {
                 quit = true;
             }
             else if (e.type == PLAYER_WIN_EVENT)
             {
                 this->setRendererType(PLAYER_WIN_PRE_INTERFACE);
-                break;
             }
             else if (e.type == PLAYER_LOSE_EVENT)
             {
                 this->setRendererType(PLAYER_LOSE_PRE_INTERFACE);
-                break;
             }
+            else if (e.type == START_GAME_EVENT)
+            {
+                this->setRendererType(SELECT_PLAY_INTERFACE);
+            }
+            else if (e.type == SINGLE_PLAYER_EVENT)
+            {
+                this->setRendererType(PLAYCHESS_INTERFACE);
+                this->playchess_manage->handleEvents(&e);
+            }
+            else if (e.type == BACK_MANU_EVENT)
+            {
+                this->setRendererType(MAIN_MENU_INTERFACE);
+            }
+            else if (e.type == PLAYER_WITHDRAW_EVENT)
+            {
+                this->playchess_manage->handleEvents(&e);
+            }
+            else if (e.type == AGAIN_GAME_EVENT)
+            {
+                this->setRendererType(PLAYCHESS_INTERFACE);
+                this->playchess_manage->handleEvents(&e);
+            }    
             else
             {
                 if(this->render_type == PLAYCHESS_INTERFACE)
@@ -128,68 +148,6 @@ void TopManage::start()
         last_render_type = this->render_type;
         //Update screen
         SDL_RenderPresent(global_renderer);
-        // 单人游戏结算界面
-        if(this->render_type == PLAYER_WIN_INTERFACE || this->render_type == PLAYER_LOSE_INTERFACE)
-        {
-            if (this->settlement_manage->again_game_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
-            {
-                this->setRendererType(PLAYCHESS_INTERFACE);
-                this->settlement_manage->again_game_button->initButtonCurrentSprite();
-                this->playchess_manage->chessboard->initChessMap();
-            }
-            if (this->settlement_manage->back_menu_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
-            {
-                this->setRendererType(MAIN_MENU_INTERFACE);
-                this->settlement_manage->back_menu_button->initButtonCurrentSprite();
-                this->playchess_manage->chessboard->initChessMap();
-            }
-        }
-        // 下棋界面
-        if(this->render_type == PLAYCHESS_INTERFACE)
-        {
-            if (this->playchess_manage->chessboard->get_player_flag_type() == SINGLE_PLAYER && this->playchess_manage->withdraw_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
-            {
-                this->playchess_manage->withdraw_button->initButtonCurrentSprite();
-                if(this->playchess_manage->chessboard->is_can_withdraw())
-                {
-                    this->playchess_manage->chessboard->set_chessboard_withdraw();
-                }
-            }
-            if (this->playchess_manage->back_menu_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
-            {
-                this->setRendererType(MAIN_MENU_INTERFACE);
-                this->playchess_manage->back_menu_button->initButtonCurrentSprite();
-                this->playchess_manage->chessboard->initChessMap();
-            }
-        }
-        // 主菜单界面
-        if(this->render_type == MAIN_MENU_INTERFACE)
-        {
-            if (this->main_menu_manage->exit_game_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
-            {
-                quit = true;
-            }
-            if (this->main_menu_manage->start_game_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
-            {
-                this->setRendererType(SELECT_PLAY_INTERFACE);
-                this->main_menu_manage->start_game_button->initButtonCurrentSprite();
-            }
-        }
-        // 选择游戏方式界面
-        if (this->render_type == SELECT_PLAY_INTERFACE)
-        {
-            if (this->select_play_manage->single_player_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
-            {
-                this->setRendererType(PLAYCHESS_INTERFACE);
-                this->select_play_manage->single_player_button->initButtonCurrentSprite();
-                this->playchess_manage->chessboard->set_player_flag_type(SINGLE_PLAYER);
-            }
-            if (this->select_play_manage->normal_back_menu_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
-            {
-                this->setRendererType(MAIN_MENU_INTERFACE);
-                this->select_play_manage->normal_back_menu_button->initButtonCurrentSprite();
-            }
-        }
     }
     //Free resources and close SDL
     this->closeRender();
@@ -264,11 +222,11 @@ bool TopManage::loadResource()
         return false;
     }
     DEBUGLOG("Create font success!");
-    this->playchess_manage->chessboard->setTTF(this->normal_font);
+    this->playchess_manage->setChessBoardTTF(this->normal_font);
     this->main_menu_manage->loadResource();
     this->select_play_manage->loadResource();
     this->playchess_manage->loadResource();
-    this->settlement_manage->init(global_window, global_renderer, this->gResultFont, this->playchess_manage->chessboard->get_chessboard_center_x(), this->playchess_manage->chessboard->get_chessboard_center_y());
+    this->settlement_manage->init(global_window, global_renderer, this->gResultFont, this->playchess_manage->get_chessboard_center_x(), this->playchess_manage->get_chessboard_center_y());
     this->settlement_manage->loadResource();
     INFOLOG("loadResource success!");
     return true;

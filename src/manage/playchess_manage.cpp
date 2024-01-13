@@ -45,13 +45,9 @@ void PlaychessManage::init(SDL_Window* global_window, SDL_Renderer* global_rende
 
 void PlaychessManage::startRender()
 {
-    SDL_SetRenderDrawColor(this->global_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    SDL_RenderClear(this->global_renderer);
     this->chessboard->render(this->global_window, this->global_renderer);
     this->withdraw_button->buttonRender(this->global_renderer);
     this->back_menu_button->buttonRender(this->global_renderer);
-    //Update screen
-    SDL_RenderPresent(this->global_renderer);
     // DEBUGLOG("startRender");
 }
 
@@ -109,13 +105,56 @@ bool PlaychessManage::handleMouseClick(SDL_Event* event)
     return false;
 }
 
-bool PlaychessManage::handleEvents(SDL_Event* event)
+void PlaychessManage::handleEvents(SDL_Event* event)
 {
-    if(this->handleMouseClick(event) && this->chessboard->get_player_flag_type() == MACHINE_PLAYER)
+    if (event->type == PLAYER_WITHDRAW_EVENT)
+    {
+        DEBUGLOG("111111111");
+        if(this->chessboard->is_can_withdraw())
+        {
+            this->chessboard->set_chessboard_withdraw();
+        }
+    }
+    else if (event->type == SINGLE_PLAYER_EVENT || event->type == AGAIN_GAME_EVENT)
+    {
+        this->chessboard->initChessMap();
+        this->chessboard->set_player_flag_type(SINGLE_PLAYER);
+    }
+    else if(this->handleMouseClick(event) && this->chessboard->get_player_flag_type() == MACHINE_PLAYER)
     {
         machine_thread = SDL_CreateThread(machineChessDown, "machine player", this->machine);
     }
-    this->back_menu_button->handleButtonEvent(event);
     this->withdraw_button->handleButtonEvent(event);
-    return true;
+    this->back_menu_button->handleButtonEvent(event);
+    if (this->withdraw_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+    {
+        SDL_Event event;
+        event.type = PLAYER_WITHDRAW_EVENT;
+        SDL_PushEvent(&event);
+        this->withdraw_button->initButtonCurrentSprite();
+        INFOLOG("handleEvents||push event=PLAYER_WITHDRAW_EVENT");
+    }
+    if (this->back_menu_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+    {
+        SDL_Event event;
+        event.type = BACK_MANU_EVENT;
+        SDL_PushEvent(&event);
+        this->back_menu_button->initButtonCurrentSprite();
+        INFOLOG("handleEvents||push event=BACK_MANU_EVENT");
+    }
+}
+
+void PlaychessManage::setChessBoardTTF(TTF_Font* ttf)
+{
+    this->chessboard->setTTF(ttf);
+}
+
+int PlaychessManage::get_chessboard_center_x()
+{
+    return this->chessboard->get_center_x();
+}
+
+int PlaychessManage::get_chessboard_center_y()
+{
+    return this->chessboard->get_center_y();
 }

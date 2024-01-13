@@ -23,13 +23,13 @@ private:
     // 要渲染字体的坐标(字体中心坐标)
     int font_x;
     int font_y;
-public:
-    SettlementManage(const Config& config);
-    ~SettlementManage();
 
     // 按键
     SDLButton* back_menu_button;
     SDLButton* again_game_button;
+public:
+    SettlementManage(const Config& config);
+    ~SettlementManage();
 
     // 玩家赢结算页面的渲染
     SDLTTF* player_win_interface;
@@ -44,14 +44,8 @@ public:
     // 加载资源
     void loadResource();
 
-    // 关闭渲染，释放资源
-    void closeRender();
-
-    // 渲染主函数
-    void renderer();
-
     // 处理事件
-    bool handleEvents(SDL_Event* event);
+    void handleEvents(SDL_Event* event);
 };
 
 

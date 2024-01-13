@@ -43,8 +43,6 @@ void SettlementManage::init(SDL_Window* global_window, SDL_Renderer* global_rend
 
 void SettlementManage::startRender(const interface_kind_type& type)
 {
-    SDL_SetRenderDrawColor(this->global_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    SDL_RenderClear(this->global_renderer);
     if (type == PLAYER_LOSE_INTERFACE)
     {
         this->player_lose_interface->ttfRender(global_renderer, font_x, font_y);
@@ -55,14 +53,27 @@ void SettlementManage::startRender(const interface_kind_type& type)
     }
     this->again_game_button->buttonRender(this->global_renderer);
     this->back_menu_button->buttonRender(this->global_renderer);
-    //Update screen
-    SDL_RenderPresent(this->global_renderer);
     // DEBUGLOG("startRender");
 }
 
-bool SettlementManage::handleEvents(SDL_Event* event)
+void SettlementManage::handleEvents(SDL_Event* event)
 {
     this->again_game_button->handleButtonEvent(event);
     this->back_menu_button->handleButtonEvent(event);
-    return true;
+    if (this->again_game_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+    {
+        SDL_Event event;
+        event.type = AGAIN_GAME_EVENT;
+        SDL_PushEvent(&event);
+        this->again_game_button->initButtonCurrentSprite();
+        INFOLOG("handleEvents||push event=AGAIN_GAME_EVENT");
+    }
+    if (this->back_menu_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+    {
+        SDL_Event event;
+        event.type = BACK_MANU_EVENT;
+        SDL_PushEvent(&event);
+        this->back_menu_button->initButtonCurrentSprite();
+        INFOLOG("handleEvents||push event=BACK_MANU_EVENT");
+    }
 }
