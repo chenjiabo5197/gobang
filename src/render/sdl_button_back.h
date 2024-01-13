@@ -10,7 +10,7 @@ class SDLButton
 {
 public:
     //Initializes internal variables
-    SDLButton(const Config& config, const std::string button_name);
+    SDLButton(const Config& config, const std::string button_name, const int& x, const int& y);
 
     ~SDLButton();
 

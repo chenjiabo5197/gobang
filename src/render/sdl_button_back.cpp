@@ -1,13 +1,13 @@
-#include "sdl_button.h"
+#include "sdl_button_back.h"
 
-SDLButton::SDLButton(const Config& config, const std::string button_name)
+SDLButton::SDLButton(const Config& config, const std::string button_name, const int& x, const int& y)
 {
     std::string temp;
     this->button_name = button_name;
     mCurrentSprite = BUTTON_SPRITE_MOUSE_OUT;
     this->sdl_texture = new SDLTexture(button_name);
-    this->button_x = config.Read(button_name+"_x", 0);
-    this->button_y = config.Read(button_name+"_y", 0);
+    this->button_x = x;
+    this->button_y= y;
     this->button_width = config.Read(button_name+"_width", 0);
     this->button_height = config.Read(button_name+"_height", 0);
     this->button_multiple = config.Read(button_name+"_multiple", 0.0);
@@ -153,15 +153,14 @@ bool SDLButton::buttonRender(SDL_Renderer* global_renderer)
         ERRORLOG("button not load resource, please load resource||button_name={}", this->button_name);
         return false;
     }
-    // int new_width = (int)(this->button_width * this->button_multiple);
-    // int new_height = (int)(this->button_height * this->button_multiple);
-    // int x_offset = new_width / 2;
-    // int y_offset = new_height / 2;
-    // int center_x = button_x - x_offset;
-    // int center_y = button_y - y_offset;
+    int new_width = (int)(this->button_width * this->button_multiple);
+    int new_height = (int)(this->button_height * this->button_multiple);
+    int x_offset = new_width / 2;
+    int y_offset = new_height / 2;
+    int center_x = button_x - x_offset;
+    int center_y = button_y - y_offset;
     //Show current button sprite
-    // this->sdl_texture->render(global_renderer, center_x, center_y, this->button_multiple, &gSpriteClips[mCurrentSprite]);
-    this->sdl_texture->render(global_renderer, button_x, button_y, this->button_multiple, &gSpriteClips[mCurrentSprite]);
+    this->sdl_texture->render(global_renderer, center_x, center_y, this->button_multiple, &gSpriteClips[mCurrentSprite]);   
     // DEBUGLOG("buttonRender||x={}||y={}||gSpriteClips.x={}||gSpriteClips.y={}||gSpriteClips.w={}||gSpriteClips.h={}", button_position.x,
     // button_position.y, gSpriteClips[mCurrentSprite].x, gSpriteClips[mCurrentSprite].y, gSpriteClips[mCurrentSprite].w, gSpriteClips[mCurrentSprite].h);
     return true;

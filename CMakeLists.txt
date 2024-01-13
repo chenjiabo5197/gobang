@@ -24,10 +24,11 @@ file(GLOB_RECURSE SOURCES_FILES
     src/common.h
     src/logger/*
     src/utils/*
-    src/render/ttf_result_interface.*
-    src/render/sdl*
+    src/render/sdl_button.*
+    src/render/sdl_texture.*
+    src/render/sdl_ttf.*
     src/chess/*
-    src/manage/manage.*
+    src/manage/*
     src/player/*
     # third_party/spdlog/*
 )

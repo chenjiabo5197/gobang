@@ -10,6 +10,10 @@
 
 #include <math.h>
 #include <SDL2/SDL_ttf.h>
+#include "main_menu_manage.h"
+#include "select_play_manage.h"
+#include "playchess_manage.h"
+#include "settlement_manage.h"
 #include "../common.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"
@@ -20,60 +24,37 @@
 #include "../player/machine.h"
 #include "../player/player.h"
 
-class Manage
+class TopManage
 {
 private:
+    // 各个子页面管理
+    MainMenuManage* main_menu_manage;
+    SelectPlayManage* select_play_manage;
+    PlaychessManage* playchess_manage;
+    SettlementManage* settlement_manage;
+
     // 渲染的宽和高
     int width;
     int height;
 
-    SDL_Window * gWindow;
-    SDL_Renderer* gRenderer;
-    TTF_Font* gResultFont; 
-    std::string ttf_result_path;
-    int ttf_result_ptsize;
+    // 行楷字体
+    std::string art_ttf_path;
+    int art_ttf_ptsize;
+
+    SDL_Window * global_window;
+    SDL_Renderer* global_renderer;
+    TTF_Font* gResultFont;
 
     // 普通字体
     TTF_Font* normal_font;
     std::string normal_ttf_path;
     int normal_ttf_ptsize;
 
-    // 棋盘
-    Chessboard* chessboard;
-
     // 渲染的种类
     interface_kind_type render_type;
-
-    // 电脑AI
-    Machine* machine;
-
-    // 玩家
-    Player* single_player;
-
-    // 玩家赢结算页面的渲染
-    SDLTTF* player_win_interface;
-    // 玩家输结算页面的渲染
-    SDLTTF* player_lose_interface;
-
-    //棋盘中心的坐标
-    int chessboard_x;
-    int chessboard_y;
-
-    // 按键
-    SDLButton* start_game_button;
-    SDLButton* again_game_button;
-    SDLButton* back_menu_button;
-    SDLButton* best_scores_button;
-    SDLButton* exit_game_button;
-    SDLButton* play_internet_button;
-    SDLButton* single_player_button;
-    SDLButton* two_players_button;
-    SDLButton* withdraw_button;
-    SDLButton* normal_back_menu_button;
-    
 public:
-    Manage(const Config& config);
-    ~Manage();
+    TopManage(const Config& config);
+    ~TopManage();
 
     void start();
 
@@ -94,6 +75,10 @@ public:
 
     // 设置渲染界面类型
     void setRendererType(const interface_kind_type& render_type);
+
+    // 获取渲染屏幕的中心点
+    int getScreenCenterX();
+    int getScreenCenterY();
 };
 
 

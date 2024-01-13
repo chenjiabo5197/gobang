@@ -1,16 +1,16 @@
-# log
+# 日志
 log_level=debug
 log_path=logs
 log_filename=gobang.log
-# MB
+# MB单位
 log_filesize=10
 log_filenums=10
 
-# display
+# 渲染屏幕大小
 screen_width=1280
 screen_height=960
 
-#chess
+# 棋子
 white_chess_resource_path=resources/white.png
 white_chess_multiple=0.5
 white_chess_origin_size=83
@@ -34,7 +34,7 @@ symbol_black_chess_origin_size=83
 symbol_black_chess_x=950
 symbol_black_chess_y=150
 
-#chessboard
+# 棋盘参数
 chessboard_origin_x=50
 chessboard_origin_y=50
 chessboard_r=255
@@ -43,7 +43,7 @@ chessboard_b=143
 chessboard_alpha=255
 chessboard_lattice_size=60
 
-#ttf_result
+# 结果结算页面文字
 ttf_result_resource_path=resources/STXingkai.ttf
 ttf_result_ptsize=650
 ttf_result_player_win=胜
@@ -57,29 +57,19 @@ ttf_result_player_lose_g=0
 ttf_result_player_lose_b=0
 ttf_result_player_lose_alpha=255
 
-#normal_ttf
+# 普通文字
 normal_ttf_resource_path=resources/STZhongsong.ttf
 normal_ttf_ptsize=50
 
-#buttons
+# 按键
+# 主菜单
+main_menu_buttons_interval=20
 start_game_resourece_path=resources/start_game.png
 start_game_width=260
 start_game_height=83
 start_game_x=500
 start_game_y=250
 start_game_multiple=1.0
-again_game_resourece_path=resources/again_game.png
-again_game_width=260
-again_game_height=83
-again_game_x=1000
-again_game_y=300
-again_game_multiple=0.5
-back_menu_resourece_path=resources/back_menu.png
-back_menu_width=260
-back_menu_height=83
-back_menu_x=1000
-back_menu_y=350
-back_menu_multiple=0.5
 best_scores_resourece_path=resources/best_scores.png
 best_scores_width=260
 best_scores_height=83
@@ -92,12 +82,8 @@ exit_game_height=83
 exit_game_x=500
 exit_game_y=450
 exit_game_multiple=1.0
-play_internet_resourece_path=resources/play_internet.png
-play_internet_width=260
-play_internet_height=83
-play_internet_x=500
-play_internet_y=400
-play_internet_multiple=1.0
+# 选择游戏方式菜单
+select_play_buttons_interval=20
 single_player_resourece_path=resources/single_player.png
 single_player_width=260
 single_player_height=83
@@ -110,15 +96,36 @@ two_players_height=83
 two_players_x=500
 two_players_y=300
 two_players_multiple=1.0
+play_internet_resourece_path=resources/play_internet.png
+play_internet_width=260
+play_internet_height=83
+play_internet_x=500
+play_internet_y=400
+play_internet_multiple=1.0
 normal_back_menu_resourece_path=resources/back_menu.png
 normal_back_menu_width=260
 normal_back_menu_height=83
 normal_back_menu_x=500
 normal_back_menu_y=500
 normal_back_menu_multiple=1.0
+# 下棋界面及结果结算界面
+playchess_buttons_interval=20
+settlement_buttons_interval=20
+back_menu_resourece_path=resources/back_menu.png
+back_menu_width=260
+back_menu_height=83
+back_menu_x=1000
+back_menu_y=350
+back_menu_multiple=0.5
 withdraw_resourece_path=resources/withdraw.png
 withdraw_width=260
 withdraw_height=83
 withdraw_x=1000
 withdraw_y=300
 withdraw_multiple=0.5
+again_game_resourece_path=resources/again_game.png
+again_game_width=260
+again_game_height=83
+again_game_x=1000
+again_game_y=300
+again_game_multiple=0.5
