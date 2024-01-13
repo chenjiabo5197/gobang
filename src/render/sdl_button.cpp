@@ -1,13 +1,13 @@
 #include "sdl_button.h"
 
-SDLButton::SDLButton(const Config& config, const std::string button_name)
+SDLButton::SDLButton(const Config& config, const std::string button_name, const int& x, const int& y)
 {
     std::string temp;
     this->button_name = button_name;
     mCurrentSprite = BUTTON_SPRITE_MOUSE_OUT;
     this->sdl_texture = new SDLTexture(button_name);
-    this->button_x = config.Read(button_name+"_x", 0);
-    this->button_y = config.Read(button_name+"_y", 0);
+    this->button_x = x;
+    this->button_y= y;
     this->button_width = config.Read(button_name+"_width", 0);
     this->button_height = config.Read(button_name+"_height", 0);
     this->button_multiple = config.Read(button_name+"_multiple", 0.0);
@@ -37,30 +37,25 @@ void SDLButton::handleButtonEvent(SDL_Event* event)
         SDL_GetMouseState(&x, &y);
 
         //Check if mouse is in button
-        /*
-        检查鼠标是否位于按钮内。由于用的是与 SDL 不同的坐标系，因此按钮的原点位于左上方。
-        这意味着每一个小于 x 位置的 x 坐标都在按钮外，每一个小于 y 位置的 y 坐标也在按钮外。按钮右侧的所有内容都是 x 位置 + 宽度，按钮下方的所有内容都是 y 位置 + 高度。
-        这就是这段代码的作用。如果鼠标位置超出了按钮的任何范围，它就会将内部标记标记为假。否则，它将保持初始值为真
-        */
         bool inside = true;
 
         //Mouse is left of the button
-        if(x < button_x)
+        if(x < button_x - ((int)this->button_width*this->button_multiple) / 2)
         {
             inside = false;
         }
         //Mouse is right of the button
-        else if(x > button_x + (int)this->button_width*this->button_multiple)
+        else if(x > button_x + ((int)this->button_width*this->button_multiple) / 2)
         {
             inside = false;
         }
         //Mouse above the button
-        else if(y < button_y)
+        else if(y < button_y - ((int)this->button_height*this->button_multiple) / 2)
         {
             inside = false;
         }
         //Mouse below the button
-        else if(y > button_y + (int)this->button_height*this->button_multiple)
+        else if(y > button_y + ((int)this->button_height*this->button_multiple) / 2)
         {
             inside = false;
         }
@@ -153,15 +148,14 @@ bool SDLButton::buttonRender(SDL_Renderer* global_renderer)
         ERRORLOG("button not load resource, please load resource||button_name={}", this->button_name);
         return false;
     }
-    // int new_width = (int)(this->button_width * this->button_multiple);
-    // int new_height = (int)(this->button_height * this->button_multiple);
-    // int x_offset = new_width / 2;
-    // int y_offset = new_height / 2;
-    // int center_x = button_x - x_offset;
-    // int center_y = button_y - y_offset;
+    int new_width = (int)(this->button_width * this->button_multiple);
+    int new_height = (int)(this->button_height * this->button_multiple);
+    int x_offset = new_width / 2;
+    int y_offset = new_height / 2;
+    int center_x = button_x - x_offset;
+    int center_y = button_y - y_offset;
     //Show current button sprite
-    // this->sdl_texture->render(global_renderer, center_x, center_y, this->button_multiple, &gSpriteClips[mCurrentSprite]);
-    this->sdl_texture->render(global_renderer, button_x, button_y, this->button_multiple, &gSpriteClips[mCurrentSprite]);
+    this->sdl_texture->render(global_renderer, center_x, center_y, this->button_multiple, &gSpriteClips[mCurrentSprite]);   
     // DEBUGLOG("buttonRender||x={}||y={}||gSpriteClips.x={}||gSpriteClips.y={}||gSpriteClips.w={}||gSpriteClips.h={}", button_position.x,
     // button_position.y, gSpriteClips[mCurrentSprite].x, gSpriteClips[mCurrentSprite].y, gSpriteClips[mCurrentSprite].w, gSpriteClips[mCurrentSprite].h);
     return true;

@@ -10,7 +10,7 @@ class SDLButton
 {
 public:
     //Initializes internal variables
-    SDLButton(const Config& config, const std::string button_name);
+    SDLButton(const Config& config, const std::string button_name, const int& x, const int& y);
 
     ~SDLButton();
 
@@ -42,7 +42,7 @@ private:
     // 按键缩放的尺寸
     float button_multiple;
 
-    //位置坐标
+    //位置坐标,按键的中心处坐标
     int button_x;
     int button_y;
 

@@ -10,10 +10,14 @@ PlaychessManage::PlaychessManage(const Config& config)
     this->chessboard = new Chessboard(config);
     this->machine = new Machine(this->chessboard);
     this->single_player = new Player(this->chessboard, "single_player", CHESS_BLACK);
-    this->back_menu_button = new SDLButton(config, "back_menu");
-    this->withdraw_button = new SDLButton(config, "withdraw");
     this->button_interval = config.Read("playchess_buttons_interval", 0);
-    DEBUGLOG("PlaychessManage construct success||button_interval={}", this->button_interval);
+    this->buttons_x = config.Read("playchess_buttons_x", 0);
+    this->buttons_y = config.Read("playchess_buttons_y", 0);
+    this->playchess_buttons[0] = new SDLButton(config, "withdraw", this->buttons_x, this->buttons_y-this->button_interval);
+    this->playchess_buttons[1] = new SDLButton(config, "back_menu", this->buttons_x, this->buttons_y);
+    this->array_length = sizeof(this->playchess_buttons) / sizeof(this->playchess_buttons[0]);
+    DEBUGLOG("PlaychessManage construct success||button_interval={}||buttons_x={}||buttons_y={}||array_length={}", 
+    this->button_interval, this->buttons_x, this->buttons_y, this->array_length);
 }
 
 PlaychessManage::~PlaychessManage()
@@ -21,16 +25,16 @@ PlaychessManage::~PlaychessManage()
     delete chessboard;
     delete machine;
     delete single_player;
-    delete back_menu_button;
-    delete withdraw_button;
     SDL_WaitThread(machine_thread, nullptr);
     DEBUGLOG("~PlaychessManage success||release resource");
 }
 
 void PlaychessManage::loadResource()
 {
-    this->back_menu_button->loadResource(this->global_window, this->global_renderer);
-    this->withdraw_button->loadResource(this->global_window, this->global_renderer);
+    for (int i = 0; i < this->array_length; i++)
+    {
+        this->playchess_buttons[i]->loadResource(this->global_window, this->global_renderer);
+    }
     INFOLOG("loadResource||load resource success");
 }
 
@@ -38,16 +42,20 @@ void PlaychessManage::init(SDL_Window* global_window, SDL_Renderer* global_rende
 {
     this->global_window = global_window;
     this->global_renderer = global_renderer;
-    this->back_menu_button->initButtonCurrentSprite();
-    this->withdraw_button->initButtonCurrentSprite();
+    for (int i = 0; i < this->array_length; i++)
+    {
+        this->playchess_buttons[i]->initButtonCurrentSprite();
+    }
     INFOLOG("init||init variable success");
 }
 
 void PlaychessManage::startRender()
 {
     this->chessboard->render(this->global_window, this->global_renderer);
-    this->withdraw_button->buttonRender(this->global_renderer);
-    this->back_menu_button->buttonRender(this->global_renderer);
+    for (int i = 0; i < this->array_length; i++)
+    {
+        this->playchess_buttons[i]->buttonRender(this->global_renderer);
+    }
     // DEBUGLOG("startRender");
 }
 
@@ -82,7 +90,6 @@ bool PlaychessManage::handleMouseClick(SDL_Event* event)
         //获取鼠标位置
         int x, y;
         SDL_GetMouseState(&x, &y);
-        DEBUGLOG("handleMouseClick2||x={}||y={}", x, y);
         ChessPos pos;
         // 检查是否有效落子
         bool is_valid_click = this->chessboard->clickBoard(x, y, &pos);
@@ -109,7 +116,6 @@ void PlaychessManage::handleEvents(SDL_Event* event)
 {
     if (event->type == PLAYER_WITHDRAW_EVENT)
     {
-        DEBUGLOG("111111111");
         if(this->chessboard->is_can_withdraw())
         {
             this->chessboard->set_chessboard_withdraw();
@@ -124,22 +130,25 @@ void PlaychessManage::handleEvents(SDL_Event* event)
     {
         machine_thread = SDL_CreateThread(machineChessDown, "machine player", this->machine);
     }
-    this->withdraw_button->handleButtonEvent(event);
-    this->back_menu_button->handleButtonEvent(event);
-    if (this->withdraw_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+
+    for (int i = 0; i < this->array_length; i++)
+    {
+        this->playchess_buttons[i]->handleButtonEvent(event);
+    }
+    if (this->playchess_buttons[0]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
     {
         SDL_Event event;
         event.type = PLAYER_WITHDRAW_EVENT;
         SDL_PushEvent(&event);
-        this->withdraw_button->initButtonCurrentSprite();
+        this->playchess_buttons[0]->initButtonCurrentSprite();
         INFOLOG("handleEvents||push event=PLAYER_WITHDRAW_EVENT");
     }
-    if (this->back_menu_button->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+    if (this->playchess_buttons[1]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
     {
         SDL_Event event;
         event.type = BACK_MANU_EVENT;
         SDL_PushEvent(&event);
-        this->back_menu_button->initButtonCurrentSprite();
+        this->playchess_buttons[1]->initButtonCurrentSprite();
         INFOLOG("handleEvents||push event=BACK_MANU_EVENT");
     }
 }

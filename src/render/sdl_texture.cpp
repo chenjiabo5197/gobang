@@ -38,7 +38,7 @@ void SDLTexture::setColor(Uint8 red, Uint8 green, Uint8 blue)
 }
 
 #if defined(SDL_TTF_MAJOR_VERSION)
-bool SDLTexture::loadFromRenderedText(SDL_Renderer* gRenderer, TTF_Font* gFont, std::string textureText, SDL_Color textColor)
+bool SDLTexture::loadFromRenderedText(SDL_Renderer* global_renderer, TTF_Font* gFont, std::string textureText, SDL_Color textColor)
 {
     ////先取消原有纹理的渲染
     free();
@@ -62,7 +62,7 @@ bool SDLTexture::loadFromRenderedText(SDL_Renderer* gRenderer, TTF_Font* gFont, 
         return false;
     }
     //Create texture from surface pixels
-    mTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
+    mTexture = SDL_CreateTextureFromSurface(global_renderer, textSurface);
     if(mTexture == nullptr)
     {
         ERRORLOG("Unable to create texture from rendered text! SDL Error={}", SDL_GetError());
@@ -78,7 +78,7 @@ bool SDLTexture::loadFromRenderedText(SDL_Renderer* gRenderer, TTF_Font* gFont, 
 }
 #endif
 
-bool SDLTexture::loadPixelsFromFile(SDL_Window * gWindow, const std::string& path)
+bool SDLTexture::loadPixelsFromFile(SDL_Window * global_window, const std::string& path)
 {
     //Free preexisting assets
     free();
@@ -93,7 +93,7 @@ bool SDLTexture::loadPixelsFromFile(SDL_Window * gWindow, const std::string& pat
     {
         // DEBUGLOG("loadPixelsFromFile loadedSurface success");
         //将现有的表面复制到指定格式的新的表面 第一个参数为源表面指针，第二个参数为像素格式，第三个参数设置为0即可
-        mSurfacePixels = SDL_ConvertSurfaceFormat(loadedSurface, SDL_GetWindowPixelFormat(gWindow), 0);
+        mSurfacePixels = SDL_ConvertSurfaceFormat(loadedSurface, SDL_GetWindowPixelFormat(global_window), 0);
         if(mSurfacePixels == nullptr)
         {
             ERRORLOG("Unable to convert loaded surface to display format! SDL Error={}", IMG_GetError());
@@ -114,7 +114,7 @@ bool SDLTexture::loadPixelsFromFile(SDL_Window * gWindow, const std::string& pat
 }
 
 // 加载纹理
-bool SDLTexture::loadFromPixels(SDL_Renderer* gRenderer)
+bool SDLTexture::loadFromPixels(SDL_Renderer* global_renderer)
 {
     //Only load if pixels exist
     if(mSurfacePixels == nullptr)
@@ -126,7 +126,7 @@ bool SDLTexture::loadFromPixels(SDL_Renderer* gRenderer)
     SDL_SetColorKey(mSurfacePixels, SDL_TRUE, SDL_MapRGB(mSurfacePixels->format, 0xff, 0xff, 0xff));
 
     //Create texture from surface pixels
-    mTexture = SDL_CreateTextureFromSurface(gRenderer, mSurfacePixels);
+    mTexture = SDL_CreateTextureFromSurface(global_renderer, mSurfacePixels);
     if(mTexture == nullptr)
     {
         ERRORLOG("Unable to create texture from loaded pixels! SDL Error={}", SDL_GetError());
@@ -144,18 +144,18 @@ bool SDLTexture::loadFromPixels(SDL_Renderer* gRenderer)
     return mTexture != nullptr;
 }
 
-bool SDLTexture::loadFromFile(SDL_Window * gWindow, SDL_Renderer* gRenderer, const std::string& path)
+bool SDLTexture::loadFromFile(SDL_Window * global_window, SDL_Renderer* global_renderer, const std::string& path)
 {
     INFOLOG("loadFromFile||path={}", path);
 
     //Load pixels
-    if(!loadPixelsFromFile(gWindow, path))
+    if(!loadPixelsFromFile(global_window, path))
     {
         ERRORLOG("Failed to load pixels, path={}", path.c_str());
         return false;
     }
     //Load texture from pixels
-    if(!loadFromPixels(gRenderer))
+    if(!loadFromPixels(global_renderer))
     {
         ERRORLOG("Failed to texture from pixels, path={}", path.c_str());
         return false;
@@ -209,7 +209,7 @@ void SDLTexture::free()
     // INFOLOG("free success");
 }
 
-void SDLTexture::render(SDL_Renderer* gRenderer, int x, int y, float multiple, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
+void SDLTexture::render(SDL_Renderer* global_renderer, int x, int y, float multiple, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
     //设置渲染区域并渲染到屏幕
     SDL_Rect renderQuad = {x, y, mWidth, mHeight};
@@ -243,9 +243,9 @@ void SDLTexture::render(SDL_Renderer* gRenderer, int x, int y, float multiple, S
     */
 
     //Render to screen
-    // SDL_RenderCopy(gRenderer, mTexture, clip, &renderQuad);
+    // SDL_RenderCopy(global_renderer, mTexture, clip, &renderQuad);
     //Render to screen 该函数的工作原理与原始的 SDL_RenderCopy 相同，但增加了用于旋转和翻转的参数
-    SDL_RenderCopyEx(gRenderer, mTexture, clip, &renderQuad, angle, center, flip);
+    SDL_RenderCopyEx(global_renderer, mTexture, clip, &renderQuad, angle, center, flip);
 }
 
 int SDLTexture::getWidth()
@@ -283,13 +283,13 @@ Uint32 SDLTexture::getPixel32(Uint32 x, Uint32 y)
 }
 
 //创建一个 32 位 RGBA 纹理并进行流访问。创建纹理时必须确保的一点是，纹理像素的格式要与流式传输的像素格式一致
-bool SDLTexture::createBlank(SDL_Renderer* gRenderer, int width, int height)
+bool SDLTexture::createBlank(SDL_Renderer* global_renderer, int width, int height)
 {
     //Get rid of preexisting texture
     free();
 
     //Create uninitialized texture
-    mTexture = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, width, height);
+    mTexture = SDL_CreateTexture(global_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, width, height);
     if(mTexture == nullptr)
     {
         ERRORLOG("Unable to create streamable blank texture! SDL Error={}", SDL_GetError());
@@ -303,13 +303,13 @@ bool SDLTexture::createBlank(SDL_Renderer* gRenderer, int width, int height)
     return mTexture != nullptr;
 }
 
-bool SDLTexture::createBlank(SDL_Renderer* gRenderer, int width, int height, SDL_TextureAccess access)
+bool SDLTexture::createBlank(SDL_Renderer* global_renderer, int width, int height, SDL_TextureAccess access)
 {
     //Get rid of preexisting texture
     free();
 
     //Create uninitialized texture
-    mTexture = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, access, width, height);
+    mTexture = SDL_CreateTexture(global_renderer, SDL_PIXELFORMAT_RGBA8888, access, width, height);
     if(mTexture == nullptr)
     {
         ERRORLOG("Unable to create streamable blank texture! SDL Error={}", SDL_GetError());
@@ -324,10 +324,10 @@ bool SDLTexture::createBlank(SDL_Renderer* gRenderer, int width, int height, SDL
 }
 
 // 对纹理进行渲染，将其设置为渲染目标
-void SDLTexture::setAsRenderTarget(SDL_Renderer* gRenderer)
+void SDLTexture::setAsRenderTarget(SDL_Renderer* global_renderer)
 {
     //Make self render target
-    SDL_SetRenderTarget(gRenderer, mTexture);
+    SDL_SetRenderTarget(global_renderer, mTexture);
 }
 
 /*

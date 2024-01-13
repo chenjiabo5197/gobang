@@ -24,25 +24,25 @@ public:
     ~SDLTexture();
 
     //Loads image at specified path
-    bool loadFromFile(SDL_Window * gWindow, SDL_Renderer* gRenderer, const std::string& path);
+    bool loadFromFile(SDL_Window * global_window, SDL_Renderer* global_renderer, const std::string& path);
 
     #if defined(SDL_TTF_MAJOR_VERSION)
     //Creates image from font string
     // SDL_ttf 的工作方式是根据字体和颜色创建新图像。对于纹理类来说，这意味着将从 SDL_ttf 渲染的文本而不是文件中加载图像
-    bool loadFromRenderedText(SDL_Renderer* gRenderer, TTF_Font* gFont, std::string textureText, SDL_Color textColor);
+    bool loadFromRenderedText(SDL_Renderer* global_renderer, TTF_Font* gFont, std::string textureText, SDL_Color textColor);
     #endif
 
     //Loads image into pixel buffer  加载像素 
-    bool loadPixelsFromFile(SDL_Window * gWindow, const std::string& path);
+    bool loadPixelsFromFile(SDL_Window * global_window, const std::string& path);
 
     //Creates image from preloaded pixels  将纹理转化为像素  
-    bool loadFromPixels(SDL_Renderer* gRenderer);
+    bool loadFromPixels(SDL_Renderer* global_renderer);
 
     //createBlank 函数分配了一个空白纹理，可以在流式传输时将数据复制到该纹理中
-    bool createBlank(SDL_Renderer* gRenderer, int width, int height);
+    bool createBlank(SDL_Renderer* global_renderer, int width, int height);
 
     //接收了access参数，该参数定义了如何访问它
-    bool createBlank(SDL_Renderer* gRenderer, int width, int height, SDL_TextureAccess access);
+    bool createBlank(SDL_Renderer* global_renderer, int width, int height, SDL_TextureAccess access);
 
     //Deallocates texture
     void free();
@@ -60,10 +60,10 @@ public:
     /*接受一个矩形参数，用来定义要渲染的纹理部分。给它一个默认参数 nullptr，以防渲染整个纹理
     接受旋转角度、纹理旋转点和 SDL 翻转枚举值，同样也给出了参数的默认值，以备在不旋转或翻转的情况下渲染纹理。
     */
-    void render(SDL_Renderer* gRenderer, int x, int y, float multiple = 1.0, SDL_Rect* clip = nullptr, double angle = 0.0, SDL_Point* center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
+    void render(SDL_Renderer* global_renderer, int x, int y, float multiple = 1.0, SDL_Rect* clip = nullptr, double angle = 0.0, SDL_Point* center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
     //渲染该纹理
-    void setAsRenderTarget(SDL_Renderer* gRenderer);
+    void setAsRenderTarget(SDL_Renderer* global_renderer);
 
     //Gets image dimensions
     int getWidth();

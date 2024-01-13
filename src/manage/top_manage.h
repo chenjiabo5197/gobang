@@ -75,10 +75,6 @@ public:
 
     // 设置渲染界面类型
     void setRendererType(const interface_kind_type& render_type);
-
-    // 获取渲染屏幕的中心点
-    int getScreenCenterX();
-    int getScreenCenterY();
 };
 
 

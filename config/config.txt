@@ -62,70 +62,54 @@ normal_ttf_resource_path=resources/STZhongsong.ttf
 normal_ttf_ptsize=50
 
 # 按键
-# 主菜单
-main_menu_buttons_interval=20
+# 主菜单 按键中心默认为屏幕中心
+main_menu_buttons_interval=100
 start_game_resourece_path=resources/start_game.png
 start_game_width=260
 start_game_height=83
-start_game_x=500
-start_game_y=250
 start_game_multiple=1.0
 best_scores_resourece_path=resources/best_scores.png
 best_scores_width=260
 best_scores_height=83
-best_scores_x=500
-best_scores_y=350
 best_scores_multiple=1.0
 exit_game_resourece_path=resources/exit_game.png
 exit_game_width=260
 exit_game_height=83
-exit_game_x=500
-exit_game_y=450
 exit_game_multiple=1.0
-# 选择游戏方式菜单
-select_play_buttons_interval=20
+# 选择游戏方式菜单  按键中心默认为屏幕中心
+select_play_buttons_interval=100
 single_player_resourece_path=resources/single_player.png
 single_player_width=260
 single_player_height=83
-single_player_x=500
-single_player_y=200
 single_player_multiple=1.0
 two_players_resourece_path=resources/two_players.png
 two_players_width=260
 two_players_height=83
-two_players_x=500
-two_players_y=300
 two_players_multiple=1.0
 play_internet_resourece_path=resources/play_internet.png
 play_internet_width=260
 play_internet_height=83
-play_internet_x=500
-play_internet_y=400
 play_internet_multiple=1.0
 normal_back_menu_resourece_path=resources/back_menu.png
 normal_back_menu_width=260
 normal_back_menu_height=83
-normal_back_menu_x=500
-normal_back_menu_y=500
 normal_back_menu_multiple=1.0
-# 下棋界面及结果结算界面
-playchess_buttons_interval=20
-settlement_buttons_interval=20
+# 下棋界面及结果结算界面  按键中心需要赋值
+playchess_buttons_interval=50
+playchess_buttons_x=1000
+playchess_buttons_y=300
+settlement_buttons_interval=50
+settlement_buttons_x=1000
+settlement_buttons_y=300
 back_menu_resourece_path=resources/back_menu.png
 back_menu_width=260
 back_menu_height=83
-back_menu_x=1000
-back_menu_y=350
 back_menu_multiple=0.5
 withdraw_resourece_path=resources/withdraw.png
 withdraw_width=260
 withdraw_height=83
-withdraw_x=1000
-withdraw_y=300
 withdraw_multiple=0.5
 again_game_resourece_path=resources/again_game.png
 again_game_width=260
 again_game_height=83
-again_game_x=1000
-again_game_y=300
 again_game_multiple=0.5

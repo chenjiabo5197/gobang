@@ -22,14 +22,18 @@ private:
     SDL_Window* global_window;
     SDL_Renderer* global_renderer;
     
-    SDLButton* main_menu_buttons[4];
+    // 当前页面要渲染的按键数组
+    SDLButton* playchess_buttons[2];
+
+    // 数组长度
+    int array_length;
+
+    //当前页面所有按键的中心位置，按键以此为中心，纵向分布
+    int buttons_x;
+    int buttons_y;
 
     // 按键之间的间隔(上下间隔)
     int button_interval;
-
-    // 按键
-    SDLButton* back_menu_button;
-    SDLButton* withdraw_button;
 
     // 棋盘
     Chessboard* chessboard;

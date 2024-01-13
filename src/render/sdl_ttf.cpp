@@ -32,34 +32,34 @@ SDLTTF::~SDLTTF()
     INFOLOG("~SDLTTF, release resource||ttf_name={}", this->ttf_name);
 }
 
-bool SDLTTF::loadRenderText(SDL_Renderer* gRenderer, TTF_Font* gFont)
+bool SDLTTF::loadRenderText(SDL_Renderer* global_renderer, TTF_Font* global_font)
 {
     SDL_Color textColor = {(Uint8)this->render_r, (Uint8)this->render_g, (Uint8)this->render_b, (Uint8)this->render_alpha};
     //Load data stream
-    if(!this->sdl_texture->loadFromRenderedText(gRenderer, gFont, this->render_text, textColor))
+    if(!this->sdl_texture->loadFromRenderedText(global_renderer, global_font, this->render_text, textColor))
     {        
         ERRORLOG("Failed to load TTF texture!");
         return false;
     }
-    // TTF_SetFontStyle(gFont, TTF_STYLE_BOLD);
+    // TTF_SetFontStyle(global_font, TTF_STYLE_BOLD);
     this->is_load_text = true;
     return true;
 }
 
-bool SDLTTF::loadRenderText(SDL_Renderer* gRenderer, TTF_Font* gFont, const std::string& texture_text, SDL_Color sdl_color)
+bool SDLTTF::loadRenderText(SDL_Renderer* global_renderer, TTF_Font* global_font, const std::string& texture_text, SDL_Color sdl_color)
 {
     //Load data stream
-    if(!this->sdl_texture->loadFromRenderedText(gRenderer, gFont, texture_text, sdl_color))
+    if(!this->sdl_texture->loadFromRenderedText(global_renderer, global_font, texture_text, sdl_color))
     {        
         ERRORLOG("Failed to load TTF texture!");
         return false;
     }
-    // TTF_SetFontStyle(gFont, TTF_STYLE_BOLD);
+    // TTF_SetFontStyle(global_font, TTF_STYLE_BOLD);
     this->is_load_text = true;
     return true;
 }
 
-bool SDLTTF::ttfRender(SDL_Renderer* gRenderer, const int& x, const int& y)
+bool SDLTTF::ttfRender(SDL_Renderer* global_renderer, const int& x, const int& y)
 {
     if (!this->is_load_text)
     {
@@ -70,12 +70,12 @@ bool SDLTTF::ttfRender(SDL_Renderer* gRenderer, const int& x, const int& y)
     int y_offset = this->sdl_texture->getHeight() / 2;
     int ttf_result_x = x - x_offset;
     int ttf_result_y = y - y_offset;
-    this->sdl_texture->render(gRenderer, ttf_result_x, ttf_result_y, 1.0);
+    this->sdl_texture->render(global_renderer, ttf_result_x, ttf_result_y, 1.0);
     // DEBUGLOG("ttfRender||ttf_result_x={}||ttf_result_y={}", ttf_result_x, ttf_result_y);
     return false;
 }
 
-bool SDLTTF::ttfRender(SDL_Renderer* gRenderer, const int& x, const int& y, const float& multiple)
+bool SDLTTF::ttfRender(SDL_Renderer* global_renderer, const int& x, const int& y, const float& multiple)
 {
     if (!this->is_load_text)
     {
@@ -88,7 +88,7 @@ bool SDLTTF::ttfRender(SDL_Renderer* gRenderer, const int& x, const int& y, cons
     int y_offset = new_height / 2;
     int ttf_result_x = x - x_offset;
     int ttf_result_y = y - y_offset;
-    this->sdl_texture->render(gRenderer, ttf_result_x, ttf_result_y, multiple);
+    this->sdl_texture->render(global_renderer, ttf_result_x, ttf_result_y, multiple);
     // DEBUGLOG("ttfRender||ttf_result_x={}||ttf_result_y={}", ttf_result_x, ttf_result_y);
     return false;
 }

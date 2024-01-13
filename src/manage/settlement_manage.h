@@ -14,8 +14,16 @@ private:
     SDL_Window* global_window;
     SDL_Renderer* global_renderer;
     TTF_Font* art_font;
-    
-    SDLButton* main_menu_buttons[4];
+
+    // 当前页面要渲染的按键数组
+    SDLButton* settlement_buttons[2];
+
+    // 数组长度
+    int array_length;
+
+    //当前页面所有按键的中心位置，按键以此为中心，纵向分布
+    int buttons_x;
+    int buttons_y;
 
     // 按键之间的间隔(上下间隔)
     int button_interval;
@@ -23,10 +31,6 @@ private:
     // 要渲染字体的坐标(字体中心坐标)
     int font_x;
     int font_y;
-
-    // 按键
-    SDLButton* back_menu_button;
-    SDLButton* again_game_button;
 public:
     SettlementManage(const Config& config);
     ~SettlementManage();
@@ -39,13 +43,16 @@ public:
     void startRender(const interface_kind_type& type);
 
     // 初始化
-    void init(SDL_Window * global_window, SDL_Renderer* global_renderer, TTF_Font* art_font, const int& x, const int& y);
+    void init(SDL_Window * global_window, SDL_Renderer* global_renderer, TTF_Font* art_font);
 
     // 加载资源
     void loadResource();
 
     // 处理事件
     void handleEvents(SDL_Event* event);
+
+    // 设置渲染文字的中心坐标
+    void set_font_coordinate(const int& x, const int& y);
 };
 
 

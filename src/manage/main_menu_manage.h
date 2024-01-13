@@ -8,20 +8,22 @@
 class MainMenuManage
 {
 private:
-
     // 渲染的窗口
     SDL_Window* global_window;
     SDL_Renderer* global_renderer;
     
+    // 当前页面要渲染的按键数组
     SDLButton* main_menu_buttons[3];
+
+    // 数组长度
+    int array_length;
+
+    // 当前页面所有按键的中心位置，按键以此为中心，纵向分布
+    int buttons_x;
+    int buttons_y;
 
     // 按键之间的间隔(上下间隔)
     int button_interval;
-
-    // 按键
-    SDLButton* start_game_button;
-    SDLButton* best_scores_button;
-    SDLButton* exit_game_button;
 public:
     MainMenuManage(const Config& config);
     ~MainMenuManage();

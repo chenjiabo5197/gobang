@@ -198,16 +198,6 @@ bool TopManage::initRender()
         return false;
     }
     DEBUGLOG("SDL_ttf initialize success");
-    INFOLOG("initRender success!");
-    this->main_menu_manage->init(global_window, global_renderer);
-    this->select_play_manage->init(global_window, global_renderer);
-    this->playchess_manage->init(global_window, global_renderer);
-    this->loadResource();
-    return true;
-}
-
-bool TopManage::loadResource()
-{
     //使用 TTF_OpenFont 加载字体。这需要输入字体文件的路径和要渲染的点尺寸
     this->gResultFont = TTF_OpenFont(this->art_ttf_path.c_str(), this->art_ttf_ptsize);
     if(gResultFont == nullptr)
@@ -222,11 +212,22 @@ bool TopManage::loadResource()
         return false;
     }
     DEBUGLOG("Create font success!");
+    INFOLOG("initRender success!");
+    this->loadResource();
+    return true;
+}
+
+bool TopManage::loadResource()
+{
+    this->main_menu_manage->init(global_window, global_renderer);
+    this->select_play_manage->init(global_window, global_renderer);
+    this->playchess_manage->init(global_window, global_renderer);
+    this->settlement_manage->init(this->global_window, this->global_renderer, this->gResultFont);
     this->playchess_manage->setChessBoardTTF(this->normal_font);
     this->main_menu_manage->loadResource();
     this->select_play_manage->loadResource();
     this->playchess_manage->loadResource();
-    this->settlement_manage->init(global_window, global_renderer, this->gResultFont, this->playchess_manage->get_chessboard_center_x(), this->playchess_manage->get_chessboard_center_y());
+    this->settlement_manage->set_font_coordinate(this->playchess_manage->get_chessboard_center_x(), this->playchess_manage->get_chessboard_center_y());
     this->settlement_manage->loadResource();
     INFOLOG("loadResource success!");
     return true;
@@ -255,17 +256,4 @@ void TopManage::setRendererType(const interface_kind_type& render_type)
     INFOLOG("setRendererType||set render_type={}", (int)render_type);
 }
 
-int TopManage::getScreenCenterX()
-{
-    int screen_center_x = this->width / 2;
-    INFOLOG("getScreenCenterX||screen_center_x={}", screen_center_x);
-    return screen_center_x;
-}
-
-int TopManage::getScreenCenterY()
-{
-    int screen_center_y = this->height / 2;
-    INFOLOG("getScreenCenterY||screen_center_y={}", screen_center_y);
-    return screen_center_y;
-}
 

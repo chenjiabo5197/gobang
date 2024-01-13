@@ -40,16 +40,16 @@ public:
     ~SDLTTF();
 
     // 加载渲染文字
-    bool loadRenderText(SDL_Renderer* gRenderer, TTF_Font* gFont);
+    bool loadRenderText(SDL_Renderer* global_renderer, TTF_Font* global_font);
 
     // 加载渲染文字,输入要渲染的文字和颜色
-    bool loadRenderText(SDL_Renderer* gRenderer, TTF_Font* gFont, const std::string& texture_text, SDL_Color sdl_color);
+    bool loadRenderText(SDL_Renderer* global_renderer, TTF_Font* global_font, const std::string& texture_text, SDL_Color sdl_color);
 
     // 渲染
-    bool ttfRender(SDL_Renderer* gRenderer, const int& x, const int& y);
+    bool ttfRender(SDL_Renderer* global_renderer, const int& x, const int& y);
 
     // 渲染，加渲染倍数
-    bool ttfRender(SDL_Renderer* gRenderer, const int& x, const int& y, const float& multiple);
+    bool ttfRender(SDL_Renderer* global_renderer, const int& x, const int& y, const float& multiple);
 };
 
 
