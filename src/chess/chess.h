@@ -28,6 +28,10 @@ private:
     int chess_x;
     int chess_y;
 
+    // 渲染的窗口
+    SDL_Window* global_window;
+    SDL_Renderer* global_renderer;
+
     // 标志该chess是否已经加载资源，以前出现了未加载资源去渲染结果没有数据，找了好久原因
     bool is_load_resource;
 public:
@@ -37,14 +41,14 @@ public:
 
     ~Chess();
 
-    // 加载资源文件
-    bool loadResource(SDL_Window * gWindow, SDL_Renderer* gRenderer);
+    // 初始化，传入渲染所需参数
+	void init(SDL_Window * global_window, SDL_Renderer* global_renderer);
 
     // 将棋子渲染在棋盘的x,y坐标，其中x，y是棋盘上以左上角为坐标原点的相对坐标
-    bool chessRender(SDL_Renderer* gRenderer, const int& x, const int& y);
+    bool chessRender(const int& x, const int& y);
 
-    // 将棋子渲染,坐标和倍数由config实例化时读取配置文件获取
-    bool chessRender(SDL_Renderer* gRenderer);
+    // 渲染棋子,传入坐标和缩放倍数,坐标为中心处坐标，需要在函数内转化为左上角坐标
+    bool chessRender(const int& x, const int& y, const float& multiple);
 };
 
 

@@ -18,15 +18,6 @@ MainMenuManage::~MainMenuManage()
     DEBUGLOG("~MainMenuManage success||release resource");
 }
 
-void MainMenuManage::loadResource()
-{
-    for (int i = 0; i < this->array_length; i++)
-    {
-        this->main_menu_buttons[i]->loadResource(this->global_window, this->global_renderer);
-    }
-    INFOLOG("loadResource||load resource success");
-}
-
 void MainMenuManage::init(SDL_Window* global_window, SDL_Renderer* global_renderer)
 {
     this->global_window = global_window;
@@ -36,6 +27,11 @@ void MainMenuManage::init(SDL_Window* global_window, SDL_Renderer* global_render
         this->main_menu_buttons[i]->initButtonCurrentSprite();
     }
     INFOLOG("init||init variable success");
+    for (int i = 0; i < this->array_length; i++)
+    {
+        this->main_menu_buttons[i]->loadResource(this->global_window, this->global_renderer);
+    }
+    INFOLOG("loadResource||load resource success");
 }
 
 void MainMenuManage::startRender()

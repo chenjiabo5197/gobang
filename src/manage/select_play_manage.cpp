@@ -19,15 +19,6 @@ SelectPlayManage::~SelectPlayManage()
     DEBUGLOG("~SelectPlayManage success||release resource");
 }
 
-void SelectPlayManage::loadResource()
-{
-    for (int i = 0; i < this->array_length; i++)
-    {
-        this->select_play_buttons[i]->loadResource(this->global_window, this->global_renderer);
-    }
-    INFOLOG("loadResource||load resource success");
-}
-
 void SelectPlayManage::init(SDL_Window* global_window, SDL_Renderer* global_renderer)
 {
     this->global_window = global_window;
@@ -37,6 +28,11 @@ void SelectPlayManage::init(SDL_Window* global_window, SDL_Renderer* global_rend
         this->select_play_buttons[i]->initButtonCurrentSprite();
     }
     INFOLOG("init||init variable success");
+    for (int i = 0; i < this->array_length; i++)
+    {
+        this->select_play_buttons[i]->loadResource(this->global_window, this->global_renderer);
+    }
+    INFOLOG("loadResource||load resource success");
 }
 
 void SelectPlayManage::startRender()

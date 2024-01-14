@@ -24,9 +24,7 @@ file(GLOB_RECURSE SOURCES_FILES
     src/common.h
     src/logger/*
     src/utils/*
-    src/render/sdl_button.*
-    src/render/sdl_texture.*
-    src/render/sdl_ttf.*
+    src/render/sdl_*
     src/chess/*
     src/manage/*
     src/player/*

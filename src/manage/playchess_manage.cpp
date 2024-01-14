@@ -10,6 +10,7 @@ PlaychessManage::PlaychessManage(const Config& config)
     this->chessboard = new Chessboard(config);
     this->machine = new Machine(this->chessboard);
     this->single_player = new Player(this->chessboard, "single_player", CHESS_BLACK);
+    this->chess_data_board = new ChessDataBoard(config);
     this->button_interval = config.Read("playchess_buttons_interval", 0);
     this->buttons_x = config.Read("playchess_buttons_x", 0);
     this->buttons_y = config.Read("playchess_buttons_y", 0);
@@ -25,12 +26,23 @@ PlaychessManage::~PlaychessManage()
     delete chessboard;
     delete machine;
     delete single_player;
+    delete chess_data_board;
     SDL_WaitThread(machine_thread, nullptr);
     DEBUGLOG("~PlaychessManage success||release resource");
 }
 
-void PlaychessManage::loadResource()
+void PlaychessManage::init(SDL_Window* global_window, SDL_Renderer* global_renderer, TTF_Font* normal_ttf)
 {
+    this->global_window = global_window;
+    this->global_renderer = global_renderer;
+    this->normal_ttf = normal_ttf;
+    this->chessboard->init(this->global_window, this->global_renderer, this->normal_ttf);
+    this->chess_data_board->init(this->global_window, this->global_renderer, this->normal_ttf);
+    for (int i = 0; i < this->array_length; i++)
+    {
+        this->playchess_buttons[i]->initButtonCurrentSprite();
+    }
+    INFOLOG("init||init variable success");
     for (int i = 0; i < this->array_length; i++)
     {
         this->playchess_buttons[i]->loadResource(this->global_window, this->global_renderer);
@@ -38,20 +50,10 @@ void PlaychessManage::loadResource()
     INFOLOG("loadResource||load resource success");
 }
 
-void PlaychessManage::init(SDL_Window* global_window, SDL_Renderer* global_renderer)
-{
-    this->global_window = global_window;
-    this->global_renderer = global_renderer;
-    for (int i = 0; i < this->array_length; i++)
-    {
-        this->playchess_buttons[i]->initButtonCurrentSprite();
-    }
-    INFOLOG("init||init variable success");
-}
-
 void PlaychessManage::startRender()
 {
-    this->chessboard->render(this->global_window, this->global_renderer);
+    this->chessboard->render();
+    this->chess_data_board->render();
     for (int i = 0; i < this->array_length; i++)
     {
         this->playchess_buttons[i]->buttonRender(this->global_renderer);
@@ -151,11 +153,6 @@ void PlaychessManage::handleEvents(SDL_Event* event)
         this->playchess_buttons[1]->initButtonCurrentSprite();
         INFOLOG("handleEvents||push event=BACK_MANU_EVENT");
     }
-}
-
-void PlaychessManage::setChessBoardTTF(TTF_Font* ttf)
-{
-    this->chessboard->setTTF(ttf);
 }
 
 int PlaychessManage::get_chessboard_center_x()

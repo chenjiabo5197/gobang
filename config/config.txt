@@ -23,16 +23,6 @@ white_current_chess_origin_size=83
 black_current_chess_resource_path=resources/black_current.png
 black_current_chess_multiple=0.5
 black_current_chess_origin_size=83
-symbol_white_chess_resource_path=resources/white.png
-symbol_white_chess_multiple=0.9
-symbol_white_chess_origin_size=83
-symbol_white_chess_x=950
-symbol_white_chess_y=50
-symbol_black_chess_resource_path=resources/black.png
-symbol_black_chess_multiple=0.9
-symbol_black_chess_origin_size=83
-symbol_black_chess_x=950
-symbol_black_chess_y=150
 
 # 棋盘参数
 chessboard_origin_x=50
@@ -42,6 +32,13 @@ chessboard_g=246
 chessboard_b=143
 chessboard_alpha=255
 chessboard_lattice_size=60
+# 窗口右上角对局数据信息
+data_board_x=1000
+data_board_y=180
+symbol_white_chess_resource_path=resources/white.png
+symbol_white_chess_origin_size=83
+symbol_black_chess_resource_path=resources/black.png
+symbol_black_chess_origin_size=83
 
 # 结果结算页面文字
 ttf_result_resource_path=resources/STXingkai.ttf
@@ -96,11 +93,11 @@ normal_back_menu_height=83
 normal_back_menu_multiple=1.0
 # 下棋界面及结果结算界面  按键中心需要赋值
 playchess_buttons_interval=50
-playchess_buttons_x=1000
-playchess_buttons_y=300
+playchess_buttons_x=1050
+playchess_buttons_y=400
 settlement_buttons_interval=50
-settlement_buttons_x=1000
-settlement_buttons_y=300
+settlement_buttons_x=1050
+settlement_buttons_y=400
 back_menu_resourece_path=resources/back_menu.png
 back_menu_width=260
 back_menu_height=83

@@ -219,16 +219,11 @@ bool TopManage::initRender()
 
 bool TopManage::loadResource()
 {
-    this->main_menu_manage->init(global_window, global_renderer);
-    this->select_play_manage->init(global_window, global_renderer);
-    this->playchess_manage->init(global_window, global_renderer);
+    this->main_menu_manage->init(this->global_window, this->global_renderer);
+    this->select_play_manage->init(this->global_window, this->global_renderer);
+    this->playchess_manage->init(this->global_window, this->global_renderer, this->normal_font);
     this->settlement_manage->init(this->global_window, this->global_renderer, this->gResultFont);
-    this->playchess_manage->setChessBoardTTF(this->normal_font);
-    this->main_menu_manage->loadResource();
-    this->select_play_manage->loadResource();
-    this->playchess_manage->loadResource();
     this->settlement_manage->set_font_coordinate(this->playchess_manage->get_chessboard_center_x(), this->playchess_manage->get_chessboard_center_y());
-    this->settlement_manage->loadResource();
     INFOLOG("loadResource success!");
     return true;
 }

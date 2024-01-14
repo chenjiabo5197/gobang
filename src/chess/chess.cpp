@@ -12,7 +12,8 @@ Chess::Chess(const Config& config, const std::string& chess_name, const int& ori
     this->lattice_size = lattice_size;
     this->sdl_texture = new SDLTexture(this->chess_name);
     this->is_load_resource = false;
-    INFOLOG("Chess1 construct success||chess_resource_path={}||chess_name={}||chess_multiple={}||chess_origin_size={}", this->chess_resource_path, this->chess_name, this->chess_multiple, this->chess_origin_size);
+    INFOLOG("Chess1 construct success||chess_resource_path={}||chess_name={}||chess_multiple={}||chess_origin_size={}", 
+    this->chess_resource_path, this->chess_name, this->chess_multiple, this->chess_origin_size);
 }
 
 Chess::Chess(const Config& config, const std::string& chess_name)
@@ -38,13 +39,16 @@ Chess::~Chess()
     INFOLOG("~Chess, release resource||chess_name={}", this->chess_name);
 }
 
-bool Chess::loadResource(SDL_Window * gWindow, SDL_Renderer* gRenderer)
+void Chess::init(SDL_Window * global_window, SDL_Renderer* global_renderer)
 {
+    this->global_window = global_window;
+	this->global_renderer = global_renderer;
+
     //Load data
-    if(!this->sdl_texture->loadPixelsFromFile(gWindow, this->chess_resource_path))
+    if(!this->sdl_texture->loadPixelsFromFile(global_window, this->chess_resource_path))
     {        
         ERRORLOG("Failed to load texture!");
-        return false;
+        return;
     }
     // INFOLOG("load texture success!");
     //Get pixel data
@@ -52,7 +56,7 @@ bool Chess::loadResource(SDL_Window * gWindow, SDL_Renderer* gRenderer)
     int pixelCount = this->sdl_texture->getPitch32() * this->sdl_texture->getHeight();
     //Map colors
     Uint32 colorKey = 28095;   //取出棋子周围的颜色，用下面的值将其设置为透明色
-    Uint32 transparent = SDL_MapRGBA(SDL_GetWindowSurface(gWindow)->format, 0xFF, 0xFF, 0xFF, 0x00);
+    Uint32 transparent = SDL_MapRGBA(SDL_GetWindowSurface(global_window)->format, 0xFF, 0xFF, 0xFF, 0x00);
     // INFOLOG("loadMedia||pixelCount={}||colorKey={}||transparent={}", pixelCount, std::to_string(colorKey), std::to_string(transparent));
     //Color key pixels
     for(int i = 0; i < pixelCount; ++i)
@@ -64,17 +68,17 @@ bool Chess::loadResource(SDL_Window * gWindow, SDL_Renderer* gRenderer)
         }
     }
     //Create texture from manually color keyed pixels
-    if(!this->sdl_texture->loadFromPixels(gRenderer))
+    if(!this->sdl_texture->loadFromPixels(global_renderer))
     {
         ERRORLOG("Unable to load texture from surface!");
-        return false;
+        return;
     }
     this->is_load_resource = true;
     // DEBUGLOG("loadResource success||name={}", this->chess_name);
-    return true;
+    INFOLOG("init||Chessboard init success||load resource success");
 }
 
-bool Chess::chessRender(SDL_Renderer* gRenderer, const int& x, const int& y)
+bool Chess::chessRender(const int& x, const int& y)
 {
     if (!this->is_load_resource)
     {
@@ -86,23 +90,27 @@ bool Chess::chessRender(SDL_Renderer* gRenderer, const int& x, const int& y)
     int new_height = (int)this->chess_origin_size * this->chess_multiple;
     int x_offset = new_width / 2;
     int y_offset = new_height / 2;
-    int chess_x = x * this->lattice_size + this->origin_x - x_offset;
-    int chess_y = y * this->lattice_size + this->origin_y - y_offset;
-    this->sdl_texture->render(gRenderer, chess_x, chess_y, this->chess_multiple);
+    int new_chess_x = x * this->lattice_size + this->origin_x - x_offset;
+    int new_chess_y = y * this->lattice_size + this->origin_y - y_offset;
+    this->sdl_texture->render(global_renderer, new_chess_x, new_chess_y, this->chess_multiple);
     // DEBUGLOG("chessRender||chess_name={}||x={}||y={}||chess_x={}||chess_y={}",this->chess_name, x, y, chess_x, chess_y);
     return true;
 }
 
-bool Chess::chessRender(SDL_Renderer* gRenderer)
+bool Chess::chessRender(const int& x, const int& y, const float& multiple)
 {
     if (!this->is_load_resource)
     {
         ERRORLOG("chess not load resource, please load resource||name={}", this->chess_name);
         return false;
     }
-    int new_width = (int)this->chess_origin_size * this->chess_multiple;
-    int new_height = (int)this->chess_origin_size * this->chess_multiple;
-    this->sdl_texture->render(gRenderer, this->chess_x, this->chess_y, this->chess_multiple);
-    // DEBUGLOG("chessRender||chess_name={}||x={}||y={}||chess_x={}||chess_y={}",this->chess_name, x, y, chess_x, chess_y);
+    int new_width = (int)this->chess_origin_size * multiple;
+    int new_height = (int)this->chess_origin_size * multiple;
+    int x_offset = new_width / 2;
+    int y_offset = new_height / 2;
+    int new_chess_x = x - x_offset;
+    int new_chess_y = y - y_offset;
+    this->sdl_texture->render(global_renderer, new_chess_x, new_chess_y, multiple);
+    // DEBUGLOG("chessRender||chess_name={}||x={}||y={}||chess_x={}||chess_y={}",this->chess_name, x, y, new_chess_x, new_chess_y);
     return true;
 }

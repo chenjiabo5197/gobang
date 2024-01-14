@@ -1,3 +1,10 @@
+/*============================================
+* Author: chenjiabo
+* E-mail: chen_wangyi666@163.com
+* Date: 2024-1-3
+* Description: This is chessboard.h file
+* Copyright (c) 2023, All rights reserved
+=============================================*/
 #pragma once
 
 #include <SDL2/SDL.h>
@@ -11,80 +18,27 @@
 
 class Chessboard
 {
-public:
-    // 传入棋盘左上角的坐标origin_x，origin_y，棋盘中单个格子大小，每种棋子原素材的缩放倍数，默认不缩放
-    Chessboard(const Config& config);
-
-    ~Chessboard();
-
-	// 重置棋盘数据
-	void initChessMap();
-
-    // 渲染棋盘初始界面
-    bool renderPlayChessInterface(SDL_Renderer* gRenderer);
-
-    // 渲染圆形，传入圆心坐标和圆的半径
-    void renderCircle(SDL_Renderer* gRenderer, const int& x, const int& y, const int& radius);
-
-	// 判断在指定坐标(x,y)位置，是否有效点击
-	// 如果是有效点击，返回true，把有效点击的位置(x,y)保存到参数pos中，否则返回false
-	bool clickBoard(const int& x, const int& y, ChessPos* pos);
-
-	// 在棋盘的x行、y列，落子kind
-	void chessDown(const ChessPos& chessPos, const chess_kind_type& kind);
-
-    // 棋盘渲染当前对局，渲染棋盘，渲染当前已下的棋子
-    void render(SDL_Window * gWindow, SDL_Renderer* gRenderer);
-
-	// 初始化棋盘边界结构体
-	void initChessBoardBoundary();
-
-	// 判断传过来的点击位置是否在棋盘上
-	bool isClickOnChessBoard(const int& x, const int& y);
-
-	// // 获取棋盘大小（13,15,19）
-	int getChessBoardSize();
-
-	// 获取指定位置是黑棋/白棋/空白  空白0，白子1，黑子2
-	int getChessData(ChessPos* pos);
-	int getChessData(int row, int col);
-
-	// 判断棋局是否结束
-	bool checkOver();
-
-	// 判断胜负
-	bool checkWin();
-
-	// 设置当前的下棋方
-	void set_player_flag_type(const player_flag_type& type);
-
-	player_flag_type get_player_flag_type();
-
-	// 获取棋盘中心的坐标
-	int get_center_x();
-	int get_center_y();
-
-	// 设置悔棋渲染
-	void set_chessboard_withdraw();
-
-	// 判断是否可以进行悔棋
-	bool is_can_withdraw();
-
-	// 传入已经初始化过的ttf
-	void setTTF(TTF_Font* ttf);
-
 private:
 	// 棋子
     Chess* white_chess;   			// 棋盘上落子
 	Chess* white_current_chess;		// 棋盘上最后一步落子
-	Chess* symbol_white_chess;		// 棋盘旁边标注该棋子代表哪方
     Chess* black_chess;
 	Chess* black_current_chess;
-	Chess* symbol_black_chess;
 
+	// 棋盘渲染的参数
+    int render_r;
+    int render_g;
+    int render_b;
+    int render_alpha;
+
+	// 渲染的窗口
+    SDL_Window* global_window;
+    SDL_Renderer* global_renderer;
+	// 棋盘渲染的普通字体
+	TTF_Font* global_ttf;
+
+	// 棋盘渲染的字体
 	SDLTTF* chessboard_ttf;
-
-	TTF_Font* origin_font;
 
 	// 储存当前棋盘大小，当前默认为15
 	int chessboard_size;
@@ -121,5 +75,66 @@ private:
 	void updateCurrentChessPos();
 
 	// 渲染文字到指定位置
-	void renderText(SDL_Renderer* gRenderer, TTF_Font* gFont, const std::string& texture_text, const int& x, const int& y, const float& multiple);
+	void renderText(const std::string& texture_text, const int& x, const int& y, const float& multiple);
+public:
+    // 传入棋盘左上角的坐标origin_x，origin_y，棋盘中单个格子大小，每种棋子原素材的缩放倍数，默认不缩放
+    Chessboard(const Config& config);
+
+    ~Chessboard();
+
+	// 初始化，传入渲染所需参数
+	void init(SDL_Window * global_window, SDL_Renderer* global_renderer, TTF_Font* global_font);
+
+	// 重置棋盘数据
+	void initChessMap();
+
+    // 渲染棋盘初始界面
+    bool renderPlayChessInterface();
+
+    // 渲染圆形，传入圆心坐标和圆的半径
+    void renderCircle(const int& x, const int& y, const int& radius);
+
+	// 判断在指定坐标(x,y)位置，是否有效点击
+	// 如果是有效点击，返回true，把有效点击的位置(x,y)保存到参数pos中，否则返回false
+	bool clickBoard(const int& x, const int& y, ChessPos* pos);
+
+	// 在棋盘的x行、y列，落子kind
+	void chessDown(const ChessPos& chessPos, const chess_kind_type& kind);
+
+    // 棋盘渲染当前对局，渲染棋盘，渲染当前已下的棋子
+    void render();
+
+	// 初始化棋盘边界结构体
+	void initChessBoardBoundary();
+
+	// 判断传过来的点击位置是否在棋盘上
+	bool isClickOnChessBoard(const int& x, const int& y);
+
+	// // 获取棋盘大小（13,15,19）
+	int getChessBoardSize();
+
+	// 获取指定位置是黑棋/白棋/空白  空白0，白子1，黑子2
+	int getChessData(ChessPos* pos);
+	int getChessData(int row, int col);
+
+	// 判断棋局是否结束
+	bool checkOver();
+
+	// 判断胜负
+	bool checkWin();
+
+	// 设置当前的下棋方
+	void set_player_flag_type(const player_flag_type& type);
+
+	player_flag_type get_player_flag_type();
+
+	// 获取棋盘中心的坐标
+	int get_center_x();
+	int get_center_y();
+
+	// 设置悔棋渲染
+	void set_chessboard_withdraw();
+
+	// 判断是否可以进行悔棋
+	bool is_can_withdraw();
 };

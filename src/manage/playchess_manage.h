@@ -5,6 +5,7 @@
 #include "../logger/logger.h"
 #include "../utils/config.h"
 #include "../chess/chessboard.h"
+#include "../chess/chess_data_board.h"
 #include "../player/machine.h"
 #include "../player/player.h"
 
@@ -14,13 +15,14 @@ private:
 
     // 电脑AI
     Machine* machine;
-
     // 玩家
     Player* single_player;
 
     // 渲染的窗口
     SDL_Window* global_window;
     SDL_Renderer* global_renderer;
+    // 棋盘渲染时普通字体
+    TTF_Font* normal_ttf;
     
     // 当前页面要渲染的按键数组
     SDLButton* playchess_buttons[2];
@@ -37,6 +39,9 @@ private:
 
     // 棋盘
     Chessboard* chessboard;
+
+    // 数据板
+    ChessDataBoard* chess_data_board;
 public:
     PlaychessManage(const Config& config);
     ~PlaychessManage();
@@ -44,19 +49,13 @@ public:
     void startRender();
 
     // 初始化
-    void init(SDL_Window * global_window, SDL_Renderer* global_renderer);
-
-    // 加载资源
-    void loadResource();
+    void init(SDL_Window * global_window, SDL_Renderer* global_renderer, TTF_Font* normal_ttf);
 
     // 处理事件
     void handleEvents(SDL_Event* event);
 
     // 处理鼠标点击事件
     bool handleMouseClick(SDL_Event* event);
-
-    // 传入已经初始化过的ttf
-	void setChessBoardTTF(TTF_Font* ttf);
 
     // 获取棋盘中心的坐标
 	int get_chessboard_center_x();

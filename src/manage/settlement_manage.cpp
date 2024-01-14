@@ -22,17 +22,6 @@ SettlementManage::~SettlementManage()
     DEBUGLOG("~SettlementManage success||release resource");
 }
 
-void SettlementManage::loadResource()
-{
-    this->player_win_interface->loadRenderText(global_renderer, art_font);
-    this->player_lose_interface->loadRenderText(global_renderer, art_font);
-    for (int i = 0; i < this->array_length; i++)
-    {
-        this->settlement_buttons[i]->loadResource(this->global_window, this->global_renderer);
-    }
-    INFOLOG("loadResource||load resource success");
-}
-
 void SettlementManage::init(SDL_Window* global_window, SDL_Renderer* global_renderer, TTF_Font* art_font)
 {
     this->global_window = global_window;
@@ -43,6 +32,13 @@ void SettlementManage::init(SDL_Window* global_window, SDL_Renderer* global_rend
         this->settlement_buttons[i]->initButtonCurrentSprite();
     }
     INFOLOG("init||init variable success");
+    this->player_win_interface->loadRenderText(global_renderer, art_font);
+    this->player_lose_interface->loadRenderText(global_renderer, art_font);
+    for (int i = 0; i < this->array_length; i++)
+    {
+        this->settlement_buttons[i]->loadResource(this->global_window, this->global_renderer);
+    }
+    INFOLOG("loadResource||load resource success");
 }
 
 void SettlementManage::startRender(const interface_kind_type& type)
