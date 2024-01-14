@@ -41,7 +41,7 @@
 4.  新建 Pull Request
 
 #### 疑问
-1.  AI，player，chess的初始化必须要在main中完成，在management的构造函数中进行初始化不行？？
+1.  在下棋中，机器人方使用多线程下棋，但是为什么加了SDL_AtomicLock(&player_machine_lock)原子锁反而在执行机器人思考步骤时，玩家方也会暂停，去除原子锁之后恢复正常？？？
 
 
 #### 特技

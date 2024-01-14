@@ -5,7 +5,7 @@ ChessDataBoard::ChessDataBoard(const Config& config)
     this->symbol_white_chess = new Chess(config, "symbol_white_chess");
     this->symbol_black_chess = new Chess(config, "symbol_black_chess");
     this->data_board_ttf = new SDLTTF("chess_data_ttf");
-    this->top_timer = new SDLTimer();
+    this->top_timer = new SDLTimer("top_timer");
     this->data_board_x = config.Read("data_board_x", 0);
     this->data_board_y = config.Read("data_board_y", 0);
     INFOLOG("Chess1 construct success||data_board_x={}||data_board_y={}", 
@@ -30,7 +30,6 @@ void ChessDataBoard::init(SDL_Window * global_window, SDL_Renderer* global_rende
     this->symbol_white_chess->init(global_window, global_renderer);
 	this->symbol_black_chess->init(global_window, global_renderer);
     this->initDataBoard();
-    this->top_timer->start();
     INFOLOG("init||ChessDataBoard init success||load resource success");
 }
 
@@ -49,9 +48,10 @@ void ChessDataBoard::render()
     // 窗口头显示时间
     std::stringstream time_text;
     time_text.str("");
-    //  除1000，是因为需要的是秒，而每秒有 1000 毫秒
-    time_text << "游戏耗时: " << (this->top_timer->getTicks() / 1000.f); 
-    this->renderText(time_text.str(), this->normal_ttf, this->data_board_x, this->data_board_y-110, 0.6);  //比分信息
+    //  除1000，是因为需要的是秒，而每秒有1000毫秒,小数点后取1位小数
+    time_text << std::setiosflags(std::ios::fixed) << std::setprecision(1) << (this->top_timer->timerGetTicks() / 1000.f); 
+    this->renderText("对局开始(s): ", this->normal_ttf, this->data_board_x-50, this->data_board_y-110, 0.6);  
+    this->renderText(time_text.str(), this->normal_ttf, this->data_board_x+80, this->data_board_y-110, 0.6);  //时间信息
     // 第一行
     std::string machine_name = this->score_info["machine_name"];
     std::string machine_score = this->score_info["machine_score"];
@@ -87,5 +87,12 @@ void ChessDataBoard::updateScoreInfo(const result_info_type& type)
         this->score_info["machine_score"] = std::to_string(std::stoi(this->score_info["machine_score"]) + 1);
         INFOLOG("updateScoreInfo||current score={}", this->score_info["machine_score"]);
     }
-    
 }
+
+void ChessDataBoard::startSingleGame()
+{
+    this->top_timer->timerStart();
+    INFOLOG("startSingleGame||start timer");
+}
+
+

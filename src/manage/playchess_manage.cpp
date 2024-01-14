@@ -65,11 +65,11 @@ void PlaychessManage::startRender()
 // Machine类的友元函数
 int machineChessDown(void* data)
 {
-    SDL_AtomicLock(&player_machine_lock);
+    // SDL_AtomicLock(&player_machine_lock);
 	Machine* machine = (Machine *)(data);
     ChessPos pos = machine->think();
     // 程序休眠1s，假装在思考
-    MyUtils::sleep_seconds(1);
+    MyUtils::sleep_seconds(1.5);
 	// mciSendString("play res/chess_down.mp3", 0, 0, 0);
 	machine->chessboard->chessDown(pos, CHESS_WHITE);
     if(machine->chessboard->checkOver())
@@ -79,15 +79,14 @@ int machineChessDown(void* data)
         SDL_PushEvent(&event);
     }
     machine->chessboard->set_player_flag_type(SINGLE_PLAYER);
-    SDL_FlushEvents(SDL_APP_TERMINATING, SDL_POLLSENTINEL);
-    SDL_AtomicUnlock(&player_machine_lock);
+    // SDL_AtomicUnlock(&player_machine_lock);
     DEBUGLOG("Machine::go||Machine chess down success");
     return 0;
 }
 
 bool PlaychessManage::handleMouseClick(SDL_Event* event)
 {
-    SDL_AtomicLock(&player_machine_lock);
+    // SDL_AtomicLock(&player_machine_lock);
     if (event->type == SDL_MOUSEBUTTONDOWN && this->chessboard->get_player_flag_type() == SINGLE_PLAYER)  // 鼠标点击事件
     {
         //获取鼠标位置
@@ -108,10 +107,10 @@ bool PlaychessManage::handleMouseClick(SDL_Event* event)
             }
             this->chessboard->set_player_flag_type(MACHINE_PLAYER);
         }
-        SDL_AtomicUnlock(&player_machine_lock);
+        // SDL_AtomicUnlock(&player_machine_lock);
         return is_valid_click;
     }
-    SDL_AtomicUnlock(&player_machine_lock);
+    // SDL_AtomicUnlock(&player_machine_lock);
     return false;
 }
 
@@ -135,13 +134,13 @@ void PlaychessManage::handleEvents(SDL_Event* event)
     else if (event->type == SINGLE_PLAYER_EVENT || event->type == AGAIN_GAME_EVENT)
     {
         this->chessboard->initChessMap();
+        this->chess_data_board->startSingleGame();
         this->chessboard->set_player_flag_type(SINGLE_PLAYER);
     }
     else if(this->handleMouseClick(event) && this->chessboard->get_player_flag_type() == MACHINE_PLAYER)
     {
         machine_thread = SDL_CreateThread(machineChessDown, "machine player", this->machine);
     }
-
     for (int i = 0; i < this->array_length; i++)
     {
         this->playchess_buttons[i]->handleButtonEvent(event);

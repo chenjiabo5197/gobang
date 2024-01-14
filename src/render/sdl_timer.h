@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include "../logger/logger.h"
 
 //The application time based timer
 /*
@@ -19,21 +20,23 @@ private:
     //The timer status
     bool mPaused;
     bool mStarted;
+
+    std::string name;
 public:
     //Initializes variables
-    SDLTimer();
+    SDLTimer(const std::string& name);
     ~SDLTimer();
 
     //The various clock actions
-    void start();
-    void stop();
-    void pause();
-    void unpause();
+    void timerStart();
+    void timerStop();
+    void timerPause();
+    void timerUnpause();
 
     //Gets the timer's time
-    Uint32 getTicks();
+    Uint32 timerGetTicks();
 
     //Checks the status of the timer
-    bool isStarted();
-    bool isPaused();
+    bool timerIsStarted();
+    bool timerIsPaused();
 };

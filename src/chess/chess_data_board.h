@@ -9,6 +9,7 @@
 
 #include <SDL2/SDL.h>
 #include <map>
+#include <iomanip>
 #include "chess.h"
 #include "../render/sdl_timer.h"
 #include "../render/sdl_ttf.h"
@@ -59,6 +60,9 @@ public:
 
     // 更新比分信息
     void updateScoreInfo(const result_info_type& type);
+
+    // 开始单人游戏，设置一些数据
+    void startSingleGame();
 };
 
 
