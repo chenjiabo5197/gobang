@@ -22,11 +22,11 @@ typedef enum {
 
 // 鼠标点击时在棋盘格子的周围四个角
 typedef enum {
-	COORD_DEFAULT,	    // 初始位置
+	COORD_DEFAULT,	   // 初始位置
 	LEFTTOP,           //左上     
 	RIGHTTOP,          //右上
 	LEFTBOTTOM,        //左下
-	RIGHTBOTTOM       //右下
+	RIGHTBOTTOM        //右下
 } chess_coordinate;
 
 typedef enum {
@@ -93,7 +93,13 @@ typedef enum {
     BUTTON_SPRITE_TOTAL
 } sdl_button_sprite;
 
-
+// 当前对战输赢信息枚举
+typedef enum {
+	SINGLE_PLAYER_WIN,        	// 单人游戏玩家胜
+	SINGLE_PLAYER_LOSE,			// 单人游戏玩家输
+	TWO_PLAYER_BLACK_WIN,		// 双人游戏黑方胜
+	TWO_PLAYER_WHITE_WIN		// 双人游戏拜访胜
+}result_info_type;
 
 
 

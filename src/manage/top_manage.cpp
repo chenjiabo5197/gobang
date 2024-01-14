@@ -60,10 +60,12 @@ void TopManage::start()
             }
             else if (e.type == PLAYER_WIN_EVENT)
             {
+                this->playchess_manage->handleEvents(&e);
                 this->setRendererType(PLAYER_WIN_PRE_INTERFACE);
             }
             else if (e.type == PLAYER_LOSE_EVENT)
             {
+                this->playchess_manage->handleEvents(&e);
                 this->setRendererType(PLAYER_LOSE_PRE_INTERFACE);
             }
             else if (e.type == START_GAME_EVENT)
@@ -221,7 +223,7 @@ bool TopManage::loadResource()
 {
     this->main_menu_manage->init(this->global_window, this->global_renderer);
     this->select_play_manage->init(this->global_window, this->global_renderer);
-    this->playchess_manage->init(this->global_window, this->global_renderer, this->normal_font);
+    this->playchess_manage->init(this->global_window, this->global_renderer, this->normal_font, this->gResultFont);
     this->settlement_manage->init(this->global_window, this->global_renderer, this->gResultFont);
     this->settlement_manage->set_font_coordinate(this->playchess_manage->get_chessboard_center_x(), this->playchess_manage->get_chessboard_center_y());
     INFOLOG("loadResource success!");

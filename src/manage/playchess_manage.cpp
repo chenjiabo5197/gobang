@@ -31,13 +31,14 @@ PlaychessManage::~PlaychessManage()
     DEBUGLOG("~PlaychessManage success||release resource");
 }
 
-void PlaychessManage::init(SDL_Window* global_window, SDL_Renderer* global_renderer, TTF_Font* normal_ttf)
+void PlaychessManage::init(SDL_Window* global_window, SDL_Renderer* global_renderer, TTF_Font* normal_ttf, TTF_Font* art_ttf)
 {
     this->global_window = global_window;
     this->global_renderer = global_renderer;
     this->normal_ttf = normal_ttf;
+    this->art_ttf = art_ttf;
     this->chessboard->init(this->global_window, this->global_renderer, this->normal_ttf);
-    this->chess_data_board->init(this->global_window, this->global_renderer, this->normal_ttf);
+    this->chess_data_board->init(this->global_window, this->global_renderer, this->normal_ttf, this->art_ttf);
     for (int i = 0; i < this->array_length; i++)
     {
         this->playchess_buttons[i]->initButtonCurrentSprite();
@@ -116,7 +117,15 @@ bool PlaychessManage::handleMouseClick(SDL_Event* event)
 
 void PlaychessManage::handleEvents(SDL_Event* event)
 {
-    if (event->type == PLAYER_WITHDRAW_EVENT)
+    if (event->type == PLAYER_WIN_EVENT)
+    {
+        this->chess_data_board->updateScoreInfo(SINGLE_PLAYER_WIN);
+    }
+    else if (event->type == PLAYER_LOSE_EVENT)
+    {
+        this->chess_data_board->updateScoreInfo(SINGLE_PLAYER_LOSE);
+    }
+    else if (event->type == PLAYER_WITHDRAW_EVENT)
     {
         if(this->chessboard->is_can_withdraw())
         {

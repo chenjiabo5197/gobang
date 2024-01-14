@@ -33,9 +33,6 @@ public:
     // 初始化
     void init(SDL_Window * global_window, SDL_Renderer* global_renderer);
 
-    // 加载资源
-    void loadResource();
-
     // 处理事件
     void handleEvents(SDL_Event* event);
 };

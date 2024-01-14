@@ -72,7 +72,7 @@ void Chessboard::initChessMap()
 	}
 	this->initCurrentChessPos();
 	this->chessboard_data.clear();
-    INFOLOG("Chessboard init success");
+    INFOLOG("initChessMap success");
 }
 
 void Chessboard::initChessBoardBoundary()
