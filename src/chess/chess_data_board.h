@@ -10,6 +10,7 @@
 #include <SDL2/SDL.h>
 #include <map>
 #include "chess.h"
+#include "../render/sdl_timer.h"
 #include "../render/sdl_ttf.h"
 #include "../common.h"
 #include "../utils/myUtils.h"
@@ -40,6 +41,9 @@ private:
 
     // 比分信息
     std::map<std::string, std::string> score_info;
+
+    // 总计时器，显示当前对局进行的时间
+    SDLTimer* top_timer;
 public:
     ChessDataBoard(const Config& config);
     ~ChessDataBoard();

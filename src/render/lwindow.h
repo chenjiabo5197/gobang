@@ -16,54 +16,54 @@ SDL_Rect* gDisplayBounds = nullptr;
 
 class LWindow
 {
-    public:
-        //Intializes internals
-        LWindow();
+private:
+    //封装的窗口
+    SDL_Window* mWindow;
+    SDL_Renderer* mRenderer;
+    int mWindowID;
+    //窗口显示 ID 用于跟踪窗口所在的显示屏
+    int mWindowDisplayID;
 
-        //Creates window
-        bool init();
+    //窗口的尺寸
+    int mWidth;
+    int mHeight;
 
-        //从窗口创建呈现器的函数
-        // SDL_Renderer* createRenderer();
+    //窗口焦点类型的标志
+    bool mMouseFocus;
+    bool mKeyboardFocus;
+    bool mFullScreen;
+    bool mMinimized;
+    bool mShown;
 
-        //Handles window events
-        void handleEvent( SDL_Event& e );
+public:
+    //Intializes internals
+    LWindow();
 
-        //Focuses on window
-        void focus();
+    //Creates window
+    bool init();
 
-        //Shows windows contents
-        void render();
+    //从窗口创建呈现器的函数
+    // SDL_Renderer* createRenderer();
 
-        //Deallocates internals
-        void free();
+    //Handles window events
+    void handleEvent( SDL_Event& e );
 
-        //Window dimensions
-        int getWidth();
-        int getHeight();
+    //Focuses on window
+    void focus();
 
-        //Window focii
-        bool hasMouseFocus();
-        bool hasKeyboardFocus();
-        bool isMinimized();
-        bool isShown();
+    //Shows windows contents
+    void render();
 
-    private:
-        //封装的窗口
-        SDL_Window* mWindow;
-        SDL_Renderer* mRenderer;
-        int mWindowID;
-        //窗口显示 ID 用于跟踪窗口所在的显示屏
-        int mWindowDisplayID;
+    //Deallocates internals
+    void free();
 
-        //窗口的尺寸
-        int mWidth;
-        int mHeight;
+    //Window dimensions
+    int getWidth();
+    int getHeight();
 
-        //窗口焦点类型的标志
-        bool mMouseFocus;
-        bool mKeyboardFocus;
-        bool mFullScreen;
-        bool mMinimized;
-        bool mShown;
+    //Window focii
+    bool hasMouseFocus();
+    bool hasKeyboardFocus();
+    bool isMinimized();
+    bool isShown();
 };

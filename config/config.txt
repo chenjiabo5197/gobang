@@ -35,7 +35,7 @@ chessboard_lattice_size=60
 
 # 窗口右上角对局数据信息
 data_board_x=1090
-data_board_y=130
+data_board_y=170
 symbol_white_chess_resource_path=resources/white.png
 symbol_white_chess_origin_size=83
 symbol_black_chess_resource_path=resources/black.png
