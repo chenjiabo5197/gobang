@@ -65,7 +65,6 @@ void PlaychessManage::startRender()
 // Machine类的友元函数
 int machineChessDown(void* data)
 {
-    // SDL_AtomicLock(&player_machine_lock);
 	Machine* machine = (Machine *)(data);
     ChessPos pos = machine->think();
     // 程序休眠1s，假装在思考
@@ -79,14 +78,12 @@ int machineChessDown(void* data)
         SDL_PushEvent(&event);
     }
     machine->chessboard->set_player_flag_type(SINGLE_PLAYER);
-    // SDL_AtomicUnlock(&player_machine_lock);
     DEBUGLOG("Machine::go||Machine chess down success");
     return 0;
 }
 
 bool PlaychessManage::handleMouseClick(SDL_Event* event)
 {
-    // SDL_AtomicLock(&player_machine_lock);
     if (event->type == SDL_MOUSEBUTTONDOWN && this->chessboard->get_player_flag_type() == SINGLE_PLAYER)  // 鼠标点击事件
     {
         //获取鼠标位置
@@ -107,10 +104,8 @@ bool PlaychessManage::handleMouseClick(SDL_Event* event)
             }
             this->chessboard->set_player_flag_type(MACHINE_PLAYER);
         }
-        // SDL_AtomicUnlock(&player_machine_lock);
         return is_valid_click;
     }
-    // SDL_AtomicUnlock(&player_machine_lock);
     return false;
 }
 
