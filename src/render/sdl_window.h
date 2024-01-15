@@ -2,27 +2,23 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <sstream>
-
-//The window renderer
-SDL_Renderer* gRenderer = nullptr;
-
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+#include "../logger/logger.h"
+#include "../utils/config.h"
 
 //显示屏都有一个整数 ID 和一个与之相关的矩形，因此知道每个显示屏在桌面上的位置和尺寸
 int gTotalDisplays = 0;
 SDL_Rect* gDisplayBounds = nullptr; 
 
 
-class LWindow
+class SDLWindow
 {
 private:
-    //封装的窗口
+    //封装的窗口,渲染
     SDL_Window* mWindow;
     SDL_Renderer* mRenderer;
-    int mWindowID;
+    int window_id;
     //窗口显示 ID 用于跟踪窗口所在的显示屏
-    int mWindowDisplayID;
+    int window_display_id;
 
     //窗口的尺寸
     int mWidth;
@@ -35,9 +31,15 @@ private:
     bool mMinimized;
     bool mShown;
 
+    std::string name;
+    // 窗口标题
+    std::string title;
+
 public:
     //Intializes internals
-    LWindow();
+    SDLWindow(const Config& config, const std::string& name);
+
+    ~SDLWindow();
 
     //Creates window
     bool init();
@@ -46,7 +48,7 @@ public:
     // SDL_Renderer* createRenderer();
 
     //Handles window events
-    void handleEvent( SDL_Event& e );
+    void handleEvent(SDL_Event& e);
 
     //Focuses on window
     void focus();
