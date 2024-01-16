@@ -2,15 +2,15 @@
 
 #include <SDL2/SDL.h>
 #include "../render/sdl_button.h"
+#include "../render/sdl_window.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"
 
 class SelectPlayManage
 {
 private:
-    // 渲染的窗口
-    SDL_Window* global_window;
-    SDL_Renderer* global_renderer;
+    // 主窗口
+    SDLWindow* selete_main_window;
     
     // 当前页面要渲染的按键数组
     SDLButton* select_play_buttons[4];
@@ -31,7 +31,7 @@ public:
     void startRender();
 
     // 初始化
-    void init(SDL_Window * global_window, SDL_Renderer* global_renderer);
+    void init(SDLWindow* sdl_window);
 
     // 处理事件
     void handleEvents(SDL_Event* event);

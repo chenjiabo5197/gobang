@@ -5,20 +5,16 @@
 #include "../logger/logger.h"
 #include "../utils/config.h"
 
-//显示屏都有一个整数 ID 和一个与之相关的矩形，因此知道每个显示屏在桌面上的位置和尺寸
-int gTotalDisplays = 0;
-SDL_Rect* gDisplayBounds = nullptr; 
-
-
 class SDLWindow
 {
 private:
-    //封装的窗口,渲染
-    SDL_Window* mWindow;
-    SDL_Renderer* mRenderer;
     int window_id;
     //窗口显示 ID 用于跟踪窗口所在的显示屏
     int window_display_id;
+
+    //封装的窗口,渲染
+    SDL_Window* mWindow;
+    SDL_Renderer* mRenderer;
 
     //窗口的尺寸
     int mWidth;
@@ -62,6 +58,10 @@ public:
     //Window dimensions
     int getWidth();
     int getHeight();
+
+    // 获取渲染窗口
+    SDL_Window* getWindow();
+    SDL_Renderer* getRenderer();
 
     //Window focii
     bool hasMouseFocus();

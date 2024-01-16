@@ -31,14 +31,13 @@ PlaychessManage::~PlaychessManage()
     DEBUGLOG("~PlaychessManage success||release resource");
 }
 
-void PlaychessManage::init(SDL_Window* global_window, SDL_Renderer* global_renderer, TTF_Font* normal_ttf, TTF_Font* art_ttf)
+void PlaychessManage::init(SDLWindow* sdl_window, TTF_Font* normal_ttf, TTF_Font* art_ttf)
 {
-    this->global_window = global_window;
-    this->global_renderer = global_renderer;
+    this->playchess_main_window = sdl_window;
     this->normal_ttf = normal_ttf;
     this->art_ttf = art_ttf;
-    this->chessboard->init(this->global_window, this->global_renderer, this->normal_ttf);
-    this->chess_data_board->init(this->global_window, this->global_renderer, this->normal_ttf, this->art_ttf);
+    this->chessboard->init(this->playchess_main_window->getWindow(), this->playchess_main_window->getRenderer(), this->normal_ttf);
+    this->chess_data_board->init(this->playchess_main_window->getWindow(), this->playchess_main_window->getRenderer(), this->normal_ttf, this->art_ttf);
     for (int i = 0; i < this->array_length; i++)
     {
         this->playchess_buttons[i]->initButtonCurrentSprite();
@@ -46,7 +45,7 @@ void PlaychessManage::init(SDL_Window* global_window, SDL_Renderer* global_rende
     INFOLOG("init||init variable success");
     for (int i = 0; i < this->array_length; i++)
     {
-        this->playchess_buttons[i]->loadResource(this->global_window, this->global_renderer);
+        this->playchess_buttons[i]->loadResource(this->playchess_main_window->getWindow(), this->playchess_main_window->getRenderer());
     }
     INFOLOG("loadResource||load resource success");
 }
@@ -57,7 +56,7 @@ void PlaychessManage::startRender()
     this->chess_data_board->render();
     for (int i = 0; i < this->array_length; i++)
     {
-        this->playchess_buttons[i]->buttonRender(this->global_renderer);
+        this->playchess_buttons[i]->buttonRender(this->playchess_main_window->getRenderer());
     }
     // DEBUGLOG("startRender");
 }

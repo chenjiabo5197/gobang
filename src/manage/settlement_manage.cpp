@@ -22,21 +22,22 @@ SettlementManage::~SettlementManage()
     DEBUGLOG("~SettlementManage success||release resource");
 }
 
-void SettlementManage::init(SDL_Window* global_window, SDL_Renderer* global_renderer, TTF_Font* art_font)
+void SettlementManage::init(SDLWindow* sdl_window, TTF_Font* art_font)
 {
-    this->global_window = global_window;
-    this->global_renderer = global_renderer;
+    // this->global_window = global_window;
+    // this->this->settlement_main_window->getRenderer() = this->settlement_main_window->getRenderer();
+    this->settlement_main_window = sdl_window;
     this->art_font = art_font;
     for (int i = 0; i < this->array_length; i++)
     {
         this->settlement_buttons[i]->initButtonCurrentSprite();
     }
     INFOLOG("init||init variable success");
-    this->player_win_interface->loadRenderText(global_renderer, art_font);
-    this->player_lose_interface->loadRenderText(global_renderer, art_font);
+    this->player_win_interface->loadRenderText(this->settlement_main_window->getRenderer(), art_font);
+    this->player_lose_interface->loadRenderText(this->settlement_main_window->getRenderer(), art_font);
     for (int i = 0; i < this->array_length; i++)
     {
-        this->settlement_buttons[i]->loadResource(this->global_window, this->global_renderer);
+        this->settlement_buttons[i]->loadResource(this->settlement_main_window->getWindow(), this->settlement_main_window->getRenderer());
     }
     INFOLOG("loadResource||load resource success");
 }
@@ -45,15 +46,15 @@ void SettlementManage::startRender(const interface_kind_type& type)
 {
     if (type == PLAYER_LOSE_INTERFACE)
     {
-        this->player_lose_interface->ttfRender(global_renderer, font_x, font_y);
+        this->player_lose_interface->ttfRender(this->settlement_main_window->getRenderer(), font_x, font_y);
     }
     else if (type == PLAYER_WIN_INTERFACE)
     {
-        this->player_win_interface->ttfRender(global_renderer, font_x, font_y);
+        this->player_win_interface->ttfRender(this->settlement_main_window->getRenderer(), font_x, font_y);
     }
     for (int i = 0; i < this->array_length; i++)
     {
-        this->settlement_buttons[i]->buttonRender(this->global_renderer);
+        this->settlement_buttons[i]->buttonRender(this->settlement_main_window->getRenderer());
     }
     // DEBUGLOG("startRender");
 }

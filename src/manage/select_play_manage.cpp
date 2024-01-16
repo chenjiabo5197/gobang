@@ -19,10 +19,9 @@ SelectPlayManage::~SelectPlayManage()
     DEBUGLOG("~SelectPlayManage success||release resource");
 }
 
-void SelectPlayManage::init(SDL_Window* global_window, SDL_Renderer* global_renderer)
+void SelectPlayManage::init(SDLWindow* sdl_window)
 {
-    this->global_window = global_window;
-    this->global_renderer = global_renderer;
+    this->selete_main_window = sdl_window;
     for (int i = 0; i < this->array_length; i++)
     {
         this->select_play_buttons[i]->initButtonCurrentSprite();
@@ -30,7 +29,7 @@ void SelectPlayManage::init(SDL_Window* global_window, SDL_Renderer* global_rend
     INFOLOG("init||init variable success");
     for (int i = 0; i < this->array_length; i++)
     {
-        this->select_play_buttons[i]->loadResource(this->global_window, this->global_renderer);
+        this->select_play_buttons[i]->loadResource(this->selete_main_window->getWindow(), this->selete_main_window->getRenderer());
     }
     INFOLOG("loadResource||load resource success");
 }
@@ -39,7 +38,7 @@ void SelectPlayManage::startRender()
 {
     for (int i = 0; i < this->array_length; i++)
     {
-        this->select_play_buttons[i]->buttonRender(this->global_renderer);
+        this->select_play_buttons[i]->buttonRender(this->selete_main_window->getRenderer());
     }
     // DEBUGLOG("startRender");
 }

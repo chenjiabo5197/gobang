@@ -1,5 +1,9 @@
 #include "sdl_window.h"
 
+//显示屏都有一个整数 ID 和一个与之相关的矩形，因此知道每个显示屏在桌面上的位置和尺寸
+int gTotalDisplays = 0;
+SDL_Rect* gDisplayBounds = nullptr; 
+
 SDLWindow::SDLWindow(const Config& config, const std::string& name)
 {
     std::string temp;
@@ -10,8 +14,8 @@ SDLWindow::SDLWindow(const Config& config, const std::string& name)
     mFullScreen = false;
     mMinimized = false;
     this->name = name;
-    this->mWidth = config.Read(name+"_width", 0);
-    this->mHeight = config.Read(name+"_height", 0);
+    this->mWidth = config.Read(name+"_screen_width", 0);
+    this->mHeight = config.Read(name+"_screen_height", 0);
     this->title = config.Read(name+"_title", temp);
     INFOLOG("SDLWindow construct success||name={}||title={}||width={}||height={}", this->name, this->title, this->mWidth, this->mHeight);
 }
@@ -233,6 +237,16 @@ void SDLWindow::render()
         //Update screen
         SDL_RenderPresent(mRenderer);
     }
+}
+
+SDL_Window* SDLWindow::getWindow()
+{
+    return this->mWindow;
+}
+    
+SDL_Renderer* SDLWindow::getRenderer()
+{
+    return this->mRenderer;
 }
 
 int SDLWindow::getWidth()

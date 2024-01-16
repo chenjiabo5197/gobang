@@ -20,6 +20,7 @@
 #include "../render/sdl_texture.h"
 #include "../render/sdl_button.h"
 #include "../render/sdl_ttf.h"
+#include "../render/sdl_window.h"
 #include "../chess/chessboard.h"
 #include "../player/machine.h"
 #include "../player/player.h"
@@ -27,22 +28,18 @@
 class TopManage
 {
 private:
+    // 主窗口
+    SDLWindow* main_window;
+
     // 各个子页面管理
     MainMenuManage* main_menu_manage;
     SelectPlayManage* select_play_manage;
     PlaychessManage* playchess_manage;
     SettlementManage* settlement_manage;
 
-    // 渲染的宽和高
-    int width;
-    int height;
-
     // 行楷字体
     std::string art_ttf_path;
     int art_ttf_ptsize;
-
-    SDL_Window * global_window;
-    SDL_Renderer* global_renderer;
     TTF_Font* gResultFont;
 
     // 普通字体

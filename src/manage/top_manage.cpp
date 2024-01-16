@@ -11,8 +11,6 @@ TopManage::TopManage(const Config& config)
 {
     this->setRendererType(DEFAULT_INTERFACE);
     std::string temp;
-    this->width = config.Read("screen_width", 0);
-    this->height = config.Read("screen_height", 0);
     this->art_ttf_path = config.Read("ttf_result_resource_path", temp);
     this->art_ttf_ptsize = config.Read("ttf_result_ptsize", 0);
     this->normal_ttf_path = config.Read("normal_ttf_resource_path", temp);
@@ -21,8 +19,9 @@ TopManage::TopManage(const Config& config)
     this->select_play_manage = new SelectPlayManage(config);
     this->playchess_manage = new PlaychessManage(config);
     this->settlement_manage = new SettlementManage(config);
-    DEBUGLOG("Manage construct success||width={}||height={}||render_type={}||art_ttf_path={}||art_ttf_ptsize={}||normal_ttf_resource_path={}||normal_ttf_ptsize={}", 
-    this->width, this->height, (int)this->render_type, this->art_ttf_path, this->art_ttf_ptsize, this->normal_ttf_path, this->normal_ttf_ptsize);
+    this->main_window = new SDLWindow(config, "main_window");
+    DEBUGLOG("Manage construct success||render_type={}||art_ttf_path={}||art_ttf_ptsize={}||normal_ttf_resource_path={}||normal_ttf_ptsize={}", 
+    (int)this->render_type, this->art_ttf_path, this->art_ttf_ptsize, this->normal_ttf_path, this->normal_ttf_ptsize);
 }
 
 TopManage::~TopManage()
@@ -31,6 +30,8 @@ TopManage::~TopManage()
     delete select_play_manage;
     delete playchess_manage;
     delete settlement_manage;
+    this->main_window->free();
+    delete main_window;
     DEBUGLOG("~Manage success||release resource");
 }
 
@@ -119,8 +120,8 @@ void TopManage::start()
             this->setRendererType(PLAYER_WIN_INTERFACE);
         }
         //Clear screen
-        SDL_SetRenderDrawColor(global_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-        SDL_RenderClear(global_renderer);
+        SDL_SetRenderDrawColor(this->main_window->getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
+        SDL_RenderClear(this->main_window->getRenderer());
         switch (this->render_type)
         {
         case PLAYCHESS_INTERFACE:
@@ -149,7 +150,7 @@ void TopManage::start()
         }
         last_render_type = this->render_type;
         //Update screen
-        SDL_RenderPresent(global_renderer);
+        SDL_RenderPresent(this->main_window->getRenderer());
     }
     //Free resources and close SDL
     this->closeRender();
@@ -169,22 +170,6 @@ bool TopManage::initRender()
     {
         WARNLOG("Warning: Linear texture filtering not enabled!");
     }
-    //Create window
-    this->global_window = SDL_CreateWindow("五子棋", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->width, this->height, SDL_WINDOW_SHOWN);
-    if(global_window == nullptr)
-    {
-        ERRORLOG("Window could not be created||SDL_Error: ", SDL_GetError());
-        return false;
-    }
-    DEBUGLOG("Create window success||width={}||height={}", this->width, this->height);
-    //为窗口创建垂直同步渲染器
-    this->global_renderer = SDL_CreateRenderer(global_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if(global_renderer == nullptr)
-    {
-        ERRORLOG("Renderer could not be created||SDL Error={}", SDL_GetError());
-        return false;
-    }
-    DEBUGLOG("Create renderer success!");
     //Initialize PNG loading
     int imgFlags = IMG_INIT_PNG;
     if(!(IMG_Init(imgFlags) & imgFlags))
@@ -214,6 +199,7 @@ bool TopManage::initRender()
         return false;
     }
     DEBUGLOG("Create font success!");
+    this->main_window->init();
     INFOLOG("initRender success!");
     this->loadResource();
     return true;
@@ -221,10 +207,10 @@ bool TopManage::initRender()
 
 bool TopManage::loadResource()
 {
-    this->main_menu_manage->init(this->global_window, this->global_renderer);
-    this->select_play_manage->init(this->global_window, this->global_renderer);
-    this->playchess_manage->init(this->global_window, this->global_renderer, this->normal_font, this->gResultFont);
-    this->settlement_manage->init(this->global_window, this->global_renderer, this->gResultFont);
+    this->main_menu_manage->init(this->main_window);
+    this->select_play_manage->init(this->main_window);
+    this->playchess_manage->init(this->main_window, this->normal_font, this->gResultFont);
+    this->settlement_manage->init(this->main_window, this->gResultFont);
     this->settlement_manage->set_font_coordinate(this->playchess_manage->get_chessboard_center_x(), this->playchess_manage->get_chessboard_center_y());
     INFOLOG("loadResource success!");
     return true;
@@ -232,11 +218,6 @@ bool TopManage::loadResource()
 
 void TopManage::closeRender()
 {
-    //Destroy windows
-    SDL_DestroyWindow(global_window);
-    global_window = nullptr;
-    SDL_DestroyRenderer(global_renderer);
-    global_renderer = nullptr;
     TTF_CloseFont(gResultFont);
     gResultFont = nullptr;
 

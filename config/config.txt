@@ -9,6 +9,10 @@ log_filenums=10
 # 渲染屏幕大小
 screen_width=1280
 screen_height=960
+# 主窗口
+main_window_title=五子棋
+main_window_screen_width=1280
+main_window_screen_height=960
 
 # 棋子
 white_chess_resource_path=resources/white.png

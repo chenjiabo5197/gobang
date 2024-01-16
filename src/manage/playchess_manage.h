@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL.h>
 #include "../render/sdl_button.h"
+#include "../render/sdl_window.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"
 #include "../chess/chessboard.h"
@@ -12,15 +13,14 @@
 class PlaychessManage
 {
 private:
+    // 主窗口
+    SDLWindow* playchess_main_window;
 
     // 电脑AI
     Machine* machine;
     // 玩家
     Player* single_player;
-
-    // 渲染的窗口
-    SDL_Window* global_window;
-    SDL_Renderer* global_renderer;
+    
     // 棋盘渲染时普通字体
     TTF_Font* normal_ttf;
     // 行楷字体
@@ -51,7 +51,7 @@ public:
     void startRender();
 
     // 初始化
-    void init(SDL_Window * global_window, SDL_Renderer* global_renderer, TTF_Font* normal_ttf, TTF_Font* art_ttf);
+    void init(SDLWindow* sdl_window, TTF_Font* normal_ttf, TTF_Font* art_ttf);
 
     // 处理事件
     void handleEvents(SDL_Event* event);

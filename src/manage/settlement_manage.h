@@ -4,15 +4,16 @@
 #include "../common.h"
 #include "../render/sdl_button.h"
 #include "../render/sdl_ttf.h"
+#include "../render/sdl_window.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"
 
 class SettlementManage
 {
 private:
-    // 渲染的窗口
-    SDL_Window* global_window;
-    SDL_Renderer* global_renderer;
+    // 主窗口
+    SDLWindow* settlement_main_window;
+
     TTF_Font* art_font;
 
     // 当前页面要渲染的按键数组
@@ -43,7 +44,7 @@ public:
     void startRender(const interface_kind_type& type);
 
     // 初始化
-    void init(SDL_Window * global_window, SDL_Renderer* global_renderer, TTF_Font* art_font);
+    void init(SDLWindow* sdl_window, TTF_Font* art_font);
     
     // 处理事件
     void handleEvents(SDL_Event* event);
