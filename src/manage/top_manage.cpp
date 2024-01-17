@@ -2,7 +2,7 @@
 * Author: chenjiabo
 * E-mail: chen_wangyi666@163.com
 * Date: 2024-1-3
-* Description: This is manage.cpp file
+* Description: This is managevent.cpp file
 * Copyright (c) 2023, All rights reserved
 =============================================*/
 #include "top_manage.h"
@@ -45,69 +45,70 @@ void TopManage::start()
         return;
     }
     //Hack to get window to stay up
-    SDL_Event e;
+    SDL_Event event;
     bool quit = false;
     interface_kind_type last_render_type = DEFAULT_INTERFACE;
     //While application is running
     while(!quit)
     {
         //Handle events on queue
-        while(SDL_PollEvent(&e) != 0)
+        while(SDL_PollEvent(&event) != 0)
         {
             //User requests quit
-            if(e.type == SDL_QUIT || e.type == EXIT_GAME_EVENT)
+            if(event.type == SDL_QUIT || event.type == EXIT_GAME_EVENT)
             {
                 quit = true;
             }
-            else if (e.type == PLAYER_WIN_EVENT)
+            else if (event.type == PLAYER_WIN_EVENT)
             {
-                this->playchess_manage->handleEvents(&e);
+                this->playchess_manage->handleEvents(&event);
                 this->setRendererType(PLAYER_WIN_PRE_INTERFACE);
             }
-            else if (e.type == PLAYER_LOSE_EVENT)
+            else if (event.type == PLAYER_LOSE_EVENT)
             {
-                this->playchess_manage->handleEvents(&e);
+                this->playchess_manage->handleEvents(&event);
                 this->setRendererType(PLAYER_LOSE_PRE_INTERFACE);
             }
-            else if (e.type == START_GAME_EVENT)
+            else if (event.type == START_GAME_EVENT)
             {
                 this->setRendererType(SELECT_PLAY_INTERFACE);
             }
-            else if (e.type == SINGLE_PLAYER_EVENT)
+            else if (event.type == SINGLE_PLAYER_EVENT)
             {
-                this->setRendererType(PLAYCHESS_INTERFACE);
-                this->playchess_manage->handleEvents(&e);
+                // this->setRendererType(PLAYCHESS_INTERFACE);
+                // this->playchess_manage->handleEvents(&event);
+                this->select_play_manage->handleEvents(&event);
             }
-            else if (e.type == BACK_MANU_EVENT)
+            else if (event.type == BACK_MANU_EVENT)
             {
                 this->setRendererType(MAIN_MENU_INTERFACE);
             }
-            else if (e.type == PLAYER_WITHDRAW_EVENT)
+            else if (event.type == PLAYER_WITHDRAW_EVENT)
             {
-                this->playchess_manage->handleEvents(&e);
+                this->playchess_manage->handleEvents(&event);
             }
-            else if (e.type == AGAIN_GAME_EVENT)
+            else if (event.type == AGAIN_GAME_EVENT)
             {
                 this->setRendererType(PLAYCHESS_INTERFACE);
-                this->playchess_manage->handleEvents(&e);
+                this->playchess_manage->handleEvents(&event);
             }    
             else
             {
                 if(this->render_type == PLAYCHESS_INTERFACE)
                 {
-                    this->playchess_manage->handleEvents(&e);
+                    this->playchess_manage->handleEvents(&event);
                 }
                 else if (this->render_type == PLAYER_WIN_INTERFACE || this->render_type == PLAYER_LOSE_INTERFACE)
                 {
-                    this->settlement_manage->handleEvents(&e);
+                    this->settlement_manage->handleEvents(&event);
                 }
                 else if (this->render_type == MAIN_MENU_INTERFACE)
                 {
-                    this->main_menu_manage->handleEvents(&e);
+                    this->main_menu_manage->handleEvents(&event);
                 }
                 else if (this->render_type == SELECT_PLAY_INTERFACE)
                 {
-                    this->select_play_manage->handleEvents(&e);
+                    this->select_play_manage->handleEvents(&event);
                 }
             }
         }

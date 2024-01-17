@@ -6,13 +6,15 @@ log_filename=gobang.log
 log_filesize=10
 log_filenums=10
 
-# 渲染屏幕大小
-screen_width=1280
-screen_height=960
 # 主窗口
 main_window_title=五子棋
 main_window_screen_width=1280
 main_window_screen_height=960
+
+# 选择先后手窗口
+select_chess_color_title=选择先后手
+select_chess_color_screen_width=320
+select_chess_color_screen_height=180
 
 # 棋子
 white_chess_resource_path=resources/white.png

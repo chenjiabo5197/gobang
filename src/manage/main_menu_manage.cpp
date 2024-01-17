@@ -2,8 +2,8 @@
 
 MainMenuManage::MainMenuManage(const Config& config)
 {
-    this->buttons_x = config.Read("screen_width", 0) / 2;
-    this->buttons_y = config.Read("screen_height", 0) / 2;
+    this->buttons_x = config.Read("main_window_screen_width", 0) / 2;
+    this->buttons_y = config.Read("main_window_screen_height", 0) / 2;
     this->button_interval = config.Read("main_menu_buttons_interval", 0);
     this->main_menu_buttons[0] = new SDLButton(config, "start_game", this->buttons_x, this->buttons_y-this->button_interval);
     this->main_menu_buttons[1] = new SDLButton(config, "best_scores", this->buttons_x, this->buttons_y);

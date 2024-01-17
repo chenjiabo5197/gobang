@@ -59,6 +59,8 @@ public:
     int getWidth();
     int getHeight();
 
+    int getWindowId();
+
     // 获取渲染窗口
     SDL_Window* getWindow();
     SDL_Renderer* getRenderer();

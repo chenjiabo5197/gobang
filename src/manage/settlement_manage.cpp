@@ -24,8 +24,6 @@ SettlementManage::~SettlementManage()
 
 void SettlementManage::init(SDLWindow* sdl_window, TTF_Font* art_font)
 {
-    // this->global_window = global_window;
-    // this->this->settlement_main_window->getRenderer() = this->settlement_main_window->getRenderer();
     this->settlement_main_window = sdl_window;
     this->art_font = art_font;
     for (int i = 0; i < this->array_length; i++)

@@ -2,14 +2,15 @@
 
 SelectPlayManage::SelectPlayManage(const Config& config)
 {
-    this->buttons_x = config.Read("screen_width", 0) / 2;
-    this->buttons_y = config.Read("screen_height", 0) / 2;
+    this->buttons_x = config.Read("main_window_screen_width", 0) / 2;
+    this->buttons_y = config.Read("main_window_screen_height", 0) / 2;
     this->button_interval = config.Read("select_play_buttons_interval", 0);
     this->select_play_buttons[0] = new SDLButton(config, "single_player", this->buttons_x, this->buttons_y-2*this->button_interval);
     this->select_play_buttons[1] = new SDLButton(config, "two_players", this->buttons_x, this->buttons_y-this->button_interval);
     this->select_play_buttons[2] = new SDLButton(config, "play_internet", this->buttons_x, this->buttons_y);
     this->select_play_buttons[3] = new SDLButton(config, "normal_back_menu", this->buttons_x, this->buttons_y+this->button_interval);
     this->array_length = sizeof(this->select_play_buttons) / sizeof(this->select_play_buttons[0]);
+    this->select_chess_color_window = new SDLWindow(config, "select_chess_color");
     DEBUGLOG("SelectPlayManage construct success||button_interval={}||buttons_x={}||buttons_y={}||array_length={}", 
     this->button_interval, this->buttons_x, this->buttons_y, this->array_length);
 }
@@ -45,6 +46,10 @@ void SelectPlayManage::startRender()
 
 void SelectPlayManage::handleEvents(SDL_Event* event)
 {
+    if (event->type == SINGLE_PLAYER_EVENT || event->type == AGAIN_GAME_EVENT)
+    {
+        this->singlePlaySelectChess();
+    }
     for (int i = 0; i < this->array_length; i++)
     {
         this->select_play_buttons[i]->handleButtonEvent(event);
@@ -81,4 +86,31 @@ void SelectPlayManage::handleEvents(SDL_Event* event)
         this->select_play_buttons[3]->initButtonCurrentSprite();
         INFOLOG("handleEvents||push event=BACK_MANU_EVENT");
     }
+}
+
+void SelectPlayManage::singlePlaySelectChess()
+{
+    this->select_chess_color_window->init();
+    //Hack to get window to stay up
+    SDL_Event event;
+    bool quit = false;
+    //While application is running
+    while(!quit)
+    {
+        //Handle events on queue
+        while(SDL_PollEvent(&event) != 0)
+        {
+            if (event.type == SDL_WINDOWEVENT && event.window.windowID == this->select_chess_color_window->getWindowId() && event.window.event == SDL_WINDOWEVENT_CLOSE)
+            {
+                quit = true;
+            }
+        }
+        //Clear screen
+        SDL_SetRenderDrawColor(this->select_chess_color_window->getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
+        SDL_RenderClear(this->select_chess_color_window->getRenderer());
+        //Update screen
+        SDL_RenderPresent(this->select_chess_color_window->getRenderer());
+    }
+    //Free resources and close SDL
+    this->select_chess_color_window->free();
 }

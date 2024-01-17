@@ -64,12 +64,6 @@ public:
     // 关闭渲染，释放资源
     void closeRender();
 
-    // 渲染主函数
-    void renderer();
-
-    // 处理鼠标点击事件
-    bool handleMouseClick(SDL_Event* e);
-
     // 设置渲染界面类型
     void setRendererType(const interface_kind_type& render_type);
 };

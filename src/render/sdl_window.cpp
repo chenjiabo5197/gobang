@@ -168,48 +168,48 @@ void SDLWindow::handleEvent(SDL_Event& e)
             break;
         }
     }
-    else if(e.type == SDL_KEYDOWN)
-    {
-        //Display change flag
-        bool switchDisplay = false;
+    // else if(e.type == SDL_KEYDOWN)
+    // {
+    //     //Display change flag
+    //     bool switchDisplay = false;
 
-        //当按向上或向下键时，就会改变显示索引，移动到下一个显示器显示
-        switch(e.key.keysym.sym)
-        {
-            case SDLK_UP:
-            ++window_display_id;
-            switchDisplay = true;
-            break;
+    //     //当按向上或向下键时，就会改变显示索引，移动到下一个显示器显示
+    //     switch(e.key.keysym.sym)
+    //     {
+    //         case SDLK_UP:
+    //         ++window_display_id;
+    //         switchDisplay = true;
+    //         break;
 
-            case SDLK_DOWN:
-            --window_display_id;
-            switchDisplay = true;
-            break;
-        }
+    //         case SDLK_DOWN:
+    //         --window_display_id;
+    //         switchDisplay = true;
+    //         break;
+    //     }
         //如果要移动到下一个显示窗口，首先要确定该显示窗口是一个有效的索引。然后使用 SDL_SetWindowPosition 更新窗口的位置。此处的调用将使窗口在下一个显示屏中居中
-        if(switchDisplay)
-        {
-            //一直按上或者下也能让窗口在不同显示器之间循环起来
-            if(window_display_id < 0)
-            {
-                window_display_id = gTotalDisplays - 1;
-            }
-            else if(window_display_id >= gTotalDisplays)
-            {
-                window_display_id = 0;
-            }
-            // mWindow为创建的窗口指针，第二个参数为将要得到的窗口X坐标，第三个参数为将要得到的窗口Y坐标
-            SDL_SetWindowPosition(mWindow, gDisplayBounds[ window_display_id ].x + (gDisplayBounds[ window_display_id ].w - mWidth) / 2, gDisplayBounds[ window_display_id ].y + (gDisplayBounds[ window_display_id ].h - mHeight) / 2);
-            updateCaption = true;
-        }
-    }
+        // if(switchDisplay)
+        // {
+        //     //一直按上或者下也能让窗口在不同显示器之间循环起来
+        //     if(window_display_id < 0)
+        //     {
+        //         window_display_id = gTotalDisplays - 1;
+        //     }
+        //     else if(window_display_id >= gTotalDisplays)
+        //     {
+        //         window_display_id = 0;
+        //     }
+        //     // mWindow为创建的窗口指针，第二个参数为将要得到的窗口X坐标，第三个参数为将要得到的窗口Y坐标
+        //     SDL_SetWindowPosition(mWindow, gDisplayBounds[ window_display_id ].x + (gDisplayBounds[ window_display_id ].w - mWidth) / 2, gDisplayBounds[ window_display_id ].y + (gDisplayBounds[ window_display_id ].h - mHeight) / 2);
+        //     updateCaption = true;
+        // }
+    // }
     //Update window caption with new data
-    if(updateCaption)
-    {
-        std::stringstream caption;
-        caption << "SDL Tutorial - ID: " << window_id << " Display: " << window_display_id << " MouseFocus:" << ((mMouseFocus) ? "On" : "Off") << " KeyboardFocus:" << ((mKeyboardFocus) ? "On" : "Off");
-        SDL_SetWindowTitle(mWindow, caption.str().c_str());
-    }
+    // if(updateCaption)
+    // {
+    //     std::stringstream caption;
+    //     caption << "SDL Tutorial - ID: " << window_id << " Display: " << window_display_id << " MouseFocus:" << ((mMouseFocus) ? "On" : "Off") << " KeyboardFocus:" << ((mKeyboardFocus) ? "On" : "Off");
+    //     SDL_SetWindowTitle(mWindow, caption.str().c_str());
+    // }
 }
   
 //为窗口获取焦点的函数。首先，检查窗口是否正在显示，如果没有显示，则使用 SDL_ShowWindow 将其显示出来。接下来，调用 SDL_RaiseWindow 来聚焦窗口。
@@ -279,3 +279,7 @@ bool SDLWindow::isShown()
     return mShown;
 }
 
+int SDLWindow::getWindowId()
+{
+    return window_id;
+}

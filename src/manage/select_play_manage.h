@@ -11,6 +11,8 @@ class SelectPlayManage
 private:
     // 主窗口
     SDLWindow* selete_main_window;
+    // 选择先后手的窗口(也是选择棋子颜色，黑色先手)
+    SDLWindow* select_chess_color_window;
     
     // 当前页面要渲染的按键数组
     SDLButton* select_play_buttons[4];
@@ -24,6 +26,9 @@ private:
 
     // 按键之间的间隔(上下间隔)
     int button_interval;
+
+    // 单人游戏选择先后手
+    void singlePlaySelectChess();
 public:
     SelectPlayManage(const Config& config);
     ~SelectPlayManage();
