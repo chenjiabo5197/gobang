@@ -17,13 +17,14 @@
 #include "../utils/myUtils.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"
+#include "../render/sdl_window.h"
 
 class ChessDataBoard
 {
 private:
-    // 渲染的窗口
-    SDL_Window* global_window;
-    SDL_Renderer* global_renderer;
+    // 主窗口
+    SDLWindow* chess_data_window;
+
 	// 棋盘渲染的字体
 	TTF_Font* normal_ttf;
     TTF_Font* art_ttf;
@@ -50,7 +51,7 @@ public:
     ~ChessDataBoard();
 
     // 初始化，传入渲染所需参数
-	void init(SDL_Window * global_window, SDL_Renderer* global_renderer, TTF_Font* normal_font, TTF_Font* art_font);
+	void init(SDLWindow* chess_data_window, TTF_Font* normal_font, TTF_Font* art_font);
 
 	// 重置数据版信息
 	void initDataBoard();

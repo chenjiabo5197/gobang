@@ -48,15 +48,14 @@ Chessboard::~Chessboard()
     INFOLOG("~Chessboard success||release resources");
 }
 
-void Chessboard::init(SDL_Window * global_window, SDL_Renderer* global_renderer, TTF_Font* global_font)
+void Chessboard::init(SDLWindow* chessboard_window, TTF_Font* global_font)
 {
-	this->global_window = global_window;
-	this->global_renderer = global_renderer;
+	this->chessboard_window = chessboard_window;
 	this->global_ttf = global_font;
-	this->white_chess->init(this->global_window, this->global_renderer);
-	this->white_current_chess->init(this->global_window, this->global_renderer);
-    this->black_chess->init(this->global_window, this->global_renderer);
-	this->black_current_chess->init(this->global_window, this->global_renderer);
+	this->white_chess->init(this->chessboard_window);
+	this->white_current_chess->init(this->chessboard_window);
+    this->black_chess->init(this->chessboard_window);
+	this->black_current_chess->init(this->chessboard_window);
 	INFOLOG("init||Chessboard init success||load resource success");
 }
 
@@ -97,23 +96,23 @@ bool Chessboard::renderPlayChessInterface()
     // 渲染棋盘背景色
     SDL_Rect chessboard_backgroud = {this->chessboard_boundary->left_top_x, this->chessboard_boundary->left_top_y, 
 	this->chessboard_boundary->right_top_x-this->chessboard_boundary->left_top_x, this->chessboard_boundary->left_bottom_y-this->chessboard_boundary->left_top_y};
-    // SDL_SetRenderDrawColor(global_renderer, 255, 246, 143, 0xFF);
-	SDL_SetRenderDrawColor(global_renderer, (Uint8)this->render_r, (Uint8)this->render_g, (Uint8)this->render_b, (Uint8)this->render_alpha);        
-    SDL_RenderFillRect(global_renderer, &chessboard_backgroud);
+    // SDL_SetRenderDrawColor(this->chessboard_window->getRenderer(), 255, 246, 143, 0xFF);
+	SDL_SetRenderDrawColor(this->chessboard_window->getRenderer(), (Uint8)this->render_r, (Uint8)this->render_g, (Uint8)this->render_b, (Uint8)this->render_alpha);        
+    SDL_RenderFillRect(this->chessboard_window->getRenderer(), &chessboard_backgroud);
 
     // 渲染棋盘边界正方形,五子棋盘一共有15*15行，一共是14*14个间距,此处+1是为了渲染棋盘边框两次，使棋盘边框线看起来粗一点
     SDL_Rect chessboard_boundary = {this->origin_x+1, this->origin_y+1, this->lattice_size*14+1, this->lattice_size*14+1};
-    SDL_SetRenderDrawColor(global_renderer, 0x00, 0x00, 0x00, 0xFF);        
-    SDL_RenderDrawRect(global_renderer, &chessboard_boundary);
+    SDL_SetRenderDrawColor(this->chessboard_window->getRenderer(), 0x00, 0x00, 0x00, 0xFF);        
+    SDL_RenderDrawRect(this->chessboard_window->getRenderer(), &chessboard_boundary);
     
 	char ch = 'A';
     //渲染棋盘网格线
     for (int i = 0; i < 15; i++)
     {
         // 横向的棋盘线
-        SDL_RenderDrawLine(global_renderer, this->origin_x, this->lattice_size*i+this->origin_y, this->lattice_size*14+this->origin_x, this->lattice_size*i+this->origin_y);
+        SDL_RenderDrawLine(this->chessboard_window->getRenderer(), this->origin_x, this->lattice_size*i+this->origin_y, this->lattice_size*14+this->origin_x, this->lattice_size*i+this->origin_y);
 		// 纵向的棋盘线
-        SDL_RenderDrawLine(global_renderer, this->lattice_size*i+this->origin_x, this->origin_y, this->lattice_size*i+this->origin_x, this->lattice_size*14+this->origin_y);
+        SDL_RenderDrawLine(this->chessboard_window->getRenderer(), this->lattice_size*i+this->origin_x, this->origin_y, this->lattice_size*i+this->origin_x, this->lattice_size*14+this->origin_y);
 		// 纵向的1-15
 		this->renderText(std::to_string(i+1), this->origin_x-15, this->lattice_size*i+this->origin_y, 0.4);
 		std::string temp = "";
@@ -151,7 +150,7 @@ void Chessboard::renderCircle(const int& x, const int& y, const int& radius)
                 {
                     temp_y = y+i;
                 }
-                SDL_RenderDrawPoint(global_renderer, temp_x, temp_y);
+                SDL_RenderDrawPoint(this->chessboard_window->getRenderer(), temp_x, temp_y);
                 // DEBUGLOG("renderCircle||temp_x={}||temp_y={}||row_point_nums={}", temp_x, temp_y, row_point_nums);
             }
         }
@@ -527,6 +526,6 @@ void Chessboard::initCurrentChessPos()
 void Chessboard::renderText(const std::string& texture_text, const int& x, const int& y, const float& multiple)
 {
 	SDL_Color color = {0, 0, 0, 0};
-	this->chessboard_ttf->loadRenderText(global_renderer, global_ttf, texture_text, color);
-	this->chessboard_ttf->ttfRender(global_renderer, x, y, multiple);
+	this->chessboard_ttf->loadRenderText(this->chessboard_window->getRenderer(), global_ttf, texture_text, color);
+	this->chessboard_ttf->ttfRender(this->chessboard_window->getRenderer(), x, y, multiple);
 }

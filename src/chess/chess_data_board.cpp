@@ -21,14 +21,13 @@ ChessDataBoard::~ChessDataBoard()
     INFOLOG("~ChessDataBoard success||release resources");
 }
 
-void ChessDataBoard::init(SDL_Window * global_window, SDL_Renderer* global_renderer, TTF_Font* normal_font, TTF_Font* art_font)
+void ChessDataBoard::init(SDLWindow* chess_data_window, TTF_Font* normal_font, TTF_Font* art_font)
 {
-    this->global_window = global_window;
-	this->global_renderer = global_renderer;
+    this->chess_data_window = chess_data_window;
 	this->normal_ttf = normal_font;
     this->art_ttf = art_font;
-    this->symbol_white_chess->init(global_window, global_renderer);
-	this->symbol_black_chess->init(global_window, global_renderer);
+    this->symbol_white_chess->init(this->chess_data_window);
+	this->symbol_black_chess->init(this->chess_data_window);
     this->initDataBoard();
     INFOLOG("init||ChessDataBoard init success||load resource success");
 }
@@ -71,8 +70,8 @@ void ChessDataBoard::render()
 void ChessDataBoard::renderText(const std::string& texture_text, TTF_Font* texture_ttf, const int& x, const int& y, const float& multiple)
 {
 	SDL_Color color = {0, 0, 0, 0};
-	this->data_board_ttf->loadRenderText(this->global_renderer, texture_ttf, texture_text, color);
-	this->data_board_ttf->ttfRender(this->global_renderer, x, y, multiple);
+	this->data_board_ttf->loadRenderText(this->chess_data_window->getRenderer(), texture_ttf, texture_text, color);
+	this->data_board_ttf->ttfRender(this->chess_data_window->getRenderer(), x, y, multiple);
 }
 
 void ChessDataBoard::updateScoreInfo(const result_info_type& type)

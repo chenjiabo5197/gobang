@@ -30,7 +30,6 @@ TopManage::~TopManage()
     delete select_play_manage;
     delete playchess_manage;
     delete settlement_manage;
-    this->main_window->free();
     delete main_window;
     DEBUGLOG("~Manage success||release resource");
 }
@@ -221,6 +220,9 @@ void TopManage::closeRender()
 {
     TTF_CloseFont(gResultFont);
     gResultFont = nullptr;
+    TTF_CloseFont(normal_font);
+    normal_font = nullptr;
+    this->main_window->free();
 
     //Quit SDL subsystems
     TTF_Quit();

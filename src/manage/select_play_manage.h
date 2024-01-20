@@ -1,6 +1,8 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include "../chess/chess.h"
+#include "../render/sdl_ttf.h"
 #include "../render/sdl_button.h"
 #include "../render/sdl_window.h"
 #include "../logger/logger.h"
@@ -29,6 +31,17 @@ private:
 
     // 单人游戏选择先后手
     void singlePlaySelectChess();
+
+    // 处理选择先后手窗口事件及渲染
+    void handleWindowEvents(SDL_Event* event, bool mouse_focus);
+
+    // 选择先后手的棋子
+    Chess* white_color_chess;		
+    Chess* black_color_chess;
+
+    // 棋盘渲染的字体
+    TTF_Font* art_ttf;
+    SDLTTF* select_chess_color_ttf;
 public:
     SelectPlayManage(const Config& config);
     ~SelectPlayManage();

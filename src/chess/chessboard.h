@@ -15,6 +15,7 @@
 #include "../utils/myUtils.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"
+#include "../render/sdl_window.h"
 
 class Chessboard
 {
@@ -31,9 +32,9 @@ private:
     int render_b;
     int render_alpha;
 
-	// 渲染的窗口
-    SDL_Window* global_window;
-    SDL_Renderer* global_renderer;
+	// 主窗口
+    SDLWindow* chessboard_window;
+
 	// 棋盘渲染的普通字体
 	TTF_Font* global_ttf;
 
@@ -83,7 +84,7 @@ public:
     ~Chessboard();
 
 	// 初始化，传入渲染所需参数
-	void init(SDL_Window * global_window, SDL_Renderer* global_renderer, TTF_Font* global_font);
+	void init(SDLWindow* chessboard_window, TTF_Font* global_font);
 
 	// 重置棋盘数据
 	void initChessMap();

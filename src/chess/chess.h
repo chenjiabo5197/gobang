@@ -4,6 +4,7 @@
 #include "../render/sdl_texture.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"
+#include "../render/sdl_window.h"
 
 class Chess
 {
@@ -28,9 +29,8 @@ private:
     int chess_x;
     int chess_y;
 
-    // 渲染的窗口
-    SDL_Window* global_window;
-    SDL_Renderer* global_renderer;
+    // 主窗口
+    SDLWindow* chess_window;
 
     // 标志该chess是否已经加载资源，以前出现了未加载资源去渲染结果没有数据，找了好久原因
     bool is_load_resource;
@@ -42,7 +42,7 @@ public:
     ~Chess();
 
     // 初始化，传入渲染所需参数
-	void init(SDL_Window * global_window, SDL_Renderer* global_renderer);
+	void init(SDLWindow* chess_window);
 
     // 将棋子渲染在棋盘的x,y坐标，其中x，y是棋盘上以左上角为坐标原点的相对坐标
     bool chessRender(const int& x, const int& y);

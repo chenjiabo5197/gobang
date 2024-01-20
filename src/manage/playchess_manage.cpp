@@ -36,8 +36,8 @@ void PlaychessManage::init(SDLWindow* sdl_window, TTF_Font* normal_ttf, TTF_Font
     this->playchess_main_window = sdl_window;
     this->normal_ttf = normal_ttf;
     this->art_ttf = art_ttf;
-    this->chessboard->init(this->playchess_main_window->getWindow(), this->playchess_main_window->getRenderer(), this->normal_ttf);
-    this->chess_data_board->init(this->playchess_main_window->getWindow(), this->playchess_main_window->getRenderer(), this->normal_ttf, this->art_ttf);
+    this->chessboard->init(this->playchess_main_window, this->normal_ttf);
+    this->chess_data_board->init(this->playchess_main_window, this->normal_ttf, this->art_ttf);
     for (int i = 0; i < this->array_length; i++)
     {
         this->playchess_buttons[i]->initButtonCurrentSprite();
