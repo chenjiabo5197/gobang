@@ -21,14 +21,11 @@ Chess::Chess(const Config& config, const std::string& chess_name)
     std::string temp;
     this->chess_name = chess_name;
     this->chess_resource_path = config.Read(chess_name+"_resource_path", temp);
-    this->chess_multiple = config.Read(chess_name+"_multiple", 0.0);
     this->chess_origin_size = config.Read(chess_name+"_origin_size", 0);
-    this->chess_x = config.Read(chess_name+"_x", 0);
-    this->chess_y = config.Read(chess_name+"_y", 0);
     this->sdl_texture = new SDLTexture(this->chess_name);
     this->is_load_resource = false;
-    INFOLOG("Chess2 construct success||chess_resource_path={}||chess_name={}||chess_multiple={}||chess_x={}||chess_y={}", 
-    this->chess_resource_path, this->chess_name, this->chess_multiple, this->chess_x, this->chess_y);
+    INFOLOG("Chess2 construct success||chess_resource_path={}||chess_name={}||chess_multiple={}", 
+    this->chess_resource_path, this->chess_name, this->chess_multiple);
 
 }
 
@@ -96,20 +93,45 @@ bool Chess::chessRender(const int& x, const int& y)
     return true;
 }
 
-bool Chess::chessRender(const int& x, const int& y, const float& multiple)
+bool Chess::chessRender()
 {
     if (!this->is_load_resource)
     {
         ERRORLOG("chess not load resource, please load resource||name={}", this->chess_name);
         return false;
     }
-    int new_width = (int)this->chess_origin_size * multiple;
-    int new_height = (int)this->chess_origin_size * multiple;
+    int new_width = (int)this->chess_origin_size * this->chess_multiple;
+    int new_height = (int)this->chess_origin_size * this->chess_multiple;
     int x_offset = new_width / 2;
     int y_offset = new_height / 2;
-    int new_chess_x = x - x_offset;
-    int new_chess_y = y - y_offset;
-    this->sdl_texture->render(this->chess_window->getRenderer(), new_chess_x, new_chess_y, multiple);
-    // DEBUGLOG("chessRender||chess_name={}||x={}||y={}||chess_x={}||chess_y={}",this->chess_name, x, y, new_chess_x, new_chess_y);
+    int new_chess_x = this->chess_x - x_offset;
+    int new_chess_y = this->chess_y - y_offset;
+    this->sdl_texture->render(this->chess_window->getRenderer(), new_chess_x, new_chess_y, this->chess_multiple);
+    // DEBUGLOG("chessRender||chess_name={}||chess_x={}||chess_y={}",this->chess_name, this->chess_x, this->chess_y);
     return true;
+}
+
+void Chess::set_chess_coordinate(const int& x, const int& y)
+{
+    this->chess_x = x;
+    this->chess_y = y;
+    // INFOLOG("set_chess_coordinate||chess_x={}||chess_y={}", this->chess_x, this->chess_y);
+}
+
+std::pair<int, int> Chess::get_chess_coordinate()
+{
+    std::pair<int, int> chess_coordinate = std::make_pair(this->chess_x, this->chess_y);
+    // DEBUGLOG("get_chess_coordinate||chess_x={}||chess_y={}", chess_coordinate.first, chess_coordinate.second);
+    return chess_coordinate;
+}
+
+void Chess::set_chess_multiple(const float& multiple)
+{
+    this->chess_multiple = multiple;
+    // INFOLOG("set_chess_multiple||chess_multiple{}", this->chess_multiple);
+}
+
+int Chess::get_chess_size()
+{
+    return (int)this->chess_origin_size * this->chess_multiple;
 }

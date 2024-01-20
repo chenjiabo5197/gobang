@@ -32,8 +32,11 @@ private:
     // 单人游戏选择先后手
     void singlePlaySelectChess();
 
-    // 处理选择先后手窗口事件及渲染
-    void handleWindowEvents(SDL_Event* event, bool mouse_focus);
+    // 处理选择先后手窗口事件,返回白棋和黑棋与鼠标的位置关系枚举
+    std::pair<sdl_button_sprite, sdl_button_sprite> handleWindowEvents(SDL_Event* event, bool mouse_focus);
+
+    // 渲染选择先后手窗口,返回值为true表示已经选择好了先后手，选择窗口关闭
+    bool selectChessRender(std::pair<sdl_button_sprite, sdl_button_sprite> mouse_event);
 
     // 选择先后手的棋子
     Chess* white_color_chess;		
@@ -42,6 +45,9 @@ private:
     // 棋盘渲染的字体
     TTF_Font* art_ttf;
     SDLTTF* select_chess_color_ttf;
+
+    // 渲染文字到指定位置(选择先后手窗口专用)
+	void renderText(const std::string& texture_text, TTF_Font* texture_ttf, SDL_Color color, const int& x, const int& y, const float& multiple);
 public:
     SelectPlayManage(const Config& config);
     ~SelectPlayManage();
@@ -49,7 +55,7 @@ public:
     void startRender();
 
     // 初始化
-    void init(SDLWindow* sdl_window);
+    void init(SDLWindow* sdl_window, TTF_Font* art_ttf);
 
     // 处理事件
     void handleEvents(SDL_Event* event);

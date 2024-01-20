@@ -1,17 +1,32 @@
 #pragma once
 #include "SDL2/SDL.h"
 
-#define PLAYER_WIN_EVENT		(SDL_USEREVENT+1)
-#define PLAYER_LOSE_EVENT		(SDL_USEREVENT+2)
-#define START_GAME_EVENT		(SDL_USEREVENT+3)
-#define BEST_SCORES_EVENT		(SDL_USEREVENT+4)
-#define EXIT_GAME_EVENT	    	(SDL_USEREVENT+5)
-#define SINGLE_PLAYER_EVENT	    (SDL_USEREVENT+6)
-#define TWO_PLAYER_EVENT	    (SDL_USEREVENT+7)
-#define PLAY_INTERNET_EVENT	    (SDL_USEREVENT+8)
-#define BACK_MANU_EVENT	    	(SDL_USEREVENT+9)
-#define PLAYER_WITHDRAW_EVENT	(SDL_USEREVENT+10)
-#define AGAIN_GAME_EVENT	    (SDL_USEREVENT+11)
+// 单人游戏玩家赢
+#define PLAYER_WIN_EVENT				(SDL_USEREVENT+1)
+// 单人游戏玩家输
+#define PLAYER_LOSE_EVENT				(SDL_USEREVENT+2)
+// 开始游戏，进入选择游戏方式界面
+#define START_GAME_EVENT				(SDL_USEREVENT+3)
+// 查看最好分数
+#define BEST_SCORES_EVENT				(SDL_USEREVENT+4)
+// 退出游戏
+#define EXIT_GAME_EVENT	    			(SDL_USEREVENT+5)
+// 单人游戏
+#define SINGLE_PLAYER_EVENT	    		(SDL_USEREVENT+6)
+// 双人游戏
+#define TWO_PLAYER_EVENT	    		(SDL_USEREVENT+7)
+// 网络对战
+#define PLAY_INTERNET_EVENT	    		(SDL_USEREVENT+8)
+// 返回主菜单
+#define BACK_MANU_EVENT	    			(SDL_USEREVENT+9)
+// 单人游戏悔棋
+#define PLAYER_WITHDRAW_EVENT			(SDL_USEREVENT+10)
+// 游戏结算页面再来一局
+#define AGAIN_GAME_EVENT	    		(SDL_USEREVENT+11)
+// 单人游戏玩家选择白色棋子  后手
+#define SINGLE_PLAYER_WHITE_EVENT	    (SDL_USEREVENT+12)
+// 单人游戏玩家选择白色棋子  先手
+#define SINGLE_PLAYER_BLACK_EVENT	    (SDL_USEREVENT+13)
 
 
 typedef enum {

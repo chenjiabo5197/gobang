@@ -55,7 +55,9 @@ void ChessDataBoard::render()
     std::string machine_name = this->score_info["machine_name"];
     std::string machine_score = this->score_info["machine_score"];
     this->renderText(machine_score, this->normal_ttf, this->data_board_x-140, this->data_board_y-50, 0.7);  //比分信息
-	this->symbol_white_chess->chessRender(this->data_board_x-80, this->data_board_y-50, 0.8);
+    this->symbol_white_chess->set_chess_coordinate(this->data_board_x-80, this->data_board_y-50);
+    this->symbol_white_chess->set_chess_multiple(0.8);
+	this->symbol_white_chess->chessRender();
     this->renderText(machine_name, this->art_ttf, this->data_board_x+30, this->data_board_y-50, 0.08);
 	// 中间行
     this->renderText("VS", this->art_ttf, this->data_board_x, this->data_board_y, 0.08);
@@ -63,7 +65,9 @@ void ChessDataBoard::render()
     std::string player_name = this->score_info["player_name"];
     std::string player_score = this->score_info["player_score"];
     this->renderText(player_score, this->normal_ttf, this->data_board_x-140, this->data_board_y+50, 0.7);  //比分信息
-    this->symbol_black_chess->chessRender(this->data_board_x-80, this->data_board_y+50, 0.8);
+    this->symbol_black_chess->set_chess_coordinate(this->data_board_x-80, this->data_board_y+50);
+    this->symbol_black_chess->set_chess_multiple(0.8);
+    this->symbol_black_chess->chessRender();
 	this->renderText(player_name, this->art_ttf, this->data_board_x+30, this->data_board_y+50, 0.08);
 }
 

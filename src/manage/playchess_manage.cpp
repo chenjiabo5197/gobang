@@ -125,7 +125,7 @@ void PlaychessManage::handleEvents(SDL_Event* event)
             this->chessboard->set_chessboard_withdraw();
         }
     }
-    else if (event->type == SINGLE_PLAYER_EVENT || event->type == AGAIN_GAME_EVENT)
+    else if (event->type == SINGLE_PLAYER_WHITE_EVENT || event->type == SINGLE_PLAYER_BLACK_EVENT || event->type == AGAIN_GAME_EVENT)
     {
         this->chessboard->initChessMap();
         this->chess_data_board->startSingleGame();

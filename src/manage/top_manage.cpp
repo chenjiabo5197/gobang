@@ -74,10 +74,14 @@ void TopManage::start()
             }
             else if (event.type == SINGLE_PLAYER_EVENT)
             {
-                // this->setRendererType(PLAYCHESS_INTERFACE);
-                // this->playchess_manage->handleEvents(&event);
                 this->select_play_manage->handleEvents(&event);
             }
+            else if (event.type == SINGLE_PLAYER_WHITE_EVENT || event.type == SINGLE_PLAYER_BLACK_EVENT)
+            {
+                this->setRendererType(PLAYCHESS_INTERFACE);
+                this->playchess_manage->handleEvents(&event);
+            }
+            
             else if (event.type == BACK_MANU_EVENT)
             {
                 this->setRendererType(MAIN_MENU_INTERFACE);
@@ -186,8 +190,8 @@ bool TopManage::initRender()
     }
     DEBUGLOG("SDL_ttf initialize success");
     //使用 TTF_OpenFont 加载字体。这需要输入字体文件的路径和要渲染的点尺寸
-    this->gResultFont = TTF_OpenFont(this->art_ttf_path.c_str(), this->art_ttf_ptsize);
-    if(gResultFont == nullptr)
+    this->art_ttf = TTF_OpenFont(this->art_ttf_path.c_str(), this->art_ttf_ptsize);
+    if(art_ttf == nullptr)
     {
         ERRORLOG("Failed to load STXingkai font! SDL_ttf Error={}", TTF_GetError());
         return false;
@@ -208,9 +212,9 @@ bool TopManage::initRender()
 bool TopManage::loadResource()
 {
     this->main_menu_manage->init(this->main_window);
-    this->select_play_manage->init(this->main_window);
-    this->playchess_manage->init(this->main_window, this->normal_font, this->gResultFont);
-    this->settlement_manage->init(this->main_window, this->gResultFont);
+    this->select_play_manage->init(this->main_window, this->art_ttf);
+    this->playchess_manage->init(this->main_window, this->normal_font, this->art_ttf);
+    this->settlement_manage->init(this->main_window, this->art_ttf);
     this->settlement_manage->set_font_coordinate(this->playchess_manage->get_chessboard_center_x(), this->playchess_manage->get_chessboard_center_y());
     INFOLOG("loadResource success!");
     return true;
@@ -218,8 +222,8 @@ bool TopManage::loadResource()
 
 void TopManage::closeRender()
 {
-    TTF_CloseFont(gResultFont);
-    gResultFont = nullptr;
+    TTF_CloseFont(art_ttf);
+    art_ttf = nullptr;
     TTF_CloseFont(normal_font);
     normal_font = nullptr;
     this->main_window->free();

@@ -47,8 +47,20 @@ public:
     // 将棋子渲染在棋盘的x,y坐标，其中x，y是棋盘上以左上角为坐标原点的相对坐标
     bool chessRender(const int& x, const int& y);
 
-    // 渲染棋子,传入坐标和缩放倍数,坐标为中心处坐标，需要在函数内转化为左上角坐标
-    bool chessRender(const int& x, const int& y, const float& multiple);
+    // 渲染棋子, 坐标在使用set_chess_coordinate函数传入,缩放倍数使用set_chess_multiple传入
+    bool chessRender();
+
+    // 设置棋子的坐标，设置的是棋子中心点的坐标，渲染该棋子时无需传入坐标参数
+    void set_chess_coordinate(const int& x, const int& y);
+
+    // 返回棋子的坐标
+    std::pair<int, int> get_chess_coordinate();
+
+    // 设置棋子的缩放倍数
+    void set_chess_multiple(const float& multiple);
+
+    // 获取棋子的实际大小
+    int get_chess_size();
 };
 
 

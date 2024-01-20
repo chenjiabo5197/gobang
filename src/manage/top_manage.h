@@ -40,7 +40,7 @@ private:
     // 行楷字体
     std::string art_ttf_path;
     int art_ttf_ptsize;
-    TTF_Font* gResultFont;
+    TTF_Font* art_ttf;
 
     // 普通字体
     TTF_Font* normal_font;
