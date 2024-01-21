@@ -13,6 +13,9 @@ private:
 	// 储存各个点的评分情况，作为AI下棋数据
 	std::vector<std::vector<int>> scoreMap;
 
+	// 棋子数量
+	int chess_num;
+
 	/*
 	* AI先计算棋手如果在这个位置落子，会有多大的价值。然后再计算自己如果在这个位置落子，有大大价值。
 	* 具体计算方法
@@ -38,6 +41,13 @@ public:
 
     // 初始化，评分数组初始化
     void init();
+
+	// 下棋成功，棋子数+1
+	void addChessNum();
+
+	// 获取机器人当前对局下棋数量
+	int getChessNum();
+
 	// 友元函数，用于做线程函数，访问Machine类内部变量
 	friend int machineChessDown(void* data);
 };

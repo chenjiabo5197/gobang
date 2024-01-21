@@ -29,6 +29,9 @@ private:
     // 当前页面要渲染的按键数组
     SDLButton* playchess_buttons[2];
 
+    // 是否需要重置数据板
+    bool is_reset_chess_data_board;
+
     // 数组长度
     int array_length;
 

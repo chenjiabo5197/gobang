@@ -14,6 +14,7 @@ Machine::~Machine()
 
 void Machine::init()
 {
+	this->chess_num = 0;
 	int size = chessboard->getChessBoardSize();
 	for (int i = 0; i < size; i++)
 	{
@@ -25,7 +26,17 @@ void Machine::init()
 		}
 		scoreMap.push_back(row);
 	}
-	INFOLOG("Machine::init||init Machine success||size={}", size);
+	INFOLOG("init||init Machine success||size={}", size);
+}
+
+void Machine::addChessNum()
+{
+    INFOLOG("addChessNum||chess_num={}", ++this->chess_num);
+}
+
+int Machine::getChessNum()
+{
+	return this->chess_num;
 }
 
 // int go(void* data)

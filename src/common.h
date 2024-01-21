@@ -46,10 +46,10 @@ typedef enum {
 
 typedef enum {
 	GAME_KIND_DEFAULT,
-	ONE_PLAYER_GAME,     // 单人游戏
-	TWO_PLAYERS_GAME,    // 双人游戏
-	PLAYER_INTERNET      // 网络对战
-} game_kind;
+	SINGLE_PLAYER_GAME,     	// 单人游戏
+	TWO_PLAYERS_GAME,    		// 双人游戏
+	PLAYER_INTERNET_GAME      	// 网络对战
+} game_kind_type;
 
 // 棋子位置
 struct ChessPos {   
@@ -113,8 +113,12 @@ typedef enum {
 	SINGLE_PLAYER_WIN,        	// 单人游戏玩家胜
 	SINGLE_PLAYER_LOSE,			// 单人游戏玩家输
 	TWO_PLAYER_BLACK_WIN,		// 双人游戏黑方胜
-	TWO_PLAYER_WHITE_WIN		// 双人游戏拜访胜
-}result_info_type;
+	TWO_PLAYER_WHITE_WIN		// 双人游戏白方胜
+} result_info_type;
 
-
+// 单人游戏先手方枚举
+typedef enum {
+	BLACK_COLOR_TYPE,			// 黑方先手
+	WHITE_COLOR_TYPE			// 白方先手
+} chess_color_type;
 

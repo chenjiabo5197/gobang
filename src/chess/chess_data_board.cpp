@@ -28,19 +28,25 @@ void ChessDataBoard::init(SDLWindow* chess_data_window, TTF_Font* normal_font, T
     this->art_ttf = art_font;
     this->symbol_white_chess->init(this->chess_data_window);
 	this->symbol_black_chess->init(this->chess_data_window);
-    this->initDataBoard();
     INFOLOG("init||ChessDataBoard init success||load resource success");
 }
 
-void ChessDataBoard::initDataBoard()
+void ChessDataBoard::initDataBoard(const chess_color_type& type)
 {
-    this->score_info["machine_name"] = "机器人";
-    this->score_info["machine_score"] = "0";
-    this->score_info["player_name"] = "玩家";
-    this->score_info["player_score"] = "0";
+    this->current_game_type = SINGLE_PLAYER_GAME;
+    std::map<std::string, std::string> player_info = {{"name", "玩家"}, {"score", "0"}};
+    std::map<std::string, std::string> machine_info = {{"name", "机器人"}, {"score", "0"}};
+    this->score_info["player"] = player_info;
+    this->score_info["machine"] = machine_info;
     INFOLOG("initDataBoard success");
 }
 
+void ChessDataBoard::resetDataBoard()
+{
+    INFOLOG("resetDataBoard");
+}
+
+// 数据板默认第一行为白棋(后手)，第二行为黑棋(先手)
 void ChessDataBoard::render()
 {
     // 渲染右上角解释窗口
@@ -51,24 +57,35 @@ void ChessDataBoard::render()
     time_text << std::setiosflags(std::ios::fixed) << std::setprecision(1) << (this->top_timer->timerGetTicks() / 1000.f); 
     this->renderText("对局开始(s): ", this->normal_ttf, this->data_board_x-50, this->data_board_y-110, 0.6);  
     this->renderText(time_text.str(), this->normal_ttf, this->data_board_x+80, this->data_board_y-110, 0.6);  //时间信息
+    std::string first_row_name, first_row_score, second_row_name, second_row_score;
+    if (this->current_chess_sequence == WHITE_COLOR_TYPE)
+    {
+        first_row_name = this->score_info["player"]["name"];
+        first_row_score = this->score_info["player"]["score"];
+        second_row_name = this->score_info["machine"]["name"];
+        second_row_score = this->score_info["machine"]["score"];
+    }
+    else if (this->current_chess_sequence == BLACK_COLOR_TYPE)
+    {
+        first_row_name = this->score_info["machine"]["name"];
+        first_row_score = this->score_info["machine"]["score"];
+        second_row_name = this->score_info["player"]["name"];
+        second_row_score = this->score_info["player"]["score"];
+    }
     // 第一行
-    std::string machine_name = this->score_info["machine_name"];
-    std::string machine_score = this->score_info["machine_score"];
-    this->renderText(machine_score, this->normal_ttf, this->data_board_x-140, this->data_board_y-50, 0.7);  //比分信息
+    this->renderText(first_row_score, this->normal_ttf, this->data_board_x-140, this->data_board_y-50, 0.7);  //比分信息
     this->symbol_white_chess->set_chess_coordinate(this->data_board_x-80, this->data_board_y-50);
     this->symbol_white_chess->set_chess_multiple(0.8);
 	this->symbol_white_chess->chessRender();
-    this->renderText(machine_name, this->art_ttf, this->data_board_x+30, this->data_board_y-50, 0.08);
+    this->renderText(first_row_name, this->art_ttf, this->data_board_x+30, this->data_board_y-50, 0.08);
 	// 中间行
     this->renderText("VS", this->art_ttf, this->data_board_x, this->data_board_y, 0.08);
     //最后一行
-    std::string player_name = this->score_info["player_name"];
-    std::string player_score = this->score_info["player_score"];
-    this->renderText(player_score, this->normal_ttf, this->data_board_x-140, this->data_board_y+50, 0.7);  //比分信息
+    this->renderText(second_row_score, this->normal_ttf, this->data_board_x-140, this->data_board_y+50, 0.7);  //比分信息
     this->symbol_black_chess->set_chess_coordinate(this->data_board_x-80, this->data_board_y+50);
     this->symbol_black_chess->set_chess_multiple(0.8);
     this->symbol_black_chess->chessRender();
-	this->renderText(player_name, this->art_ttf, this->data_board_x+30, this->data_board_y+50, 0.08);
+	this->renderText(second_row_name, this->art_ttf, this->data_board_x+30, this->data_board_y+50, 0.08);
 }
 
 void ChessDataBoard::renderText(const std::string& texture_text, TTF_Font* texture_ttf, const int& x, const int& y, const float& multiple)
@@ -82,20 +99,27 @@ void ChessDataBoard::updateScoreInfo(const result_info_type& type)
 {
     if (type == SINGLE_PLAYER_WIN)
     {
-        this->score_info["player_score"] = std::to_string(std::stoi(this->score_info["player_score"]) + 1);
-        INFOLOG("updateScoreInfo||current score={}", this->score_info["player_score"]);
+        this->score_info["player"]["score"] = std::to_string(std::stoi(this->score_info["player"]["score"]) + 1);
+        INFOLOG("updateScoreInfo||current score={}", this->score_info["player"]["score"]);
     }
     else if (type == SINGLE_PLAYER_LOSE)
     {
-        this->score_info["machine_score"] = std::to_string(std::stoi(this->score_info["machine_score"]) + 1);
-        INFOLOG("updateScoreInfo||current score={}", this->score_info["machine_score"]);
+        this->score_info["machine"]["score"] = std::to_string(std::stoi(this->score_info["machine"]["score"]) + 1);
+        INFOLOG("updateScoreInfo||current score={}", this->score_info["machine"]["score"]);
     }
 }
 
-void ChessDataBoard::startSingleGame()
+void ChessDataBoard::startSingleGame(const chess_color_type& type)
 {
+    this->current_chess_sequence = type;
     this->top_timer->timerStart();
-    INFOLOG("startSingleGame||start timer");
+    INFOLOG("startSingleGame||start timer||current_chess_sequence={}", (int)this->current_chess_sequence);
+}
+
+chess_color_type ChessDataBoard::getCurrentChessSequence()
+{
+    DEBUGLOG("getCurrentChessSequence||current_chess_sequence={}", (int)this->current_chess_sequence);
+    return this->current_chess_sequence;
 }
 
 

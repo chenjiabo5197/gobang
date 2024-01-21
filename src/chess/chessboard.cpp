@@ -386,7 +386,7 @@ bool Chessboard::checkOver()
 			return true;
 		}
 	}
-	// 判断棋盘是否满了，13*13的棋盘，最多169颗棋子
+	// 判断棋盘是否满了，13*13的棋盘，最多169颗棋子 // TODO 平局
 	// if (this->chessBoardData.size() == 169)
 	// {
 	// 	INFOLOG("Chess::checkOver||result draw");

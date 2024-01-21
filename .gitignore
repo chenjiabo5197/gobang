@@ -22,6 +22,7 @@ logs/*
 .vs/*
 *.csv
 build
+.VSCodeCounter
 
 # Compiled Dynamic libraries
 *.so

@@ -72,7 +72,7 @@ void TopManage::start()
             {
                 this->setRendererType(SELECT_PLAY_INTERFACE);
             }
-            else if (event.type == SINGLE_PLAYER_EVENT)
+            else if (event.type == SINGLE_PLAYER_EVENT || event.type == AGAIN_GAME_EVENT)
             {
                 this->select_play_manage->handleEvents(&event);
             }
@@ -90,11 +90,11 @@ void TopManage::start()
             {
                 this->playchess_manage->handleEvents(&event);
             }
-            else if (event.type == AGAIN_GAME_EVENT)
-            {
-                this->setRendererType(PLAYCHESS_INTERFACE);
-                this->playchess_manage->handleEvents(&event);
-            }    
+            // else if (event.type == AGAIN_GAME_EVENT)
+            // {
+            //     this->setRendererType(PLAYCHESS_INTERFACE);
+            //     this->playchess_manage->handleEvents(&event);
+            // }    
             else
             {
                 if(this->render_type == PLAYCHESS_INTERFACE)

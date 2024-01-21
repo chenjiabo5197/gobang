@@ -25,6 +25,12 @@ private:
     // 主窗口
     SDLWindow* chess_data_window;
 
+    // 当前比赛类型，单人/双人/网络
+    game_kind_type current_game_type;
+
+    // 单人游戏先后手
+    chess_color_type current_chess_sequence;
+
 	// 棋盘渲染的字体
 	TTF_Font* normal_ttf;
     TTF_Font* art_ttf;
@@ -42,7 +48,7 @@ private:
 	void renderText(const std::string& texture_text, TTF_Font* texture_ttf, const int& x, const int& y, const float& multiple);
 
     // 比分信息
-    std::map<std::string, std::string> score_info;
+    std::map<std::string, std::map<std::string, std::string>> score_info;
 
     // 总计时器，显示当前对局进行的时间
     SDLTimer* top_timer;
@@ -53,8 +59,11 @@ public:
     // 初始化，传入渲染所需参数
 	void init(SDLWindow* chess_data_window, TTF_Font* normal_font, TTF_Font* art_font);
 
-	// 重置数据版信息
-	void initDataBoard();
+	// 初始化数据板信息
+	void initDataBoard(const chess_color_type& type);
+
+    // 重置数据板信息
+    void resetDataBoard();
 
     // 数据版渲染
     void render();
@@ -63,7 +72,10 @@ public:
     void updateScoreInfo(const result_info_type& type);
 
     // 开始单人游戏，设置一些数据
-    void startSingleGame();
+    void startSingleGame(const chess_color_type& type);
+
+    // 获取当前单人游戏先后手顺序
+    chess_color_type getCurrentChessSequence();
 };
 
 

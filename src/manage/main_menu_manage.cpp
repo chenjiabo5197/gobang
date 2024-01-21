@@ -48,6 +48,7 @@ void MainMenuManage::handleEvents(SDL_Event* event)
     {
         this->main_menu_buttons[i]->handleButtonEvent(event);
     }
+    // TODO 按键选择音
     if (this->main_menu_buttons[0]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
     {
         SDL_Event event;
