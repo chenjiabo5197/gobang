@@ -10,7 +10,7 @@ bool is_machine_first = false;
 
 PlaychessManage::PlaychessManage(const Config& config)
 {
-    this->chessboard = new Chessboard(config);
+    this->chessboard = new Chessboard(config); // TODO 新建优化
     this->machine = new Machine(this->chessboard);
     this->single_player = new Player(this->chessboard, "single_player", CHESS_BLACK);
     this->chess_data_board = new ChessDataBoard(config);
@@ -57,7 +57,7 @@ void PlaychessManage::init(SDLWindow* sdl_window, TTF_Font* normal_ttf, TTF_Font
 void PlaychessManage::startRender()
 {
     this->chessboard->render();
-    this->chess_data_board->render();
+    this->chess_data_board->render(this->chessboard->get_player_flag_type());
     for (int i = 0; i < this->array_length; i++)
     {
         this->playchess_buttons[i]->buttonRender(this->playchess_main_window->getRenderer());
@@ -84,7 +84,7 @@ int machineChessDown(void* data)
         chess_type = CHESS_WHITE;
     }
     // 初始下棋在中间位置
-    if (machine->getChessNum() == 0)
+    if (is_machine_first && machine->getChessNum() == 0)
     {
         pos = ChessPos{7, 7};
     }
@@ -138,6 +138,7 @@ bool PlaychessManage::handleMouseClick(SDL_Event* event)
     return false;
 }
 
+// TODO 双人游戏，网络对战
 void PlaychessManage::handleEvents(SDL_Event* event)
 {
     if (event->type == PLAYER_WIN_EVENT)
@@ -165,6 +166,8 @@ void PlaychessManage::handleEvents(SDL_Event* event)
             this->chess_data_board->initDataBoard(WHITE_COLOR_TYPE);
             this->is_reset_chess_data_board = false;
         }
+        this->single_player->resetPlayer();
+        this->machine->resetMachine();
         this->chessboard->set_player_flag_type(MACHINE_PLAYER);
         this->chessboard->initChessMap();
         this->chess_data_board->startSingleGame(WHITE_COLOR_TYPE);
@@ -172,16 +175,23 @@ void PlaychessManage::handleEvents(SDL_Event* event)
     }
     else if (event->type == SINGLE_PLAYER_BLACK_EVENT)
     {
+        is_machine_first = false;  // 设置机器人后手
         if (this->is_reset_chess_data_board)
         {
             this->chess_data_board->initDataBoard(BLACK_COLOR_TYPE);
             this->is_reset_chess_data_board = false;
         }
+        this->single_player->resetPlayer();
+        this->machine->resetMachine();
         this->chessboard->set_player_flag_type(SINGLE_PLAYER);
         this->chessboard->initChessMap();
         this->chess_data_board->startSingleGame(BLACK_COLOR_TYPE);
     }
-    else if(this->handleMouseClick(event) && this->chessboard->get_player_flag_type() == MACHINE_PLAYER)
+    else if (event->type == TWO_PLAYER_EVENT)
+    {
+        // TODO 双人游戏
+    }
+    if(this->handleMouseClick(event) && this->chessboard->get_player_flag_type() == MACHINE_PLAYER)
     {
         machine_thread = SDL_CreateThread(machineChessDown, "machine player", this->machine);
     }

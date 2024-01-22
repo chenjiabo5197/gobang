@@ -3,7 +3,7 @@
 SettlementManage::SettlementManage(const Config& config)
 {
     std::string temp;
-    this->player_win_interface = new SDLTTF(config, "ttf_result_player_win");
+    this->player_win_interface = new SDLTTF(config, "ttf_result_player_win");// TODO 新建优化
     this->player_lose_interface = new SDLTTF(config, "ttf_result_player_lose");
     this->buttons_x = config.Read("settlement_buttons_x", 0);
     this->buttons_y = config.Read("settlement_buttons_y", 0);

@@ -34,6 +34,7 @@ void ChessDataBoard::init(SDLWindow* chess_data_window, TTF_Font* normal_font, T
 void ChessDataBoard::initDataBoard(const chess_color_type& type)
 {
     this->current_game_type = SINGLE_PLAYER_GAME;
+    // this->data_board_arr[0] = new ChessDataBoardIterm("玩家", );
     std::map<std::string, std::string> player_info = {{"name", "玩家"}, {"score", "0"}};
     std::map<std::string, std::string> machine_info = {{"name", "机器人"}, {"score", "0"}};
     this->score_info["player"] = player_info;
@@ -47,16 +48,19 @@ void ChessDataBoard::resetDataBoard()
 }
 
 // 数据板默认第一行为白棋(后手)，第二行为黑棋(先手)
-void ChessDataBoard::render()
+void ChessDataBoard::render(const player_flag_type& type)
 {
     // 渲染右上角解释窗口
+    // 默认字体黑色
+    SDL_Color color = {0, 0, 0, 0};
+    SDL_Color current_color = {0, 0, 255, 0};
     // 窗口头显示时间
     std::stringstream time_text;
     time_text.str("");
     //  除1000，是因为需要的是秒，而每秒有1000毫秒,小数点后取1位小数
     time_text << std::setiosflags(std::ios::fixed) << std::setprecision(1) << (this->top_timer->timerGetTicks() / 1000.f); 
-    this->renderText("对局开始(s): ", this->normal_ttf, this->data_board_x-50, this->data_board_y-110, 0.6);  
-    this->renderText(time_text.str(), this->normal_ttf, this->data_board_x+80, this->data_board_y-110, 0.6);  //时间信息
+    this->renderText("对局开始(s): ", this->normal_ttf, color, this->data_board_x-50, this->data_board_y-110, 0.6);  
+    this->renderText(time_text.str(), this->normal_ttf, color,this->data_board_x+80, this->data_board_y-110, 0.6);  //时间信息
     std::string first_row_name, first_row_score, second_row_name, second_row_score;
     if (this->current_chess_sequence == WHITE_COLOR_TYPE)
     {
@@ -73,24 +77,23 @@ void ChessDataBoard::render()
         second_row_score = this->score_info["player"]["score"];
     }
     // 第一行
-    this->renderText(first_row_score, this->normal_ttf, this->data_board_x-140, this->data_board_y-50, 0.7);  //比分信息
+    this->renderText(first_row_score, this->normal_ttf, color, this->data_board_x-140, this->data_board_y-50, 0.7);  //比分信息
     this->symbol_white_chess->set_chess_coordinate(this->data_board_x-80, this->data_board_y-50);
     this->symbol_white_chess->set_chess_multiple(0.8);
 	this->symbol_white_chess->chessRender();
-    this->renderText(first_row_name, this->art_ttf, this->data_board_x+30, this->data_board_y-50, 0.08);
+    this->renderText(first_row_name, this->art_ttf, color,this->data_board_x+30, this->data_board_y-50, 0.08);
 	// 中间行
-    this->renderText("VS", this->art_ttf, this->data_board_x, this->data_board_y, 0.08);
+    this->renderText("VS", this->art_ttf, color, this->data_board_x, this->data_board_y, 0.08);
     //最后一行
-    this->renderText(second_row_score, this->normal_ttf, this->data_board_x-140, this->data_board_y+50, 0.7);  //比分信息
+    this->renderText(second_row_score, this->normal_ttf, color, this->data_board_x-140, this->data_board_y+50, 0.7);  //比分信息
     this->symbol_black_chess->set_chess_coordinate(this->data_board_x-80, this->data_board_y+50);
     this->symbol_black_chess->set_chess_multiple(0.8);
     this->symbol_black_chess->chessRender();
-	this->renderText(second_row_name, this->art_ttf, this->data_board_x+30, this->data_board_y+50, 0.08);
+	this->renderText(second_row_name, this->art_ttf, color, this->data_board_x+30, this->data_board_y+50, 0.08);
 }
 
-void ChessDataBoard::renderText(const std::string& texture_text, TTF_Font* texture_ttf, const int& x, const int& y, const float& multiple)
+void ChessDataBoard::renderText(const std::string& texture_text, TTF_Font* texture_ttf, SDL_Color color, const int& x, const int& y, const float& multiple)
 {
-	SDL_Color color = {0, 0, 0, 0};
 	this->data_board_ttf->loadRenderText(this->chess_data_window->getRenderer(), texture_ttf, texture_text, color);
 	this->data_board_ttf->ttfRender(this->chess_data_window->getRenderer(), x, y, multiple);
 }

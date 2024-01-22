@@ -39,6 +39,12 @@ int Machine::getChessNum()
 	return this->chess_num;
 }
 
+void Machine::resetMachine()
+{
+	this->chess_num = 0;
+	INFOLOG("resetMachine||reset machine success");
+}
+
 // int go(void* data)
 // {
 // 	Machine* machine = (Machine *)(data);

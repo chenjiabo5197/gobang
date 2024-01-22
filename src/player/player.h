@@ -27,6 +27,9 @@ public:
 
 	// 下棋成功，棋子数+1
 	void addChessNum();
+
+	// 获取当前对局下棋数量
+	int getChessNum();
 	
 	friend int playerChessDown(void* data);
 };

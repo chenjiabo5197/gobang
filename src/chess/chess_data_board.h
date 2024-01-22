@@ -11,6 +11,7 @@
 #include <map>
 #include <iomanip>
 #include "chess.h"
+#include "chess_data_board_iterm.h"
 #include "../render/sdl_timer.h"
 #include "../render/sdl_ttf.h"
 #include "../common.h"
@@ -24,6 +25,9 @@ class ChessDataBoard
 private:
     // 主窗口
     SDLWindow* chess_data_window;
+
+    // 数据板数组
+    ChessDataBoardIterm* data_board_arr[2];
 
     // 当前比赛类型，单人/双人/网络
     game_kind_type current_game_type;
@@ -45,7 +49,7 @@ private:
     int data_board_y;
 
     // 渲染文字到指定位置
-	void renderText(const std::string& texture_text, TTF_Font* texture_ttf, const int& x, const int& y, const float& multiple);
+	void renderText(const std::string& texture_text, TTF_Font* texture_ttf, SDL_Color color, const int& x, const int& y, const float& multiple);
 
     // 比分信息
     std::map<std::string, std::map<std::string, std::string>> score_info;
@@ -66,7 +70,7 @@ public:
     void resetDataBoard();
 
     // 数据版渲染
-    void render();
+    void render(const player_flag_type& type);
 
     // 更新比分信息
     void updateScoreInfo(const result_info_type& type);

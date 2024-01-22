@@ -48,6 +48,9 @@ public:
 	// 获取机器人当前对局下棋数量
 	int getChessNum();
 
+	// 每次游戏完后，重开游戏需要设置的参数
+	void resetMachine();
+
 	// 友元函数，用于做线程函数，访问Machine类内部变量
 	friend int machineChessDown(void* data);
 };

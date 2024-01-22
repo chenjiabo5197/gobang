@@ -2,7 +2,7 @@
 
 SelectPlayManage::SelectPlayManage(const Config& config)
 {
-    this->buttons_x = config.Read("main_window_screen_width", 0) / 2;
+    this->buttons_x = config.Read("main_window_screen_width", 0) / 2;// TODO 新建优化
     this->buttons_y = config.Read("main_window_screen_height", 0) / 2;
     this->button_interval = config.Read("select_play_buttons_interval", 0);
     this->select_play_buttons[0] = new SDLButton(config, "single_player", this->buttons_x, this->buttons_y-2*this->button_interval);
@@ -62,7 +62,7 @@ void SelectPlayManage::handleEvents(SDL_Event* event)
     {
         this->select_play_buttons[i]->handleButtonEvent(event);
     }
-    if (this->select_play_buttons[0]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+    if (this->select_play_buttons[0]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP) // TODO 新建优化N_SPRITE_MOUSE_UP)
     {
         SDL_Event event;
         event.type = SINGLE_PLAYER_EVENT;

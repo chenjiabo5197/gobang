@@ -2,7 +2,7 @@
 
 MainMenuManage::MainMenuManage(const Config& config)
 {
-    this->buttons_x = config.Read("main_window_screen_width", 0) / 2;
+    this->buttons_x = config.Read("main_window_screen_width", 0) / 2;// TODO 新建优化
     this->buttons_y = config.Read("main_window_screen_height", 0) / 2;
     this->button_interval = config.Read("main_menu_buttons_interval", 0);
     this->main_menu_buttons[0] = new SDLButton(config, "start_game", this->buttons_x, this->buttons_y-this->button_interval);
@@ -42,6 +42,7 @@ void MainMenuManage::startRender()
     // DEBUGLOG("startRender");
 }
 
+// TODO 查看排行榜
 void MainMenuManage::handleEvents(SDL_Event* event)
 {
     for (int i = 0; i < this->array_length; i++)

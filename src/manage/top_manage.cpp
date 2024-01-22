@@ -15,7 +15,7 @@ TopManage::TopManage(const Config& config)
     this->art_ttf_ptsize = config.Read("ttf_result_ptsize", 0);
     this->normal_ttf_path = config.Read("normal_ttf_resource_path", temp);
     this->normal_ttf_ptsize = config.Read("normal_ttf_ptsize", 0);
-    this->main_menu_manage = new MainMenuManage(config);
+    this->main_menu_manage = new MainMenuManage(config);// TODO 新建优化
     this->select_play_manage = new SelectPlayManage(config);
     this->playchess_manage = new PlaychessManage(config);
     this->settlement_manage = new SettlementManage(config);
@@ -75,6 +75,10 @@ void TopManage::start()
             else if (event.type == SINGLE_PLAYER_EVENT || event.type == AGAIN_GAME_EVENT)
             {
                 this->select_play_manage->handleEvents(&event);
+            }
+            else if (event.type == TWO_PLAYER_EVENT)
+            {
+                this->playchess_manage->handleEvents(&event);
             }
             else if (event.type == SINGLE_PLAYER_WHITE_EVENT || event.type == SINGLE_PLAYER_BLACK_EVENT)
             {

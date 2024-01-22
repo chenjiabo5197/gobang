@@ -30,6 +30,11 @@ void Player::addChessNum()
     INFOLOG("Player::addChessNum||player_name={}||chess_num={}", this->player_name, ++this->chess_num);
 }
 
+int Player::getChessNum()
+{
+	return this->chess_num;
+}
+
 // bool Player::go(int x, int y, chess_kind_type kind)
 // {
 // 	// 等待棋手有效落子
