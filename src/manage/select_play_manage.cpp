@@ -150,7 +150,7 @@ void SelectPlayManage::singlePlaySelectChess()
         //Clear screen
         SDL_SetRenderDrawColor(this->select_chess_color_window->getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderClear(this->select_chess_color_window->getRenderer());
-        quit = this->selectChessRender(chess_mouse_type_pair);
+        quit = this->selectChessRender(chess_mouse_type_pair) || quit;
         SDL_RenderPresent(this->select_chess_color_window->getRenderer());
     }
     //Free resources and close SDL
@@ -186,12 +186,12 @@ std::pair<sdl_button_sprite, sdl_button_sprite> SelectPlayManage::handleWindowEv
                     break;
                 }                   
             }
-            // DEBUGLOG("handleWindowEvents||i={}||chess_mouse_type={}", i, (int)chess_mouse_type[i]);
+            DEBUGLOG("handleWindowEvents||i={}||chess_mouse_type={}", i, (int)chess_mouse_type[i]);
         }
     }
     std::pair<sdl_button_sprite, sdl_button_sprite> chess_mouse_type_pair(chess_mouse_type[0], chess_mouse_type[1]);
-    // DEBUGLOG("handleWindowEvents||chess_mouse_type_pair.first={}||chess_mouse_type_pair.second={}||type={}", 
-    // (int)chess_mouse_type_pair.first, (int)chess_mouse_type_pair.second, (int)event->type);
+    DEBUGLOG("handleWindowEvents||chess_mouse_type_pair.first={}||chess_mouse_type_pair.second={}||type={}", 
+    (int)chess_mouse_type_pair.first, (int)chess_mouse_type_pair.second, (int)event->type);
     return chess_mouse_type_pair;
 }
 

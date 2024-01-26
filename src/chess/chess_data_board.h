@@ -34,6 +34,7 @@ private:
 
     // 单人游戏先后手
     chess_color_type current_chess_sequence;
+    chess_color_type last_chess_sequence;
 
 	// 棋盘渲染的字体
 	TTF_Font* normal_ttf;

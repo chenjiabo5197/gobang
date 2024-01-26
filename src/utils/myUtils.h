@@ -48,5 +48,14 @@ public:
 
 	// 让程序休眠的秒数
 	static void sleep_seconds(const float& seconds);
+
+	// 交换两个值
+	template<typename T>
+	static void swapValue(T &value1, T &value2)
+	{
+		T temp = value1;
+		value1 = value2;
+		value2 = temp;
+	}
 };
 

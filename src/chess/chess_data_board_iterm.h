@@ -13,6 +13,7 @@
 #include "../render/sdl_ttf.h"
 #include "../logger/logger.h"
 #include "../render/sdl_window.h"
+#include "../utils/myUtils.h"
 
 class ChessDataBoardIterm
 {
@@ -55,6 +56,9 @@ public:
 
     // 渲染文字到指定位置
 	void renderText(const std::string& texture_text, TTF_Font* texture_ttf, SDL_Color color, const int& x, const int& y, const float& multiple);
+
+    // 交换两个ChessDataBoardIterm的名字、分数和坐标
+    void swapField(ChessDataBoardIterm& iterm);
 };
 
 

@@ -30,14 +30,14 @@ void ChessDataBoardIterm::init(SDLWindow* iterm_window, TTF_Font* normal_font, T
     this->chess_data_iterm_window = iterm_window;
 	this->normal_ttf = normal_font;
     this->art_ttf = art_font;
-    INFOLOG("init||ChessDataBoardIterm init success||iterm_name={}", this->iterm_name);
+    DEBUGLOG("init||ChessDataBoardIterm init success||iterm_name={}", this->iterm_name);
 }
 
 
 void ChessDataBoardIterm::render(SDL_Color color)
 {
-    this->renderText(iterm_name, this->normal_ttf, color, this->iterm_name_x, this->iterm_name_y, this->iterm_name_multiple);
-    this->renderText(std::to_string(this->iterm_score), this->art_ttf, color, this->iterm_score_x, this->iterm_score_y, this->iterm_score_multiple);
+    this->renderText(iterm_name, this->art_ttf, color, this->iterm_name_x, this->iterm_name_y, this->iterm_name_multiple);
+    this->renderText(std::to_string(this->iterm_score), this->normal_ttf, color, this->iterm_score_x, this->iterm_score_y, this->iterm_score_multiple);
 }
 
 void ChessDataBoardIterm::addScore()
@@ -50,4 +50,23 @@ void ChessDataBoardIterm::renderText(const std::string& texture_text, TTF_Font* 
 {
 	this->data_board_iterm_ttf->loadRenderText(this->chess_data_iterm_window->getRenderer(), texture_ttf, texture_text, color);
 	this->data_board_iterm_ttf->ttfRender(this->chess_data_iterm_window->getRenderer(), x, y, multiple);
+}
+
+void ChessDataBoardIterm::swapField(ChessDataBoardIterm& iterm)
+{
+    // 名字
+    // MyUtils::swapValue(this->iterm_name, iterm.iterm_name);
+    // 要渲染的文字坐标
+    MyUtils::swapValue(this->iterm_name_x, iterm.iterm_name_x);
+    MyUtils::swapValue(this->iterm_name_y, iterm.iterm_name_y);
+    // 文字缩放倍数
+    MyUtils::swapValue(this->iterm_name_multiple, iterm.iterm_name_multiple);
+    // 分数
+    // MyUtils::swapValue(this->iterm_score, iterm.iterm_score);
+    // 要渲染的文字坐标
+    MyUtils::swapValue(this->iterm_score_x, iterm.iterm_score_x);
+    MyUtils::swapValue(this->iterm_score_y, iterm.iterm_score_y);
+    // 文字缩放倍数
+    MyUtils::swapValue(this->iterm_score_multiple, iterm.iterm_score_multiple);
+    INFOLOG("swapField||name={}||iterm.name={}", this->iterm_name, iterm.iterm_name);
 }
