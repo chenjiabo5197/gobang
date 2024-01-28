@@ -2,7 +2,7 @@
 * Author: chenjiabo
 * E-mail: chen_wangyi666@163.com
 * Date: 2024-1-3
-* Description: This is manage.h file
+* Description: 顶层管理，负责调用各个子管理系统
 * Copyright (c) 2023, All rights reserved
 =============================================*/
 

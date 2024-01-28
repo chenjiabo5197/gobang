@@ -1,3 +1,10 @@
+/*============================================
+* Author: chenjiabo
+* E-mail: chen_wangyi666@163.com
+* Date: 2024-1-3
+* Description: 结算页面管理系统，负责结算页面的渲染
+* Copyright (c) 2024, All rights reserved
+=============================================*/
 #pragma once
 
 #include <SDL2/SDL.h>

@@ -1,3 +1,10 @@
+/*============================================
+* Author: chenjiabo
+* E-mail: chen_wangyi666@163.com
+* Date: 2024-1-3
+* Description: 选择游戏方式管理系统，负责选择游戏方式页面渲染和选择先后手窗口
+* Copyright (c) 2023, All rights reserved
+=============================================*/
 #pragma once
 
 #include <SDL2/SDL.h>
@@ -31,6 +38,9 @@ private:
 
     // 单人游戏选择先后手
     void singlePlaySelectChess();
+
+    // 当前游戏类型，单人、双人、网络
+    game_kind_type current_game_type;
 
     // 处理选择先后手窗口事件,返回白棋和黑棋与鼠标的位置关系枚举
     std::pair<sdl_button_sprite, sdl_button_sprite> handleWindowEvents(SDL_Event* event, bool mouse_focus);

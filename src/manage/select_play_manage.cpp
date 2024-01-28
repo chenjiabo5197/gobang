@@ -54,7 +54,7 @@ void SelectPlayManage::startRender()
 
 void SelectPlayManage::handleEvents(SDL_Event* event)
 {
-    if (event->type == SINGLE_PLAYER_EVENT || event->type == AGAIN_GAME_EVENT)
+    if (event->type == SINGLE_PLAYER_EVENT || (this->current_game_type == SINGLE_PLAYER_GAME && event->type == AGAIN_GAME_EVENT))
     {
         this->singlePlaySelectChess();
     }
@@ -64,35 +64,43 @@ void SelectPlayManage::handleEvents(SDL_Event* event)
     }
     if (this->select_play_buttons[0]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP) // TODO 新建优化N_SPRITE_MOUSE_UP)
     {
+        // 单人游戏
+        this->current_game_type = SINGLE_PLAYER_GAME;
         SDL_Event event;
         event.type = SINGLE_PLAYER_EVENT;
         SDL_PushEvent(&event);
         this->select_play_buttons[0]->initButtonCurrentSprite();
-        INFOLOG("handleEvents||push event=SINGLE_PLAYER_EVENT");
+        INFOLOG("handleEvents||push event=SINGLE_PLAYER_EVENT||current_game_type = SINGLE_PLAYER_GAME");
     }
     if (this->select_play_buttons[1]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
     {
+        // 双人游戏
+        this->current_game_type = TWO_PLAYERS_GAME;
         SDL_Event event;
         event.type = TWO_PLAYER_EVENT;
         SDL_PushEvent(&event);
         this->select_play_buttons[1]->initButtonCurrentSprite();
-        INFOLOG("handleEvents||push event=TWO_PLAYER_EVENT");
+        INFOLOG("handleEvents||push event=TWO_PLAYER_EVENT||current_game_type = TWO_PLAYERS_GAME");
     }
     if (this->select_play_buttons[2]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
     {
+        // 网络对战
+        this->current_game_type = PLAYER_INTERNET_GAME;
         SDL_Event event;
         event.type = PLAY_INTERNET_EVENT;
         SDL_PushEvent(&event);
         this->select_play_buttons[2]->initButtonCurrentSprite();
-        INFOLOG("handleEvents||push event=PLAY_INTERNET_EVENT");
+        INFOLOG("handleEvents||push event=PLAY_INTERNET_EVENT||current_game_type = PLAYER_INTERNET_GAME");
     }
     if (this->select_play_buttons[3]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
     {
+        // 返回主菜单
+        this->current_game_type = GAME_KIND_DEFAULT;
         SDL_Event event;
         event.type = BACK_MANU_EVENT;
         SDL_PushEvent(&event);
         this->select_play_buttons[3]->initButtonCurrentSprite();
-        INFOLOG("handleEvents||push event=BACK_MANU_EVENT");
+        INFOLOG("handleEvents||push event=BACK_MANU_EVENT||current_game_type = GAME_KIND_DEFAULT");
     }
 }
 
@@ -186,12 +194,12 @@ std::pair<sdl_button_sprite, sdl_button_sprite> SelectPlayManage::handleWindowEv
                     break;
                 }                   
             }
-            DEBUGLOG("handleWindowEvents||i={}||chess_mouse_type={}", i, (int)chess_mouse_type[i]);
+            // DEBUGLOG("handleWindowEvents||i={}||chess_mouse_type={}", i, (int)chess_mouse_type[i]);
         }
     }
     std::pair<sdl_button_sprite, sdl_button_sprite> chess_mouse_type_pair(chess_mouse_type[0], chess_mouse_type[1]);
-    DEBUGLOG("handleWindowEvents||chess_mouse_type_pair.first={}||chess_mouse_type_pair.second={}||type={}", 
-    (int)chess_mouse_type_pair.first, (int)chess_mouse_type_pair.second, (int)event->type);
+    // DEBUGLOG("handleWindowEvents||chess_mouse_type_pair.first={}||chess_mouse_type_pair.second={}||type={}", 
+    // (int)chess_mouse_type_pair.first, (int)chess_mouse_type_pair.second, (int)event->type);
     return chess_mouse_type_pair;
 }
 

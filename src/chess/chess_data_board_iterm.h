@@ -57,7 +57,7 @@ public:
     // 渲染文字到指定位置
 	void renderText(const std::string& texture_text, TTF_Font* texture_ttf, SDL_Color color, const int& x, const int& y, const float& multiple);
 
-    // 交换两个ChessDataBoardIterm的名字、分数和坐标
+    // 交换两个ChessDataBoardIterm的名字、分数的坐标
     void swapField(ChessDataBoardIterm& iterm);
 };
 

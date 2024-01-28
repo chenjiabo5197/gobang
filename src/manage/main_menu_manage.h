@@ -1,3 +1,10 @@
+/*============================================
+* Author: chenjiabo
+* E-mail: chen_wangyi666@163.com
+* Date: 2024-1-3
+* Description: 主菜单管理，负责主菜单的渲染
+* Copyright (c) 2023, All rights reserved
+=============================================*/
 #pragma once
 
 #include <SDL2/SDL.h>

@@ -116,9 +116,10 @@ typedef enum {
 	TWO_PLAYER_WHITE_WIN		// 双人游戏白方胜
 } result_info_type;
 
-// 单人游戏先手方枚举
+// 游戏先手方枚举
 typedef enum {
-	BLACK_COLOR_TYPE,			// 黑方先手
-	WHITE_COLOR_TYPE			// 白方先手
+	BLACK_COLOR_TYPE,			// 单人游戏，黑方
+	WHITE_COLOR_TYPE,			// 单人游戏，白方
+	TWO_PLAYERS_COLOR_TYPE		// 双人游戏
 } chess_color_type;
 

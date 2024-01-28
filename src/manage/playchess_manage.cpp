@@ -69,7 +69,7 @@ void PlaychessManage::startRender()
 int machineChessDown(void* data)
 {
 	Machine* machine = (Machine *)(data);
-    ChessPos pos = machine->think();
+    ChessPos pos;
     // 程序休眠1s，假装在思考
     MyUtils::sleep_seconds(1.5);
     // TODO 落子音
@@ -87,6 +87,10 @@ int machineChessDown(void* data)
     if (is_machine_first && machine->getChessNum() == 0)
     {
         pos = ChessPos{7, 7};
+    }
+    else  // 非初始下棋，需要每一步进行打分
+    {
+        pos = machine->think();
     }
 	machine->chessboard->chessDown(pos, chess_type);
     machine->addChessNum();
@@ -141,10 +145,12 @@ bool PlaychessManage::handleMouseClick(SDL_Event* event)
 // TODO 双人游戏，网络对战
 void PlaychessManage::handleEvents(SDL_Event* event)
 {
+    // 单人游戏，玩家赢
     if (event->type == PLAYER_WIN_EVENT)
     {
         this->chess_data_board->updateScoreInfo(SINGLE_PLAYER_WIN);
     }
+    // 单人游戏机器人赢
     else if (event->type == PLAYER_LOSE_EVENT)
     {
         this->chess_data_board->updateScoreInfo(SINGLE_PLAYER_LOSE);
@@ -187,10 +193,13 @@ void PlaychessManage::handleEvents(SDL_Event* event)
         this->chessboard->initChessMap();
         this->chess_data_board->startSingleGame(BLACK_COLOR_TYPE);
     }
+    // 双人游戏
     else if (event->type == TWO_PLAYER_EVENT)
     {
         // TODO 双人游戏
+        this->chess_data_board->startSingleGame(TWO_PLAYERS_COLOR_TYPE);
     }
+    // 鼠标点击事件
     if(this->handleMouseClick(event) && this->chessboard->get_player_flag_type() == MACHINE_PLAYER)
     {
         machine_thread = SDL_CreateThread(machineChessDown, "machine player", this->machine);
@@ -200,6 +209,7 @@ void PlaychessManage::handleEvents(SDL_Event* event)
     {
         this->playchess_buttons[i]->handleButtonEvent(event);
     }
+    // 检查悔棋键状态
     if (this->playchess_buttons[0]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
     {
         SDL_Event event;
@@ -208,6 +218,7 @@ void PlaychessManage::handleEvents(SDL_Event* event)
         this->playchess_buttons[0]->initButtonCurrentSprite();
         INFOLOG("handleEvents||push event=PLAYER_WITHDRAW_EVENT");
     }
+    // 检查返回主菜单键状态
     if (this->playchess_buttons[1]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
     {
         SDL_Event event;

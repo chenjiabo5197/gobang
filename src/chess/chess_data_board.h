@@ -29,9 +29,6 @@ private:
     // 数据板数组
     ChessDataBoardIterm* data_board_arr[2];
 
-    // 当前比赛类型，单人/双人/网络
-    game_kind_type current_game_type;
-
     // 单人游戏先后手
     chess_color_type current_chess_sequence;
     chess_color_type last_chess_sequence;
@@ -51,9 +48,6 @@ private:
 
     // 渲染文字到指定位置
 	void renderText(const std::string& texture_text, TTF_Font* texture_ttf, SDL_Color color, const int& x, const int& y, const float& multiple);
-
-    // 比分信息
-    std::map<std::string, std::map<std::string, std::string>> score_info;
 
     // 总计时器，显示当前对局进行的时间
     SDLTimer* top_timer;

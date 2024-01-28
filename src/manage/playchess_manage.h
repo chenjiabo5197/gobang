@@ -1,3 +1,10 @@
+/*============================================
+* Author: chenjiabo
+* E-mail: chen_wangyi666@163.com
+* Date: 2024-1-3
+* Description: 下棋页面管理，负责下棋页面的渲染
+* Copyright (c) 2023, All rights reserved
+=============================================*/
 #pragma once
 
 #include <SDL2/SDL.h>
@@ -32,7 +39,7 @@ private:
     // 是否需要重置数据板
     bool is_reset_chess_data_board;
 
-    // 数组长度
+    // 按键的数组长度，渲染按键时使用
     int array_length;
 
     //当前页面所有按键的中心位置，按键以此为中心，纵向分布
