@@ -8,8 +8,8 @@ log_filenums=10
 
 # 主窗口
 main_window_title=五子棋
-main_window_screen_width=1280
-main_window_screen_height=960
+main_window_screen_width=1080
+main_window_screen_height=800
 
 # 选择先后手窗口
 select_chess_color_title=选择先后手
@@ -37,10 +37,10 @@ chessboard_r=255
 chessboard_g=246
 chessboard_b=143
 chessboard_alpha=255
-chessboard_lattice_size=60
+chessboard_lattice_size=50
 
 # 窗口右上角对局数据信息
-data_board_x=1090
+data_board_x=940
 data_board_y=170
 symbol_white_chess_resource_path=resources/white.png
 symbol_white_chess_origin_size=83
@@ -71,39 +71,39 @@ main_menu_buttons_interval=100
 start_game_resourece_path=resources/start_game.png
 start_game_width=260
 start_game_height=83
-start_game_multiple=1.0
+start_game_multiple=0.9
 best_scores_resourece_path=resources/best_scores.png
 best_scores_width=260
 best_scores_height=83
-best_scores_multiple=1.0
+best_scores_multiple=0.9
 exit_game_resourece_path=resources/exit_game.png
 exit_game_width=260
 exit_game_height=83
-exit_game_multiple=1.0
+exit_game_multiple=0.9
 # 选择游戏方式菜单  按键中心默认为屏幕中心
 select_play_buttons_interval=100
 single_player_resourece_path=resources/single_player.png
 single_player_width=260
 single_player_height=83
-single_player_multiple=1.0
+single_player_multiple=0.9
 two_players_resourece_path=resources/two_players.png
 two_players_width=260
 two_players_height=83
-two_players_multiple=1.0
+two_players_multiple=0.9
 play_internet_resourece_path=resources/play_internet.png
 play_internet_width=260
 play_internet_height=83
-play_internet_multiple=1.0
+play_internet_multiple=0.9
 normal_back_menu_resourece_path=resources/back_menu.png
 normal_back_menu_width=260
 normal_back_menu_height=83
-normal_back_menu_multiple=1.0
+normal_back_menu_multiple=0.9
 # 下棋界面及结果结算界面  按键中心需要赋值
 playchess_buttons_interval=50
-playchess_buttons_x=1050
+playchess_buttons_x=900
 playchess_buttons_y=400
 settlement_buttons_interval=50
-settlement_buttons_x=1050
+settlement_buttons_x=900
 settlement_buttons_y=400
 back_menu_resourece_path=resources/back_menu.png
 back_menu_width=260
