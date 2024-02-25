@@ -114,11 +114,11 @@ bool Chessboard::renderPlayChessInterface()
 		// 纵向的棋盘线
         SDL_RenderDrawLine(this->chessboard_window->getRenderer(), this->lattice_size*i+this->origin_x, this->origin_y, this->lattice_size*i+this->origin_x, this->lattice_size*14+this->origin_y);
 		// 纵向的1-15
-		this->renderText(std::to_string(i+1), this->origin_x-15, this->lattice_size*i+this->origin_y, 0.4);
+		this->renderText(std::to_string(i+1), this->origin_x-15, this->lattice_size*i+this->origin_y, 0.3);
 		std::string temp = "";
 		temp += ch + i;
 		// 横向的A-
-		this->renderText(temp, this->lattice_size*i+this->origin_x, this->lattice_size*14+this->origin_y+15, 0.4);
+		this->renderText(temp, this->lattice_size*i+this->origin_x, this->lattice_size*14+this->origin_y+15, 0.3);
     }
     // 渲染棋盘上五个圆点
     this->renderCircle(this->lattice_size*7+this->origin_x, this->lattice_size*7+this->origin_y, 5);
@@ -382,6 +382,18 @@ bool Chessboard::checkOver()
 		else if (player_flag == MACHINE_PLAYER)  // AI赢
 		{
 			INFOLOG("Chess::checkOver||machine win");
+			// resultFlag = PLAYER_LOSE;
+			return true;
+		}
+		else if (player_flag == BLACK_PLAYER)  // 双人游戏黑方赢
+		{
+			INFOLOG("Chess::checkOver||black win");
+			// resultFlag = PLAYER_LOSE;
+			return true;
+		}
+		else if (player_flag == WHITE_PLAYER)  // 双人游戏白方赢
+		{
+			INFOLOG("Chess::checkOver||white win");
 			// resultFlag = PLAYER_LOSE;
 			return true;
 		}

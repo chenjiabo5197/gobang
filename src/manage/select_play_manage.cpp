@@ -5,10 +5,10 @@ SelectPlayManage::SelectPlayManage(const Config& config)
     this->buttons_x = config.Read("main_window_screen_width", 0) / 2;// TODO 新建优化
     this->buttons_y = config.Read("main_window_screen_height", 0) / 2;
     this->button_interval = config.Read("select_play_buttons_interval", 0);
-    this->select_play_buttons[0] = new SDLButton(config, "single_player", this->buttons_x, this->buttons_y-2*this->button_interval);
-    this->select_play_buttons[1] = new SDLButton(config, "two_players", this->buttons_x, this->buttons_y-this->button_interval);
-    this->select_play_buttons[2] = new SDLButton(config, "play_internet", this->buttons_x, this->buttons_y);
-    this->select_play_buttons[3] = new SDLButton(config, "normal_back_menu", this->buttons_x, this->buttons_y+this->button_interval);
+    this->select_play_buttons[0] = new SDLButton(config, "single_player", this->buttons_x, this->buttons_y-1.5*this->button_interval);
+    this->select_play_buttons[1] = new SDLButton(config, "two_players", this->buttons_x, this->buttons_y-this->button_interval/2);
+    this->select_play_buttons[2] = new SDLButton(config, "play_internet", this->buttons_x, this->buttons_y+this->button_interval/2);
+    this->select_play_buttons[3] = new SDLButton(config, "normal_back_menu", this->buttons_x, this->buttons_y+1.5*this->button_interval);
     this->array_length = sizeof(this->select_play_buttons) / sizeof(this->select_play_buttons[0]);
     this->select_chess_color_window = new SDLWindow(config, "select_chess_color");
     this->white_color_chess = new Chess(config, "symbol_white_chess");

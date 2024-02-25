@@ -22,7 +22,7 @@ void Player::init()
 void Player::resetPlayer()
 {
 	this->chess_num = 0;
-	INFOLOG("Player::resetPlayer||reset player success");
+	INFOLOG("Player::resetPlayer||reset player success||name={}", this->player_name);
 }
 
 void Player::addChessNum()
@@ -32,6 +32,7 @@ void Player::addChessNum()
 
 int Player::getChessNum()
 {
+    INFOLOG("Player::getChessNum||getChessNum||chess_num={}", this->chess_num);
 	return this->chess_num;
 }
 

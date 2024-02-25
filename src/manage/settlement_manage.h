@@ -39,14 +39,18 @@ private:
     // 要渲染字体的坐标(字体中心坐标)
     int font_x;
     int font_y;
-public:
-    SettlementManage(const Config& config);
-    ~SettlementManage();
 
     // 玩家赢结算页面的渲染
     SDLTTF* player_win_interface;
     // 玩家输结算页面的渲染
     SDLTTF* player_lose_interface;
+    // 双人游戏黑方胜利结算页面的渲染
+    SDLTTF* black_win_interface;
+    // 双人游戏白方胜利结算页面的渲染
+    SDLTTF* white_win_interface;
+public:
+    SettlementManage(const Config& config);
+    ~SettlementManage();
 
     void startRender(const interface_kind_type& type);
 

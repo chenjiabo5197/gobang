@@ -13,6 +13,7 @@ PlaychessManage::PlaychessManage(const Config& config)
     this->chessboard = new Chessboard(config); // TODO 新建优化
     this->machine = new Machine(this->chessboard);
     this->single_player = new Player(this->chessboard, "single_player", CHESS_BLACK);
+    this->single_player2 = new Player(this->chessboard, "single_player2", CHESS_BLACK);
     this->chess_data_board = new ChessDataBoard(config);
     this->button_interval = config.Read("playchess_buttons_interval", 0);
     this->buttons_x = config.Read("playchess_buttons_x", 0);
@@ -30,6 +31,7 @@ PlaychessManage::~PlaychessManage()
     delete chessboard;
     delete machine;
     delete single_player;
+    delete single_player2;
     delete chess_data_board;
     SDL_WaitThread(machine_thread, nullptr);
     DEBUGLOG("~PlaychessManage success||release resource");
@@ -107,38 +109,96 @@ int machineChessDown(void* data)
 
 bool PlaychessManage::handleMouseClick(SDL_Event* event)
 {
-    if (event->type == SDL_MOUSEBUTTONDOWN && this->chessboard->get_player_flag_type() == SINGLE_PLAYER)  // 鼠标点击事件
+    if (event->type == SDL_MOUSEBUTTONDOWN)  // 鼠标点击事件
     {
-        //获取鼠标位置
-        int x, y;
-        SDL_GetMouseState(&x, &y);
-        ChessPos pos;
-        // 检查是否有效落子
-        bool is_valid_click = this->chessboard->clickBoard(x, y, &pos);
-        if (is_valid_click)
+        if (this->chessboard->get_player_flag_type() == SINGLE_PLAYER)   // 单人游戏
         {
-            chess_kind_type chess_type = CHESS_DEFAULT;
-            if (is_machine_first)
+            //获取鼠标位置
+            int x, y;
+            SDL_GetMouseState(&x, &y);
+            ChessPos pos;
+            // 检查是否有效落子
+            bool is_valid_click = this->chessboard->clickBoard(x, y, &pos);
+            if (is_valid_click)
             {
-                chess_type = CHESS_WHITE;
+                chess_kind_type chess_type = CHESS_DEFAULT;
+                if (is_machine_first)
+                {
+                    chess_type = CHESS_WHITE;
+                }
+                else
+                {
+                    chess_type = CHESS_BLACK;
+                }
+                // TODO 落子音
+                this->chessboard->chessDown(pos, chess_type);
+                this->single_player->addChessNum();
+                if(this->chessboard->checkOver())
+                {
+                    SDL_Event event;
+                    event.type = PLAYER_WIN_EVENT;
+                    INFOLOG("handleMouseClick||push event||event_type={}", event.type);
+                    SDL_PushEvent(&event);
+                }
+                else
+                {
+                    this->chessboard->set_player_flag_type(MACHINE_PLAYER);
+                }
             }
-            else
-            {
-                chess_type = CHESS_BLACK;
-            }
-            // TODO 落子音
-            this->chessboard->chessDown(pos, chess_type);
-            this->single_player->addChessNum();
-            if(this->chessboard->checkOver())
-            {
-                SDL_Event event;
-                event.type = PLAYER_WIN_EVENT;
-                SDL_PushEvent(&event);
-            }
-            this->chessboard->set_player_flag_type(MACHINE_PLAYER);
+            return is_valid_click;
         }
-        return is_valid_click;
+        else if (this->chessboard->get_player_flag_type() == BLACK_PLAYER || this->chessboard->get_player_flag_type() == WHITE_PLAYER)  // 双人游戏
+        {
+            //获取鼠标位置
+            int x, y;
+            SDL_GetMouseState(&x, &y);
+            ChessPos pos;
+            // 检查是否有效落子
+            bool is_valid_click = this->chessboard->clickBoard(x, y, &pos);
+            if (is_valid_click)
+            {
+                chess_kind_type chess_type = CHESS_DEFAULT;
+                // 判断落子颜色
+                if (this->chessboard->get_player_flag_type() == WHITE_PLAYER)
+                {
+                    chess_type = CHESS_WHITE;
+                }
+                else
+                {
+                    chess_type = CHESS_BLACK;
+                }
+                // TODO 落子音
+                this->chessboard->chessDown(pos, chess_type);
+                // this->single_player->addChessNum();  // 双人游戏暂时不需要计算玩家棋子
+                if(this->chessboard->checkOver())
+                {
+                    SDL_Event event;
+                    // 判断赢方
+                    if (this->chessboard->get_player_flag_type() == WHITE_PLAYER)
+                    {
+                        event.type = TWO_PLAYER_WHITE_WIN_EVENT;
+                    }
+                    else
+                    {
+                        event.type = TWO_PLAYER_BLACK_WIN_EVENT;
+                    }
+                    INFOLOG("handleMouseClick||push event||event_type={}", event.type);
+                    SDL_PushEvent(&event);
+                }
+                else if (this->chessboard->get_player_flag_type() == WHITE_PLAYER)               
+                {
+                    this->chessboard->set_player_flag_type(BLACK_PLAYER);
+                }
+                else
+                {
+                    this->chessboard->set_player_flag_type(WHITE_PLAYER);
+                }
+            }
+            return is_valid_click;
+        }
+        
     }
+    
     return false;
 }
 
@@ -197,6 +257,15 @@ void PlaychessManage::handleEvents(SDL_Event* event)
     else if (event->type == TWO_PLAYER_EVENT)
     {
         // TODO 双人游戏
+        if (this->is_reset_chess_data_board)
+        {
+            this->chess_data_board->initDataBoard(TWO_PLAYERS_COLOR_TYPE);
+            this->is_reset_chess_data_board = false;
+        }
+        this->single_player->resetPlayer();
+        this->single_player2->resetPlayer();
+        this->chessboard->set_player_flag_type(BLACK_PLAYER);
+        this->chessboard->initChessMap();
         this->chess_data_board->startSingleGame(TWO_PLAYERS_COLOR_TYPE);
     }
     // 鼠标点击事件

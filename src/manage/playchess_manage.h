@@ -27,6 +27,8 @@ private:
     Machine* machine;
     // 玩家
     Player* single_player;
+    // 玩家2
+    Player* single_player2;
     
     // 棋盘渲染时普通字体
     TTF_Font* normal_ttf;

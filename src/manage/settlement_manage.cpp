@@ -3,8 +3,10 @@
 SettlementManage::SettlementManage(const Config& config)
 {
     std::string temp;
-    this->player_win_interface = new SDLTTF(config, "ttf_result_player_win");// TODO 新建优化
-    this->player_lose_interface = new SDLTTF(config, "ttf_result_player_lose");
+    this->player_win_interface = new SDLTTF(config, "result_player_win");// TODO 新建优化
+    this->player_lose_interface = new SDLTTF(config, "result_player_lose");
+    this->black_win_interface = new SDLTTF(config, "result_black_win");
+    this->white_win_interface = new SDLTTF(config, "result_white_win");
     this->buttons_x = config.Read("settlement_buttons_x", 0);
     this->buttons_y = config.Read("settlement_buttons_y", 0);
     this->button_interval = config.Read("settlement_buttons_interval", 0);
@@ -19,6 +21,8 @@ SettlementManage::~SettlementManage()
 {
     delete player_win_interface;
     delete player_lose_interface;
+    delete black_win_interface;
+    delete white_win_interface;
     DEBUGLOG("~SettlementManage success||release resource");
 }
 
@@ -33,6 +37,8 @@ void SettlementManage::init(SDLWindow* sdl_window, TTF_Font* art_font)
     INFOLOG("init||init variable success");
     this->player_win_interface->loadRenderText(this->settlement_main_window->getRenderer(), art_font);
     this->player_lose_interface->loadRenderText(this->settlement_main_window->getRenderer(), art_font);
+    this->black_win_interface->loadRenderText(this->settlement_main_window->getRenderer(), art_font);
+    this->white_win_interface->loadRenderText(this->settlement_main_window->getRenderer(), art_font);
     for (int i = 0; i < this->array_length; i++)
     {
         this->settlement_buttons[i]->loadResource(this->settlement_main_window->getWindow(), this->settlement_main_window->getRenderer());
@@ -49,6 +55,14 @@ void SettlementManage::startRender(const interface_kind_type& type)
     else if (type == PLAYER_WIN_INTERFACE)
     {
         this->player_win_interface->ttfRender(this->settlement_main_window->getRenderer(), font_x, font_y);
+    }
+    else if (type == BLACK_WIN_INTERFACE)
+    {
+        this->black_win_interface->ttfRender(this->settlement_main_window->getRenderer(), font_x, font_y, 0.35);
+    }
+    else if (type == WHITE_WIN_INTERFACE)
+    {
+        this->white_win_interface->ttfRender(this->settlement_main_window->getRenderer(), font_x, font_y, 0.35);
     }
     for (int i = 0; i < this->array_length; i++)
     {

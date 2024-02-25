@@ -27,6 +27,10 @@
 #define SINGLE_PLAYER_WHITE_EVENT	    (SDL_USEREVENT+12)
 // 单人游戏玩家选择白色棋子  先手
 #define SINGLE_PLAYER_BLACK_EVENT	    (SDL_USEREVENT+13)
+// 双人游戏 白方赢
+#define TWO_PLAYER_WHITE_WIN_EVENT	   	(SDL_USEREVENT+14)
+// 双人游戏 黑方赢
+#define TWO_PLAYER_BLACK_WIN_EVENT	    (SDL_USEREVENT+15)
 
 
 typedef enum {

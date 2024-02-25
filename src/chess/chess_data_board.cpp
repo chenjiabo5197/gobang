@@ -36,12 +36,16 @@ void ChessDataBoard::initDataBoard(const chess_color_type& type)
     switch (type)
     {
     case BLACK_COLOR_TYPE:
-        this->data_board_arr[0] = new ChessDataBoardIterm("机器人", this->data_board_x+30, this->data_board_y-50, 0.08, 0.7);
-        this->data_board_arr[1] = new ChessDataBoardIterm("玩家", this->data_board_x+30, this->data_board_y+50, 0.08, 0.7);
+        this->data_board_arr[0] = new ChessDataBoardIterm("机器人", this->data_board_x+30, this->data_board_y-50, 0.06, 0.7);
+        this->data_board_arr[1] = new ChessDataBoardIterm("玩家", this->data_board_x+30, this->data_board_y+50, 0.06, 0.7);
         break;
     case WHITE_COLOR_TYPE:
-        this->data_board_arr[0] = new ChessDataBoardIterm("机器人", this->data_board_x+30, this->data_board_y+50, 0.08, 0.7);
-        this->data_board_arr[1] = new ChessDataBoardIterm("玩家", this->data_board_x+30, this->data_board_y-50, 0.08, 0.7);
+        this->data_board_arr[0] = new ChessDataBoardIterm("机器人", this->data_board_x+30, this->data_board_y+50, 0.06, 0.7);
+        this->data_board_arr[1] = new ChessDataBoardIterm("玩家", this->data_board_x+30, this->data_board_y-50, 0.06, 0.7);
+        break;
+    case TWO_PLAYERS_COLOR_TYPE:
+        this->data_board_arr[0] = new ChessDataBoardIterm("玩家1", this->data_board_x+30, this->data_board_y+50, 0.06, 0.7);
+        this->data_board_arr[1] = new ChessDataBoardIterm("玩家2", this->data_board_x+30, this->data_board_y-50, 0.06, 0.7);
         break;
     default:
         break;
@@ -65,7 +69,7 @@ void ChessDataBoard::render(const player_flag_type& type)
     // 渲染右上角解释窗口
     // 默认字体黑色
     SDL_Color color = {0, 0, 0, 0};
-    SDL_Color current_color = {0, 0, 255, 0};
+    SDL_Color current_color = {0, 255, 0, 0};
     // 窗口头显示时间
     std::stringstream time_text;
     time_text.str("");
@@ -80,6 +84,14 @@ void ChessDataBoard::render(const player_flag_type& type)
         this->data_board_arr[1]->render(color);
         break;
     case SINGLE_PLAYER:
+        this->data_board_arr[0]->render(color);
+        this->data_board_arr[1]->render(current_color);
+        break;
+    case BLACK_PLAYER:
+        this->data_board_arr[0]->render(current_color);
+        this->data_board_arr[1]->render(color);
+        break;
+    case WHITE_PLAYER:
         this->data_board_arr[0]->render(color);
         this->data_board_arr[1]->render(current_color);
         break;

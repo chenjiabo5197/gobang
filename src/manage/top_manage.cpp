@@ -11,8 +11,8 @@ TopManage::TopManage(const Config& config)
 {
     this->setRendererType(DEFAULT_INTERFACE);
     std::string temp;
-    this->art_ttf_path = config.Read("ttf_result_resource_path", temp);
-    this->art_ttf_ptsize = config.Read("ttf_result_ptsize", 0);
+    this->art_ttf_path = config.Read("result_resource_path", temp);
+    this->art_ttf_ptsize = config.Read("result_ptsize", 0);
     this->normal_ttf_path = config.Read("normal_ttf_resource_path", temp);
     this->normal_ttf_ptsize = config.Read("normal_ttf_ptsize", 0);
     this->main_menu_manage = new MainMenuManage(config);// TODO 新建优化
@@ -68,6 +68,16 @@ void TopManage::start()
                 this->playchess_manage->handleEvents(&event);
                 this->setRendererType(PLAYER_LOSE_PRE_INTERFACE);
             }
+            else if (event.type == TWO_PLAYER_BLACK_WIN_EVENT)
+            {
+                this->playchess_manage->handleEvents(&event);
+                this->setRendererType(BLACK_WIN_INTERFACE);
+            }
+            else if (event.type == TWO_PLAYER_WHITE_WIN_EVENT)
+            {
+                this->playchess_manage->handleEvents(&event);
+                this->setRendererType(WHITE_WIN_INTERFACE);
+            }
             else if (event.type == START_GAME_EVENT)
             {
                 this->setRendererType(SELECT_PLAY_INTERFACE);
@@ -78,6 +88,7 @@ void TopManage::start()
             }
             else if (event.type == TWO_PLAYER_EVENT)
             {
+                this->setRendererType(PLAYCHESS_INTERFACE);
                 this->playchess_manage->handleEvents(&event);
             }
             else if (event.type == SINGLE_PLAYER_WHITE_EVENT || event.type == SINGLE_PLAYER_BLACK_EVENT)
@@ -105,7 +116,7 @@ void TopManage::start()
                 {
                     this->playchess_manage->handleEvents(&event);
                 }
-                else if (this->render_type == PLAYER_WIN_INTERFACE || this->render_type == PLAYER_LOSE_INTERFACE)
+                else if (this->render_type == PLAYER_WIN_INTERFACE || this->render_type == PLAYER_LOSE_INTERFACE || this->render_type == BLACK_WIN_INTERFACE || this->render_type == WHITE_WIN_INTERFACE)
                 {
                     this->settlement_manage->handleEvents(&event);
                 }
@@ -139,6 +150,8 @@ void TopManage::start()
             break;
         case PLAYER_WIN_INTERFACE:
         case PLAYER_LOSE_INTERFACE:
+        case BLACK_WIN_INTERFACE:
+        case WHITE_WIN_INTERFACE:
         {
             if (last_render_type != this->render_type)
             {
@@ -215,6 +228,7 @@ bool TopManage::initRender()
 
 bool TopManage::loadResource()
 {
+    // TODO 优化加载，默认不用加载后面用不到的管理页面
     this->main_menu_manage->init(this->main_window);
     this->select_play_manage->init(this->main_window, this->art_ttf);
     this->playchess_manage->init(this->main_window, this->normal_font, this->art_ttf);
