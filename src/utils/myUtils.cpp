@@ -8,7 +8,7 @@ bool MyUtils::isFileExistAndNotEmpty(const std::string& fileName)
 	{
 		// 文件不存在
 		ifs.close();
-		WARNLOG("MyUtils::isFileExistAndNotEmpty||no such file||fileName={}", fileName);
+		WARNLOG("isFileExistAndNotEmpty||no such file||fileName={}", fileName);
 		return false;
 	}
 	char ch;
@@ -17,11 +17,11 @@ bool MyUtils::isFileExistAndNotEmpty(const std::string& fileName)
 	{
 		// 文件为空
 		ifs.close();
-		WARNLOG("MyUtils::isFileExistAndNotEmpty||file is empty||fileName={}", fileName);
+		WARNLOG("isFileExistAndNotEmpty||file is empty||fileName={}", fileName);
 		return false;
 	}
 	ifs.close();
-	INFOLOG("MyUtils::isFileExistAndNotEmpty||file is exist and not empty||fileName={}", fileName);
+	INFOLOG("isFileExistAndNotEmpty||file is exist and not empty||fileName={}", fileName);
 	return true;
 }
 
@@ -32,7 +32,7 @@ bool MyUtils::saveVectorToCsv(std::vector<BestScoreUser>& v)
 	ofs.open(BESTSCORESFILE, std::ios::out);
 	if (!ofs.is_open())
 	{
-		ERRORLOG("MyUtils::saveVectorToCsv||open file fail");
+		ERRORLOG("saveVectorToCsv||open file fail");
 		return false;
 	}
 	for (std::vector<BestScoreUser>::iterator it = v.begin(); it != v.end(); it++)
@@ -41,10 +41,10 @@ bool MyUtils::saveVectorToCsv(std::vector<BestScoreUser>& v)
 		ofs << it->userScore << ",";
 		ofs << it->curTime << ",";
 		ofs << std::endl;
-		DEBUGLOG("MyUtils::saveVectorToCsv||write to {}||name={}||score={}||time={}", BESTSCORESFILE, it->userName, it->userScore, it->curTime);
+		DEBUGLOG("saveVectorToCsv||write to {}||name={}||score={}||time={}", BESTSCORESFILE, it->userName, it->userScore, it->curTime);
 	}
 	ofs.close();
-	INFOLOG("MyUtils::saveVectorToCsv||best scores save to file success||fileName={}", BESTSCORESFILE);
+	INFOLOG("saveVectorToCsv||best scores save to file success||fileName={}", BESTSCORESFILE);
 	return true;
 }
 
@@ -65,7 +65,7 @@ std::string MyUtils::getCurTime()
 	char c_TimeStamp[64];
 	memset(c_TimeStamp, 0, sizeof(c_TimeStamp));
 	strftime(c_TimeStamp, sizeof(c_TimeStamp), "%Y-%m-%d %H:%M:%S", p_Time);
-	DEBUGLOG("MyUtils::getCurTime||get curTime success||time={}", c_TimeStamp);
+	DEBUGLOG("getCurTime||get curTime success||time={}", c_TimeStamp);
 	return c_TimeStamp;
 }
 
@@ -92,14 +92,14 @@ std::vector<BestScoreUser> MyUtils::initBestScores()
 				{
 					break;
 				}
-				// DEBUGLOG("MyUtils::initBestScores||temp={}||buf={}||start={}||pos={}||len={}", buf.substr(start, pos - start), buf, start, pos, buf.size());
+				// DEBUGLOG("initBestScores||temp={}||buf={}||start={}||pos={}||len={}", buf.substr(start, pos - start), buf, start, pos, buf.size());
 				tempString.push_back(buf.substr(start, pos - start));
 				start = pos + 1;
 			}
 			tempUser.userName = tempString[0];
 			tempUser.userScore = tempString[1];
 			tempUser.curTime = tempString[2];
-			DEBUGLOG("MyUtils::initBestScores||name={}||score={}||time={}", tempUser.userName, tempUser.userScore, tempUser.curTime);
+			DEBUGLOG("initBestScores||name={}||score={}||time={}", tempUser.userName, tempUser.userScore, tempUser.curTime);
 			str += "{" + tempUser.userName + ", " + tempUser.userScore + ", " + tempUser.curTime + "}, ";
 			tempScore.push_back(tempUser);
 		}
@@ -108,10 +108,10 @@ std::vector<BestScoreUser> MyUtils::initBestScores()
 	else
 	{
 		tempScore.clear();
-		WARNLOG("MyUtils::initBestScores||{} is empty or not exist", BESTSCORESFILE);
+		WARNLOG("initBestScores||{} is empty or not exist", BESTSCORESFILE);
 	}
 	ifs.close();
-	INFOLOG("MyUtils::initBestScores||init best scores success||BestScoreUser={}", str);
+	INFOLOG("initBestScores||init best scores success||BestScoreUser={}", str);
 	return tempScore;
 }
 
@@ -123,17 +123,17 @@ void MyUtils::updateBestScore(std::vector<BestScoreUser> & bestScores, const Bes
 	{
 		// 找到插入位置了
 		if (user.userScore < it->userScore) {
-			DEBUGLOG("MyUtils::updateBestScore||find insert position||index={}", index);
+			DEBUGLOG("updateBestScore||find insert position||index={}", index);
 			break;
 		}
 	}
 	bestScores.insert(it, user);
 	if (bestScores.size() > MAXBESTSCORES) {
 		std::string lastItem = bestScores.back().userName + ", " + bestScores.back().userScore + ", " + bestScores.back().curTime;
-		DEBUGLOG("MyUtils::updateBestScore||bestScore.size() over{}||pop={}", MAXBESTSCORES, lastItem);
+		DEBUGLOG("updateBestScore||bestScore.size() over{}||pop={}", MAXBESTSCORES, lastItem);
 		bestScores.pop_back();
 	}
-	INFOLOG("MyUtils::updateBestScore||updateBestScore success");
+	INFOLOG("updateBestScore||updateBestScore success");
 }
 
 BestScoreUser MyUtils::getIBestScoreUser(const std::string& userName, const int& chessNum)

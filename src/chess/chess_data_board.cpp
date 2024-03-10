@@ -44,16 +44,19 @@ void ChessDataBoard::initDataBoard(const chess_color_type& type)
         this->data_board_arr[1] = new ChessDataBoardIterm("玩家", this->data_board_x+30, this->data_board_y-50, 0.06, 0.7);
         break;
     case TWO_PLAYERS_COLOR_TYPE:
-        this->data_board_arr[0] = new ChessDataBoardIterm("黑方", this->data_board_x+30, this->data_board_y+50, 0.06, 0.7);
-        this->data_board_arr[1] = new ChessDataBoardIterm("白方", this->data_board_x+30, this->data_board_y-50, 0.06, 0.7);
+        this->data_board_arr[2] = new ChessDataBoardIterm("黑方", this->data_board_x+30, this->data_board_y+50, 0.06, 0.7);
+        this->data_board_arr[3] = new ChessDataBoardIterm("白方", this->data_board_x+30, this->data_board_y-50, 0.06, 0.7);
         break;
     default:
         break;
     }
     this->last_chess_sequence = type;
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < 4; i++)
     {
-        this->data_board_arr[i]->init(this->chess_data_window, this->normal_ttf, this->art_ttf);
+        if (this->data_board_arr[i] != nullptr)
+        {
+            this->data_board_arr[i]->init(this->chess_data_window, this->normal_ttf, this->art_ttf);
+        }
     }
     INFOLOG("initDataBoard success||chess_color_type={}", (int)type);
 }
@@ -88,12 +91,12 @@ void ChessDataBoard::render(const player_flag_type& type)
         this->data_board_arr[1]->render(current_color);
         break;
     case BLACK_PLAYER:
-        this->data_board_arr[0]->render(current_color);
-        this->data_board_arr[1]->render(color);
+        this->data_board_arr[2]->render(current_color);
+        this->data_board_arr[3]->render(color);
         break;
     case WHITE_PLAYER:
-        this->data_board_arr[0]->render(color);
-        this->data_board_arr[1]->render(current_color);
+        this->data_board_arr[2]->render(color);
+        this->data_board_arr[3]->render(current_color);
         break;
     default:
         break;
@@ -128,11 +131,11 @@ void ChessDataBoard::updateScoreInfo(const result_info_type& type)
     }
     else if (type == TWO_PLAYER_BLACK_WIN)
     {
-        this->data_board_arr[0]->addScore();
+        this->data_board_arr[2]->addScore();
     }
     else if (type == TWO_PLAYER_WHITE_WIN)
     {
-        this->data_board_arr[1]->addScore();
+        this->data_board_arr[3]->addScore();
     }
     
 }

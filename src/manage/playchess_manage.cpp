@@ -21,7 +21,8 @@ PlaychessManage::PlaychessManage(const Config& config)
     this->playchess_buttons[0] = new SDLButton(config, "withdraw", this->buttons_x, this->buttons_y-this->button_interval);
     this->playchess_buttons[1] = new SDLButton(config, "back_menu", this->buttons_x, this->buttons_y);
     this->array_length = sizeof(this->playchess_buttons) / sizeof(this->playchess_buttons[0]);
-    this->is_reset_chess_data_board = true;
+    this->is_reset_single_player_chess_data_board = true;
+    this->is_reset_two_players_chess_data_board = true;
     DEBUGLOG("PlaychessManage construct success||button_interval={}||buttons_x={}||buttons_y={}||array_length={}", 
     this->button_interval, this->buttons_x, this->buttons_y, this->array_length);
 }
@@ -205,7 +206,7 @@ bool PlaychessManage::handleMouseClick(SDL_Event* event)
     return false;
 }
 
-// TODO 双人游戏，网络对战
+// TODO 网络对战
 void PlaychessManage::handleEvents(SDL_Event* event)
 {
     // 更新游戏比分
@@ -242,10 +243,10 @@ void PlaychessManage::handleEvents(SDL_Event* event)
     else if (event->type == SINGLE_PLAYER_WHITE_EVENT)
     {
         is_machine_first = true;  // 设置机器人先手
-        if (this->is_reset_chess_data_board)
+        if (this->is_reset_single_player_chess_data_board)
         {
             this->chess_data_board->initDataBoard(WHITE_COLOR_TYPE);
-            this->is_reset_chess_data_board = false;
+            this->is_reset_single_player_chess_data_board = false;
         }
         this->single_player->resetPlayer();
         this->machine->resetMachine();
@@ -257,10 +258,10 @@ void PlaychessManage::handleEvents(SDL_Event* event)
     else if (event->type == SINGLE_PLAYER_BLACK_EVENT)
     {
         is_machine_first = false;  // 设置机器人后手
-        if (this->is_reset_chess_data_board)
+        if (this->is_reset_single_player_chess_data_board)
         {
             this->chess_data_board->initDataBoard(BLACK_COLOR_TYPE);
-            this->is_reset_chess_data_board = false;
+            this->is_reset_single_player_chess_data_board = false;
         }
         this->single_player->resetPlayer();
         this->machine->resetMachine();
@@ -271,11 +272,10 @@ void PlaychessManage::handleEvents(SDL_Event* event)
     // 双人游戏
     else if (event->type == TWO_PLAYER_EVENT || event->type == TWO_PLAYER_AGAIN_GAME_EVENT)
     {
-        // TODO 双人游戏
-        if (this->is_reset_chess_data_board)
+        if (this->is_reset_two_players_chess_data_board)
         {
             this->chess_data_board->initDataBoard(TWO_PLAYERS_COLOR_TYPE);
-            this->is_reset_chess_data_board = false;
+            this->is_reset_two_players_chess_data_board = false;
         }
         this->single_player->resetPlayer();
         this->single_player2->resetPlayer();

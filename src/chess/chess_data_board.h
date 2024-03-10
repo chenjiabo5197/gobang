@@ -27,7 +27,7 @@ private:
     SDLWindow* chess_data_window;
 
     // 数据板数组
-    ChessDataBoardIterm* data_board_arr[2];
+    ChessDataBoardIterm* data_board_arr[4];
 
     // 单人游戏先后手
     chess_color_type current_chess_sequence;
