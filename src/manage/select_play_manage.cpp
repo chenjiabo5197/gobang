@@ -10,7 +10,7 @@ SelectPlayManage::SelectPlayManage(const Config& config)
     this->select_play_buttons[2] = new SDLButton(config, "play_internet", this->buttons_x, this->buttons_y+this->button_interval/2);
     this->select_play_buttons[3] = new SDLButton(config, "normal_back_menu", this->buttons_x, this->buttons_y+1.5*this->button_interval);
     this->array_length = sizeof(this->select_play_buttons) / sizeof(this->select_play_buttons[0]);
-    this->select_chess_color_window = new SDLWindow(config, "select_chess_color");
+    this->select_chess_color_window = new SDLWindow(config, "select_chess_color_window");
     this->white_color_chess = new Chess(config, "symbol_white_chess");
     this->black_color_chess = new Chess(config, "symbol_black_chess");
     this->select_chess_color_ttf = new SDLTTF("select_chess_color_ttf");

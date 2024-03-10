@@ -59,8 +59,9 @@ public:
     //Renders texture at given point
     /*接受一个矩形参数，用来定义要渲染的纹理部分。给它一个默认参数 nullptr，以防渲染整个纹理
     接受旋转角度、纹理旋转点和 SDL 翻转枚举值，同样也给出了参数的默认值，以备在不旋转或翻转的情况下渲染纹理。
+    clip 要渲染的区域， renderQuad要渲染的目标区域
     */
-    void render(SDL_Renderer* global_renderer, int x, int y, float multiple = 1.0, SDL_Rect* clip = nullptr, double angle = 0.0, SDL_Point* center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
+    void render(SDL_Renderer* global_renderer, int x, int y, float multiple = 1.0, SDL_Rect* clip = nullptr, SDL_Rect* renderQuad=nullptr, double angle = 0.0, SDL_Point* center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
     //渲染该纹理
     void setAsRenderTarget(SDL_Renderer* global_renderer);
@@ -91,7 +92,7 @@ private:
     //实际渲染的纹理
     SDL_Texture* mTexture;
 
-    //Surface pixels
+    //像素面，用于生成实际渲染纹理的中间值  loadPixelsFromFile函数的加载结果
     SDL_Surface* mSurfacePixels;
 
     //原始像素

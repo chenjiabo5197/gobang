@@ -32,7 +32,7 @@ Chess::Chess(const Config& config, const std::string& chess_name)
 Chess::~Chess()
 {
     this->sdl_texture->free();
-    delete(sdl_texture);
+    delete sdl_texture;
     INFOLOG("~Chess, release resource||chess_name={}", this->chess_name);
 }
 

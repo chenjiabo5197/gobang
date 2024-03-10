@@ -54,7 +54,7 @@ void initLogger(const Config& config)
 
 int main()
 {
-    Config config = initConfig("config/config.txt");
+    Config config = initConfig("config/config");
     initLogger(config);
     TopManage top_manage(config);
     top_manage.start();

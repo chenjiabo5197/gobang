@@ -17,11 +17,14 @@ SDLWindow::SDLWindow(const Config& config, const std::string& name)
     this->mWidth = config.Read(name+"_screen_width", 0);
     this->mHeight = config.Read(name+"_screen_height", 0);
     this->title = config.Read(name+"_title", temp);
-    INFOLOG("SDLWindow construct success||name={}||title={}||width={}||height={}", this->name, this->title, this->mWidth, this->mHeight);
+    this->background_path = config.Read(name+"_background_path", temp);
+    this->background_texture = new SDLTexture(this->name);
+    INFOLOG("SDLWindow construct success||name={}||title={}||background_path={}||width={}||height={}", this->name, this->title, this->background_path, this->mWidth, this->mHeight);
 }
 
 SDLWindow::~SDLWindow()
 {
+    delete background_texture;
     INFOLOG("~SDLWindow success||name={}||release resource", this->name);
 }
 
@@ -57,6 +60,21 @@ bool SDLWindow::init()
     }
     DEBUGLOG("init||Create renderer success!");
 
+    if (this->background_path != "")
+    {
+        if(!this->background_texture->loadPixelsFromFile(mWindow, this->background_path))
+        {        
+            ERRORLOG("Failed to load texture!"); 
+            return false;
+        }
+        if(!this->background_texture->loadFromPixels(mRenderer))
+        {
+            ERRORLOG("Unable to load texture from surface!");
+            return false;
+        }
+        DEBUGLOG("init||background_path={}||load resource success!", this->background_path);
+    }
+    
     //Grab window identifier
     // 在创建窗口后获取窗口 ID
     window_id = SDL_GetWindowID(mWindow);
@@ -233,7 +251,6 @@ void SDLWindow::render()
         //Clear screen
         SDL_SetRenderDrawColor(mRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderClear(mRenderer);
-
         //Update screen
         SDL_RenderPresent(mRenderer);
     }
@@ -282,4 +299,16 @@ bool SDLWindow::isShown()
 int SDLWindow::getWindowId()
 {
     return window_id;
+}
+
+void SDLWindow::render_background()
+{
+    if (this->background_path != "")
+    {
+        // 使背景图片铺满整个窗口
+        SDL_Rect render_resource= {0, 0, this->background_texture->getWidth(), this->background_texture->getHeight()};
+        SDL_Rect render_target = {0, 0, this->mWidth, this->mHeight};
+        DEBUGLOG("render_background||w={}||h={}", render_target.w, render_target.h);
+        this->background_texture->render(this->mRenderer, 0, 0, 1.0, &render_resource, &render_target);
+    }
 }

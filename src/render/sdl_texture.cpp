@@ -209,32 +209,38 @@ void SDLTexture::free()
     // INFOLOG("free success");
 }
 
-void SDLTexture::render(SDL_Renderer* global_renderer, int x, int y, float multiple, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
+void SDLTexture::render(SDL_Renderer* global_renderer, int x, int y, float multiple, SDL_Rect* clip, SDL_Rect* renderQuad, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
     //设置渲染区域并渲染到屏幕
-    SDL_Rect renderQuad = {x, y, mWidth, mHeight};
+    SDL_Rect quad = {x, y, this->mWidth, this->mHeight};
+
     /* 在特定位置渲染纹理时，需要指定一个目标矩形，该矩形可设置 x/y 位置和宽度/高度。在不知道原始图像尺寸的情况下，无法指定宽度/高度。
     因此，当渲染纹理时，创建一个包含位置参数和成员宽度/高度的矩形，并将此矩形传递给 SDL_RenderCopy
     */
 
-    //Set clip rendering dimensions
-    if(clip != nullptr)
+    // 源区域不为空，目标区域为空时，设置目标区域的高宽为源区域的高宽
+    if(clip != nullptr && renderQuad == nullptr)
     {
-        renderQuad.w = clip->w;
-        renderQuad.h = clip->h;
+        quad.w = clip->w;
+        quad.h = clip->h;
+    }
+
+     // 检查缩放倍数是否为0
+    if (multiple == 0)
+    {
+        ERRORLOG("render||multiple is zero||please check");
+    }
+
+    if(renderQuad == nullptr)
+    {
+        renderQuad = &quad;
     }
 
     // 使用倍数来缩放加载的图像,最好用于缩小，放大图片容易造成像素点过大
     if (multiple != 1.0)
     {
-        renderQuad.w = (int)renderQuad.w * multiple;
-        renderQuad.h = (int)renderQuad.h * multiple;
-    }
-
-    // 检查缩放倍数是否为0
-    if (multiple == 0)
-    {
-        ERRORLOG("render||multiple is zero||please check");
+        renderQuad->w = (int)renderQuad->w * multiple;
+        renderQuad->h = (int)renderQuad->h * multiple;
     }
     
     /*
@@ -245,7 +251,7 @@ void SDLTexture::render(SDL_Renderer* global_renderer, int x, int y, float multi
     //Render to screen
     // SDL_RenderCopy(global_renderer, mTexture, clip, &renderQuad);
     //Render to screen 该函数的工作原理与原始的 SDL_RenderCopy 相同，但增加了用于旋转和翻转的参数
-    SDL_RenderCopyEx(global_renderer, mTexture, clip, &renderQuad, angle, center, flip);
+    SDL_RenderCopyEx(global_renderer, mTexture, clip, renderQuad, angle, center, flip);
 }
 
 int SDLTexture::getWidth()

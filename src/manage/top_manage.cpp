@@ -141,6 +141,7 @@ void TopManage::start()
         //Clear screen
         SDL_SetRenderDrawColor(this->main_window->getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderClear(this->main_window->getRenderer());
+        this->main_window->render_background();
         switch (this->render_type)
         {
         case PLAYCHESS_INTERFACE:

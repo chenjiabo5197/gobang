@@ -4,6 +4,7 @@
 #include <sstream>
 #include "../logger/logger.h"
 #include "../utils/config.h"
+#include "sdl_texture.h"
 
 class SDLWindow
 {
@@ -16,6 +17,9 @@ private:
     SDL_Window* mWindow;
     SDL_Renderer* mRenderer;
 
+    // 背景图片的渲染
+    SDLTexture* background_texture;
+
     //窗口的尺寸
     int mWidth;
     int mHeight;
@@ -27,9 +31,12 @@ private:
     bool mMinimized;
     bool mShown;
 
+    // 窗口名，区分
     std::string name;
     // 窗口标题
     std::string title;
+    // 窗口背景图片路径，默认为纯白色
+    std::string background_path;
 
 public:
     //Intializes internals
@@ -70,4 +77,7 @@ public:
     bool hasKeyboardFocus();
     bool isMinimized();
     bool isShown();
+
+    // 渲染该窗口的背景
+    void render_background();
 };
