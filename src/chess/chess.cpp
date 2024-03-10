@@ -6,14 +6,14 @@ Chess::Chess(const Config& config, const std::string& chess_name, const int& ori
     this->chess_name = chess_name;
     this->chess_resource_path = config.Read(chess_name+"_resource_path", temp);
     this->chess_multiple = config.Read(chess_name+"_multiple", 0.0);
-    this->chess_origin_size = config.Read(chess_name+"_origin_size", 0);
+    // this->chess_origin_size = config.Read(chess_name+"_origin_size", 0);  // 棋子大小从棋子图片获取，取消从配置文件读取
     this->origin_x = origin_x;
     this->origin_y = origin_y;
     this->lattice_size = lattice_size;
     this->sdl_texture = new SDLTexture(this->chess_name);
     this->is_load_resource = false;
-    INFOLOG("Chess1 construct success||chess_resource_path={}||chess_name={}||chess_multiple={}||chess_origin_size={}", 
-    this->chess_resource_path, this->chess_name, this->chess_multiple, this->chess_origin_size);
+    INFOLOG("Chess1 construct success||chess_resource_path={}||chess_name={}||chess_multiple={}", 
+    this->chess_resource_path, this->chess_name, this->chess_multiple);
 }
 
 Chess::Chess(const Config& config, const std::string& chess_name)
@@ -21,7 +21,7 @@ Chess::Chess(const Config& config, const std::string& chess_name)
     std::string temp;
     this->chess_name = chess_name;
     this->chess_resource_path = config.Read(chess_name+"_resource_path", temp);
-    this->chess_origin_size = config.Read(chess_name+"_origin_size", 0);
+    // this->chess_origin_size = config.Read(chess_name+"_origin_size", 0);
     this->sdl_texture = new SDLTexture(this->chess_name);
     this->is_load_resource = false;
     INFOLOG("Chess2 construct success||chess_resource_path={}||chess_name={}||chess_multiple={}", 
@@ -46,6 +46,9 @@ void Chess::init(SDLWindow* chess_window)
         ERRORLOG("Failed to load texture!");
         return;
     }
+    // 获取棋子图片的原始尺寸
+    this->chess_origin_width = this->sdl_texture->getWidth();
+    this->chess_origin_height = this->sdl_texture->getHeight();
     // INFOLOG("load texture success!");
     //Get pixel data
     Uint32* pixels = this->sdl_texture->getPixels32();
@@ -82,8 +85,8 @@ bool Chess::chessRender(const int& x, const int& y)
         return false;
     }
     
-    int new_width = (int)this->chess_origin_size * this->chess_multiple;
-    int new_height = (int)this->chess_origin_size * this->chess_multiple;
+    int new_width = (int)this->chess_origin_width * this->chess_multiple;
+    int new_height = (int)this->chess_origin_height * this->chess_multiple;
     int x_offset = new_width / 2;
     int y_offset = new_height / 2;
     int new_chess_x = x * this->lattice_size + this->origin_x - x_offset;
@@ -100,8 +103,8 @@ bool Chess::chessRender()
         ERRORLOG("chess not load resource, please load resource||name={}", this->chess_name);
         return false;
     }
-    int new_width = (int)this->chess_origin_size * this->chess_multiple;
-    int new_height = (int)this->chess_origin_size * this->chess_multiple;
+    int new_width = (int)this->chess_origin_width * this->chess_multiple;
+    int new_height = (int)this->chess_origin_height * this->chess_multiple;
     int x_offset = new_width / 2;
     int y_offset = new_height / 2;
     int new_chess_x = this->chess_x - x_offset;
@@ -133,5 +136,6 @@ void Chess::set_chess_multiple(const float& multiple)
 
 int Chess::get_chess_size()
 {
-    return (int)this->chess_origin_size * this->chess_multiple;
+    int chess_size = this->chess_origin_width > this->chess_origin_height ? this->chess_origin_width : this->chess_origin_height;
+    return (int)chess_size * this->chess_multiple;
 }

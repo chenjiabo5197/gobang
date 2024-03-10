@@ -19,7 +19,8 @@ private:
     SDLTexture* sdl_texture;
 
     // 棋子的原始尺寸
-    int chess_origin_size;
+    int chess_origin_width;
+    int chess_origin_height;
     // 棋盘每个格子大小
     int lattice_size;
     // 棋盘左上角坐标

@@ -20,16 +20,12 @@ select_chess_color_window_screen_height=180
 # 棋子
 white_chess_resource_path=resources/white.png
 white_chess_multiple=0.4
-white_chess_origin_size=83
 black_chess_resource_path=resources/black.png
 black_chess_multiple=0.4
-black_chess_origin_size=83
 white_current_chess_resource_path=resources/white_current.png
 white_current_chess_multiple=0.4
-white_current_chess_origin_size=83
 black_current_chess_resource_path=resources/black_current.png
 black_current_chess_multiple=0.4
-black_current_chess_origin_size=83
 
 # 棋盘参数
 chessboard_origin_x=50
@@ -44,9 +40,7 @@ chessboard_lattice_size=40
 data_board_x=800
 data_board_y=170
 symbol_white_chess_resource_path=resources/white.png
-symbol_white_chess_origin_size=83
 symbol_black_chess_resource_path=resources/black.png
-symbol_black_chess_origin_size=83
 
 # 结果结算页面文字
 result_resource_path=resources/STXingkai.ttf
