@@ -21,8 +21,8 @@
 #define BACK_MANU_EVENT	    			(SDL_USEREVENT+9)
 // 单人游戏悔棋
 #define PLAYER_WITHDRAW_EVENT			(SDL_USEREVENT+10)
-// 游戏结算页面再来一局
-#define AGAIN_GAME_EVENT	    		(SDL_USEREVENT+11)
+// 单人游戏再来一局
+#define SINGLE_PLAYER_AGAIN_GAME_EVENT	(SDL_USEREVENT+11)
 // 单人游戏玩家选择白色棋子  后手
 #define SINGLE_PLAYER_WHITE_EVENT	    (SDL_USEREVENT+12)
 // 单人游戏玩家选择白色棋子  先手
@@ -31,6 +31,8 @@
 #define TWO_PLAYER_WHITE_WIN_EVENT	   	(SDL_USEREVENT+14)
 // 双人游戏 黑方赢
 #define TWO_PLAYER_BLACK_WIN_EVENT	    (SDL_USEREVENT+15)
+// 双人游戏 再来一局
+#define TWO_PLAYER_AGAIN_GAME_EVENT	    (SDL_USEREVENT+16)
 
 
 typedef enum {

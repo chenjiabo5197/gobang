@@ -48,11 +48,14 @@ private:
     SDLTTF* black_win_interface;
     // 双人游戏白方胜利结算页面的渲染
     SDLTTF* white_win_interface;
+
+    // 渲染的种类
+    interface_kind_type interface_render_type;
 public:
     SettlementManage(const Config& config);
     ~SettlementManage();
 
-    void startRender(const interface_kind_type& type);
+    void startRender();
 
     // 初始化
     void init(SDLWindow* sdl_window, TTF_Font* art_font);
@@ -62,6 +65,9 @@ public:
 
     // 设置渲染文字的中心坐标
     void set_font_coordinate(const int& x, const int& y);
+
+    // 设置要渲染的界面种类
+    void set_interface_render_type(const interface_kind_type& type);
 };
 
 

@@ -82,7 +82,7 @@ void TopManage::start()
             {
                 this->setRendererType(SELECT_PLAY_INTERFACE);
             }
-            else if (event.type == SINGLE_PLAYER_EVENT || event.type == AGAIN_GAME_EVENT)
+            else if (event.type == SINGLE_PLAYER_EVENT || event.type == SINGLE_PLAYER_AGAIN_GAME_EVENT)
             {
                 this->select_play_manage->handleEvents(&event);
             }
@@ -91,7 +91,7 @@ void TopManage::start()
                 this->setRendererType(PLAYCHESS_INTERFACE);
                 this->playchess_manage->handleEvents(&event);
             }
-            else if (event.type == SINGLE_PLAYER_WHITE_EVENT || event.type == SINGLE_PLAYER_BLACK_EVENT)
+            else if (event.type == SINGLE_PLAYER_WHITE_EVENT || event.type == SINGLE_PLAYER_BLACK_EVENT || event.type == TWO_PLAYER_AGAIN_GAME_EVENT)
             {
                 this->setRendererType(PLAYCHESS_INTERFACE);
                 this->playchess_manage->handleEvents(&event);
@@ -158,7 +158,7 @@ void TopManage::start()
             {
                 MyUtils::sleep_seconds(1.5);
             }
-            this->settlement_manage->startRender(this->render_type);
+            this->settlement_manage->startRender();
             break;
         }
         case MAIN_MENU_INTERFACE:
@@ -257,6 +257,10 @@ void TopManage::closeRender()
 void TopManage::setRendererType(const interface_kind_type& render_type)
 {
     this->render_type = render_type;
+    if(render_type == PLAYER_WIN_INTERFACE || render_type == PLAYER_LOSE_INTERFACE || render_type == BLACK_WIN_INTERFACE || render_type == WHITE_WIN_INTERFACE)
+    {
+        this->settlement_manage->set_interface_render_type(render_type);
+    }
     INFOLOG("setRendererType||set render_type={}", (int)render_type);
 }
 

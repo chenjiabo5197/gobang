@@ -173,16 +173,19 @@ bool PlaychessManage::handleMouseClick(SDL_Event* event)
                 if(this->chessboard->checkOver())
                 {
                     SDL_Event event;
+                    std::string msg = "TWO_PLAYER_WIN_EVENT";
                     // 判断赢方
                     if (this->chessboard->get_player_flag_type() == WHITE_PLAYER)
                     {
                         event.type = TWO_PLAYER_WHITE_WIN_EVENT;
+                        msg = "TWO_PLAYER_WHITE_WIN_EVENT";
                     }
                     else
                     {
                         event.type = TWO_PLAYER_BLACK_WIN_EVENT;
+                        msg = "TWO_PLAYER_BLACK_WIN_EVENT";
                     }
-                    INFOLOG("handleMouseClick||push event||event_type={}", event.type);
+                    INFOLOG("handleMouseClick||push event||event_type={}", msg);
                     SDL_PushEvent(&event);
                 }
                 else if (this->chessboard->get_player_flag_type() == WHITE_PLAYER)               
@@ -205,6 +208,7 @@ bool PlaychessManage::handleMouseClick(SDL_Event* event)
 // TODO 双人游戏，网络对战
 void PlaychessManage::handleEvents(SDL_Event* event)
 {
+    // 更新游戏比分
     // 单人游戏，玩家赢
     if (event->type == PLAYER_WIN_EVENT)
     {
@@ -215,6 +219,17 @@ void PlaychessManage::handleEvents(SDL_Event* event)
     {
         this->chess_data_board->updateScoreInfo(SINGLE_PLAYER_LOSE);
     }
+    // 双人游戏黑方赢
+    else if (event->type == TWO_PLAYER_BLACK_WIN_EVENT)
+    {
+        this->chess_data_board->updateScoreInfo(TWO_PLAYER_BLACK_WIN);
+    }
+    // 双人游戏白方赢
+    else if (event->type == TWO_PLAYER_WHITE_WIN_EVENT)
+    {
+        this->chess_data_board->updateScoreInfo(TWO_PLAYER_WHITE_WIN);
+    }
+
     // 单人游戏悔棋事件
     else if (event->type == PLAYER_WITHDRAW_EVENT)
     {
@@ -254,7 +269,7 @@ void PlaychessManage::handleEvents(SDL_Event* event)
         this->chess_data_board->startSingleGame(BLACK_COLOR_TYPE);
     }
     // 双人游戏
-    else if (event->type == TWO_PLAYER_EVENT)
+    else if (event->type == TWO_PLAYER_EVENT || event->type == TWO_PLAYER_AGAIN_GAME_EVENT)
     {
         // TODO 双人游戏
         if (this->is_reset_chess_data_board)

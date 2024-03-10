@@ -308,7 +308,7 @@ void SDLWindow::render_background()
         // 使背景图片铺满整个窗口
         SDL_Rect render_resource= {0, 0, this->background_texture->getWidth(), this->background_texture->getHeight()};
         SDL_Rect render_target = {0, 0, this->mWidth, this->mHeight};
-        DEBUGLOG("render_background||w={}||h={}", render_target.w, render_target.h);
+        // DEBUGLOG("render_background||w={}||h={}", render_target.w, render_target.h);
         this->background_texture->render(this->mRenderer, 0, 0, 1.0, &render_resource, &render_target);
     }
 }

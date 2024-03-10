@@ -13,6 +13,7 @@ SettlementManage::SettlementManage(const Config& config)
     this->settlement_buttons[0] = new SDLButton(config, "again_game", this->buttons_x, this->buttons_y-this->button_interval);
     this->settlement_buttons[1] = new SDLButton(config, "back_menu", this->buttons_x, this->buttons_y);
     this->array_length = sizeof(this->settlement_buttons) / sizeof(this->settlement_buttons[0]);
+    this->interface_render_type = DEFAULT_INTERFACE;
     DEBUGLOG("SettlementManage construct success||button_interval={}||buttons_x={}||buttons_y={}||array_length={}", 
     this->button_interval, this->buttons_x, this->buttons_y, this->array_length);
 }
@@ -46,21 +47,22 @@ void SettlementManage::init(SDLWindow* sdl_window, TTF_Font* art_font)
     INFOLOG("loadResource||load resource success");
 }
 
-void SettlementManage::startRender(const interface_kind_type& type)
+void SettlementManage::startRender()
 {
-    if (type == PLAYER_LOSE_INTERFACE)
+    // 根据不同页面展示不同的结果
+    if (this->interface_render_type == PLAYER_LOSE_INTERFACE)
     {
         this->player_lose_interface->ttfRender(this->settlement_main_window->getRenderer(), font_x, font_y);
     }
-    else if (type == PLAYER_WIN_INTERFACE)
+    else if (this->interface_render_type == PLAYER_WIN_INTERFACE)
     {
         this->player_win_interface->ttfRender(this->settlement_main_window->getRenderer(), font_x, font_y);
     }
-    else if (type == BLACK_WIN_INTERFACE)
+    else if (this->interface_render_type == BLACK_WIN_INTERFACE)
     {
         this->black_win_interface->ttfRender(this->settlement_main_window->getRenderer(), font_x, font_y, 0.35);
     }
-    else if (type == WHITE_WIN_INTERFACE)
+    else if (this->interface_render_type == WHITE_WIN_INTERFACE)
     {
         this->white_win_interface->ttfRender(this->settlement_main_window->getRenderer(), font_x, font_y, 0.35);
     }
@@ -80,10 +82,20 @@ void SettlementManage::handleEvents(SDL_Event* event)
     if (this->settlement_buttons[0]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
     {
         SDL_Event event;
-        event.type = AGAIN_GAME_EVENT;
+        std::string msg = "AGAIN_GAME_EVENT";
+        if (this->interface_render_type == PLAYER_WIN_INTERFACE || this->interface_render_type == PLAYER_LOSE_INTERFACE)
+        {
+            event.type = SINGLE_PLAYER_AGAIN_GAME_EVENT;
+            msg = "SINGLE_PLAYER_AGAIN_GAME_EVENT";
+        }
+        else if (this->interface_render_type == BLACK_WIN_INTERFACE || this->interface_render_type == WHITE_WIN_INTERFACE)
+        {
+            event.type = TWO_PLAYER_AGAIN_GAME_EVENT;
+            msg = "TWO_PLAYER_AGAIN_GAME_EVENT";
+        }
         SDL_PushEvent(&event);
         this->settlement_buttons[0]->initButtonCurrentSprite();
-        INFOLOG("handleEvents||push event=AGAIN_GAME_EVENT");
+        INFOLOG("handleEvents||push event={}", msg);
     }
     if (this->settlement_buttons[1]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
     {
@@ -100,4 +112,17 @@ void SettlementManage::set_font_coordinate(const int& x, const int& y)
     this->font_x = x;
     this->font_y = y;
     INFOLOG("set_font_coordinate||font_x={}||font_y={}", this->font_x, this->font_y);
+}
+
+void SettlementManage::set_interface_render_type(const interface_kind_type& type)
+{
+    if(type == PLAYER_WIN_INTERFACE || type == PLAYER_LOSE_INTERFACE || type == BLACK_WIN_INTERFACE || type == WHITE_WIN_INTERFACE)
+    {
+        this->interface_render_type = type;
+        INFOLOG("set_interface_render_type||interface_render_type={}", (int)this->interface_render_type);
+    }
+    else
+    {
+        ERRORLOG("set_interface_render_type||interface_render_type is error!");
+    }
 }

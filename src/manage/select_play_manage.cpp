@@ -54,7 +54,8 @@ void SelectPlayManage::startRender()
 
 void SelectPlayManage::handleEvents(SDL_Event* event)
 {
-    if (event->type == SINGLE_PLAYER_EVENT || (this->current_game_type == SINGLE_PLAYER_GAME && event->type == AGAIN_GAME_EVENT))
+    // 单人游戏或单人游戏的再来一局
+    if (event->type == SINGLE_PLAYER_EVENT || event->type == SINGLE_PLAYER_AGAIN_GAME_EVENT)
     {
         this->singlePlaySelectChess();
     }
@@ -62,7 +63,7 @@ void SelectPlayManage::handleEvents(SDL_Event* event)
     {
         this->select_play_buttons[i]->handleButtonEvent(event);
     }
-    if (this->select_play_buttons[0]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP) // TODO 新建优化N_SPRITE_MOUSE_UP)
+    if (this->select_play_buttons[0]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP) // TODO 优化BUTTON_SPRITE_MOUSE_UP
     {
         // 单人游戏
         this->current_game_type = SINGLE_PLAYER_GAME;

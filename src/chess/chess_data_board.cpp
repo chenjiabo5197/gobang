@@ -44,8 +44,8 @@ void ChessDataBoard::initDataBoard(const chess_color_type& type)
         this->data_board_arr[1] = new ChessDataBoardIterm("玩家", this->data_board_x+30, this->data_board_y-50, 0.06, 0.7);
         break;
     case TWO_PLAYERS_COLOR_TYPE:
-        this->data_board_arr[0] = new ChessDataBoardIterm("玩家1", this->data_board_x+30, this->data_board_y+50, 0.06, 0.7);
-        this->data_board_arr[1] = new ChessDataBoardIterm("玩家2", this->data_board_x+30, this->data_board_y-50, 0.06, 0.7);
+        this->data_board_arr[0] = new ChessDataBoardIterm("黑方", this->data_board_x+30, this->data_board_y+50, 0.06, 0.7);
+        this->data_board_arr[1] = new ChessDataBoardIterm("白方", this->data_board_x+30, this->data_board_y-50, 0.06, 0.7);
         break;
     default:
         break;
@@ -126,6 +126,15 @@ void ChessDataBoard::updateScoreInfo(const result_info_type& type)
     {
         this->data_board_arr[0]->addScore();
     }
+    else if (type == TWO_PLAYER_BLACK_WIN)
+    {
+        this->data_board_arr[0]->addScore();
+    }
+    else if (type == TWO_PLAYER_WHITE_WIN)
+    {
+        this->data_board_arr[1]->addScore();
+    }
+    
 }
 
 void ChessDataBoard::startSingleGame(const chess_color_type& type)
