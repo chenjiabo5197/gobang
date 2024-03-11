@@ -5,6 +5,8 @@ SDL_SpinLock player_machine_lock = 0;
 
 SDL_Thread* machine_thread = nullptr;
 
+extern Mix_Chunk* chess_down;
+
 // 是否机器人先手
 bool is_machine_first = false;
 
@@ -75,8 +77,6 @@ int machineChessDown(void* data)
     ChessPos pos;
     // 程序休眠1s，假装在思考
     MyUtils::sleep_seconds(1.5);
-    // TODO 落子音
-	// mciSendString("play res/chess_down.mp3", 0, 0, 0);
     chess_kind_type chess_type = CHESS_DEFAULT;
     if (is_machine_first)
     {
@@ -95,6 +95,7 @@ int machineChessDown(void* data)
     {
         pos = machine->think();
     }
+    Mix_PlayChannel(-1, chess_down, 0);
 	machine->chessboard->chessDown(pos, chess_type);
     machine->addChessNum();
     if(machine->chessboard->checkOver())
@@ -131,7 +132,7 @@ bool PlaychessManage::handleMouseClick(SDL_Event* event)
                 {
                     chess_type = CHESS_BLACK;
                 }
-                // TODO 落子音
+                Mix_PlayChannel(-1, chess_down, 0);
                 this->chessboard->chessDown(pos, chess_type);
                 this->single_player->addChessNum();
                 if(this->chessboard->checkOver())
@@ -168,7 +169,7 @@ bool PlaychessManage::handleMouseClick(SDL_Event* event)
                 {
                     chess_type = CHESS_BLACK;
                 }
-                // TODO 落子音
+                Mix_PlayChannel(-1, chess_down, 0);
                 this->chessboard->chessDown(pos, chess_type);
                 // this->single_player->addChessNum();  // 双人游戏暂时不需要计算玩家棋子
                 if(this->chessboard->checkOver())

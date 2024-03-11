@@ -8,7 +8,7 @@
 #pragma once
 
 #include <SDL2/SDL.h>
-#include "../common.h"
+#include "../common/common.h"
 #include "../render/sdl_button.h"
 #include "../render/sdl_ttf.h"
 #include "../render/sdl_window.h"

@@ -3,7 +3,7 @@
 #include "sdl_texture.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"
-#include "../common.h"
+#include "../common/common.h"
 
 //鼠标按键
 class SDLButton

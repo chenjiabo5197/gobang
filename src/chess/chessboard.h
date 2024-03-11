@@ -11,7 +11,7 @@
 #include <vector>
 #include "chess.h"
 #include "../render/sdl_ttf.h"
-#include "../common.h"
+#include "../common/common.h"
 #include "../utils/myUtils.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"

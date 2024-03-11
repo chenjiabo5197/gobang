@@ -7,6 +7,8 @@
 =============================================*/
 #include "top_manage.h"
 
+extern Mix_Chunk* chess_down;
+
 TopManage::TopManage(const Config& config)
 {
     this->setRendererType(DEFAULT_INTERFACE);
@@ -181,7 +183,7 @@ void TopManage::start()
 bool TopManage::initRender()
 {
     //Initialize SDL
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO) < 0)
     {
         ERRORLOG("SDL could not initialize||SDL_Error: ", SDL_GetError());
         return false;
@@ -207,6 +209,25 @@ bool TopManage::initRender()
         return false;
     }
     DEBUGLOG("SDL_ttf initialize success");
+    //Initialize SDL_mixer
+    /*
+    Mix_OpenAudio,第一个参数设置声音频率，44100 是标准频率，适用于大多数系统。
+    第二个参数决定采样格式，这里使用默认格式。第三个参数是硬件声道数，这里使用 2 个声道作为立体声声道。
+    最后一个参数是采样大小，它决定了播放声音时使用的音块大小。这里使用的是 2048 字节（又称 2 千字节），但要尽量减少播放声音时的延迟，可能需要尝试使用这个值。
+    */
+    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+    {
+        ERRORLOG("SDL_mixer could not initialize! SDL_mixer Error={}", Mix_GetError());
+        return false;
+    }
+    DEBUGLOG("SDL_mixer initialize success");
+    INFOLOG("initRender success!");
+    this->loadResource();
+    return true;
+}
+
+bool TopManage::loadResource()
+{
     //使用 TTF_OpenFont 加载字体。这需要输入字体文件的路径和要渲染的点尺寸
     this->art_ttf = TTF_OpenFont(this->art_ttf_path.c_str(), this->art_ttf_ptsize);
     if(art_ttf == nullptr)
@@ -221,15 +242,14 @@ bool TopManage::initRender()
         return false;
     }
     DEBUGLOG("Create font success!");
-    this->main_window->init();
-    INFOLOG("initRender success!");
-    this->loadResource();
-    return true;
-}
-
-bool TopManage::loadResource()
-{
+    chess_down = Mix_LoadWAV("resources/chess_down.mp3");
+    if(chess_down == nullptr)
+    {
+        ERRORLOG("Failed to load chess_down sound effect! SDL_mixer Error={}", Mix_GetError());
+        return false;
+    }
     // TODO 优化加载，默认不用加载后面用不到的管理页面
+    this->main_window->init();
     this->main_menu_manage->init(this->main_window);
     this->select_play_manage->init(this->main_window, this->art_ttf);
     this->playchess_manage->init(this->main_window, this->normal_font, this->art_ttf);
@@ -246,12 +266,15 @@ void TopManage::closeRender()
     TTF_CloseFont(normal_font);
     normal_font = nullptr;
     this->main_window->free();
+    Mix_FreeChunk(chess_down);
+    chess_down = nullptr;
 
     //Quit SDL subsystems
     TTF_Quit();
-    // Mix_Quit();
+    Mix_Quit();
     IMG_Quit();
     SDL_Quit();
+    INFOLOG("closeRender||close render, quit sdl");
 }
 
 void TopManage::setRendererType(const interface_kind_type& render_type)

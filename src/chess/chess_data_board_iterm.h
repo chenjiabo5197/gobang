@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include "chess.h"
-#include "../common.h"
+#include "../common/common.h"
 #include "../render/sdl_ttf.h"
 #include "../logger/logger.h"
 #include "../render/sdl_window.h"

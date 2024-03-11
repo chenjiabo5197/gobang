@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.22)
 
 project(gobang)
 
+MESSAGE(STATUS "BINARY dir: " ${${PROJECT_NAME}_BINARY_DIR})
+MESSAGE(STATUS "SOURCE dir: " ${${PROJECT_NAME}_SOURCE_DIR})
+
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 find_package(SDL2 REQUIRED)
@@ -21,7 +24,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 file(GLOB_RECURSE SOURCES_FILES 
     src/main.cpp
-    src/common.h
+    src/common.cpp
     src/logger/*
     src/utils/*
     src/render/sdl_*

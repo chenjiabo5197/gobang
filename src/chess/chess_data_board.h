@@ -14,7 +14,7 @@
 #include "chess_data_board_iterm.h"
 #include "../render/sdl_timer.h"
 #include "../render/sdl_ttf.h"
-#include "../common.h"
+#include "../common/common.h"
 #include "../utils/myUtils.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"

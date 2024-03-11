@@ -14,7 +14,7 @@
 #include "select_play_manage.h"
 #include "playchess_manage.h"
 #include "settlement_manage.h"
-#include "../common.h"
+#include "../common/common.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"
 #include "../render/sdl_texture.h"
