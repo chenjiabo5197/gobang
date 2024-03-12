@@ -9,6 +9,7 @@
 
 #include <SDL2/SDL.h>
 #include "../common/common.h"
+#include "../common/global.h"
 #include "../render/sdl_button.h"
 #include "../render/sdl_window.h"
 #include "../logger/logger.h"

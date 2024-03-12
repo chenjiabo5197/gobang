@@ -11,16 +11,6 @@
 #include "logger/logger.h"
 #include "utils/config.h"
 
-// 背景音乐  // TODO 背景音
-extern Mix_Music* gMusic;
-
-// 下棋音效
-extern Mix_Chunk* chess_down;
-
-// 选择按键音效
-extern Mix_Chunk* select_button;
-
-
 // 初始化配置文件
 Config initConfig(const std::string& config_path)
 {  

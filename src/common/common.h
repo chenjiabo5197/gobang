@@ -1,10 +1,6 @@
 #pragma once
 
-#ifndef _COMMON_H_
-#define _COMMON_H_
-
 #include "SDL2/SDL.h"
-#include <SDL2/SDL_mixer.h>
 
 // 单人游戏玩家赢
 #define PLAYER_WIN_EVENT				(SDL_USEREVENT+1)
@@ -134,13 +130,5 @@ typedef enum {
 	TWO_PLAYERS_COLOR_TYPE		// 双人游戏
 } chess_color_type;
 
-// 背景音乐  // TODO 背景音
-extern Mix_Music* background_music;
 
-// 下棋音效
-extern Mix_Chunk* chess_down;
 
-// 选择按键音效
-extern Mix_Chunk* select_button;
-
-#endif
