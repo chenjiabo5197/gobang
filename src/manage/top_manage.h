@@ -28,8 +28,6 @@
 class TopManage
 {
 private:
-    // 主窗口
-    SDLWindow* main_window;
 
     // 各个子页面管理
     MainMenuManage* main_menu_manage;

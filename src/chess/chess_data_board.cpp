@@ -1,5 +1,8 @@
 #include "chess_data_board.h"
 
+// 主窗口
+extern SDLWindow* main_window; 
+
 ChessDataBoard::ChessDataBoard(const Config& config)
 {
     this->symbol_white_chess = new Chess(config, "symbol_white_chess");
@@ -21,13 +24,12 @@ ChessDataBoard::~ChessDataBoard()
     INFOLOG("~ChessDataBoard success||release resources");
 }
 
-void ChessDataBoard::init(SDLWindow* chess_data_window, TTF_Font* normal_font, TTF_Font* art_font)
+void ChessDataBoard::init(TTF_Font* normal_font, TTF_Font* art_font)
 {
-    this->chess_data_window = chess_data_window;
 	this->normal_ttf = normal_font;
     this->art_ttf = art_font;
-    this->symbol_white_chess->init(this->chess_data_window);
-	this->symbol_black_chess->init(this->chess_data_window);
+    this->symbol_white_chess->init(main_window);
+	this->symbol_black_chess->init(main_window);
     INFOLOG("init||ChessDataBoard init success||load resource success");
 }
 
@@ -55,7 +57,7 @@ void ChessDataBoard::initDataBoard(const chess_color_type& type)
     {
         if (this->data_board_arr[i] != nullptr)
         {
-            this->data_board_arr[i]->init(this->chess_data_window, this->normal_ttf, this->art_ttf);
+            this->data_board_arr[i]->init(this->normal_ttf, this->art_ttf);
         }
     }
     INFOLOG("initDataBoard success||chess_color_type={}", (int)type);
@@ -115,8 +117,8 @@ void ChessDataBoard::render(const player_flag_type& type)
 
 void ChessDataBoard::renderText(const std::string& texture_text, TTF_Font* texture_ttf, SDL_Color color, const int& x, const int& y, const float& multiple)
 {
-	this->data_board_ttf->loadRenderText(this->chess_data_window->getRenderer(), texture_ttf, texture_text, color);
-	this->data_board_ttf->ttfRender(this->chess_data_window->getRenderer(), x, y, multiple);
+	this->data_board_ttf->loadRenderText(main_window->getRenderer(), texture_ttf, texture_text, color);
+	this->data_board_ttf->ttfRender(main_window->getRenderer(), x, y, multiple);
 }
 
 void ChessDataBoard::updateScoreInfo(const result_info_type& type)

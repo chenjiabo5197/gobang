@@ -18,8 +18,6 @@
 class SettlementManage
 {
 private:
-    // 主窗口
-    SDLWindow* settlement_main_window;
 
     TTF_Font* art_font;
 
@@ -58,7 +56,7 @@ public:
     void startRender();
 
     // 初始化
-    void init(SDLWindow* sdl_window, TTF_Font* art_font);
+    void init(TTF_Font* art_font);
     
     // 处理事件
     void handleEvents(SDL_Event* event);

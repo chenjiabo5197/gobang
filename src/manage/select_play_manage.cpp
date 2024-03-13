@@ -1,5 +1,8 @@
 #include "select_play_manage.h"
 
+// 主窗口
+extern SDLWindow* main_window; 
+
 SelectPlayManage::SelectPlayManage(const Config& config)
 {
     this->buttons_x = config.Read("main_window_screen_width", 0) / 2;// TODO 新建优化
@@ -27,9 +30,8 @@ SelectPlayManage::~SelectPlayManage()
     DEBUGLOG("~SelectPlayManage success||release resource");
 }
 
-void SelectPlayManage::init(SDLWindow* sdl_window, TTF_Font* art_ttf)
+void SelectPlayManage::init(TTF_Font* art_ttf)
 {
-    this->selete_main_window = sdl_window;
     this->art_ttf = art_ttf;
     for (int i = 0; i < this->array_length; i++)
     {
@@ -38,7 +40,7 @@ void SelectPlayManage::init(SDLWindow* sdl_window, TTF_Font* art_ttf)
     INFOLOG("init||init variable success");
     for (int i = 0; i < this->array_length; i++)
     {
-        this->select_play_buttons[i]->loadResource(this->selete_main_window->getWindow(), this->selete_main_window->getRenderer());
+        this->select_play_buttons[i]->loadResource(main_window->getWindow(), main_window->getRenderer());
     }
     INFOLOG("loadResource||load resource success");
 }
@@ -47,7 +49,7 @@ void SelectPlayManage::startRender()
 {
     for (int i = 0; i < this->array_length; i++)
     {
-        this->select_play_buttons[i]->buttonRender(this->selete_main_window->getRenderer());
+        this->select_play_buttons[i]->buttonRender(main_window->getRenderer());
     }
     // DEBUGLOG("startRender");
 }

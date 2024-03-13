@@ -1,5 +1,8 @@
 #include "settlement_manage.h"
 
+// 主窗口
+extern SDLWindow* main_window; 
+
 SettlementManage::SettlementManage(const Config& config)
 {
     std::string temp;
@@ -27,22 +30,21 @@ SettlementManage::~SettlementManage()
     DEBUGLOG("~SettlementManage success||release resource");
 }
 
-void SettlementManage::init(SDLWindow* sdl_window, TTF_Font* art_font)
+void SettlementManage::init(TTF_Font* art_font)
 {
-    this->settlement_main_window = sdl_window;
     this->art_font = art_font;
     for (int i = 0; i < this->array_length; i++)
     {
         this->settlement_buttons[i]->initButtonCurrentSprite();
     }
     INFOLOG("init||init variable success");
-    this->player_win_interface->loadRenderText(this->settlement_main_window->getRenderer(), art_font);
-    this->player_lose_interface->loadRenderText(this->settlement_main_window->getRenderer(), art_font);
-    this->black_win_interface->loadRenderText(this->settlement_main_window->getRenderer(), art_font);
-    this->white_win_interface->loadRenderText(this->settlement_main_window->getRenderer(), art_font);
+    this->player_win_interface->loadRenderText(main_window->getRenderer(), art_font);
+    this->player_lose_interface->loadRenderText(main_window->getRenderer(), art_font);
+    this->black_win_interface->loadRenderText(main_window->getRenderer(), art_font);
+    this->white_win_interface->loadRenderText(main_window->getRenderer(), art_font);
     for (int i = 0; i < this->array_length; i++)
     {
-        this->settlement_buttons[i]->loadResource(this->settlement_main_window->getWindow(), this->settlement_main_window->getRenderer());
+        this->settlement_buttons[i]->loadResource(main_window->getWindow(), main_window->getRenderer());
     }
     INFOLOG("loadResource||load resource success");
 }
@@ -52,23 +54,23 @@ void SettlementManage::startRender()
     // 根据不同页面展示不同的结果
     if (this->interface_render_type == PLAYER_LOSE_INTERFACE)
     {
-        this->player_lose_interface->ttfRender(this->settlement_main_window->getRenderer(), font_x, font_y);
+        this->player_lose_interface->ttfRender(main_window->getRenderer(), font_x, font_y);
     }
     else if (this->interface_render_type == PLAYER_WIN_INTERFACE)
     {
-        this->player_win_interface->ttfRender(this->settlement_main_window->getRenderer(), font_x, font_y);
+        this->player_win_interface->ttfRender(main_window->getRenderer(), font_x, font_y);
     }
     else if (this->interface_render_type == BLACK_WIN_INTERFACE)
     {
-        this->black_win_interface->ttfRender(this->settlement_main_window->getRenderer(), font_x, font_y, 0.35);
+        this->black_win_interface->ttfRender(main_window->getRenderer(), font_x, font_y, 0.35);
     }
     else if (this->interface_render_type == WHITE_WIN_INTERFACE)
     {
-        this->white_win_interface->ttfRender(this->settlement_main_window->getRenderer(), font_x, font_y, 0.35);
+        this->white_win_interface->ttfRender(main_window->getRenderer(), font_x, font_y, 0.35);
     }
     for (int i = 0; i < this->array_length; i++)
     {
-        this->settlement_buttons[i]->buttonRender(this->settlement_main_window->getRenderer());
+        this->settlement_buttons[i]->buttonRender(main_window->getRenderer());
     }
     // DEBUGLOG("startRender");
 }

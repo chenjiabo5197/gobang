@@ -1,5 +1,8 @@
 #include "main_menu_manage.h"
 
+// 主窗口
+extern SDLWindow* main_window; 
+
 MainMenuManage::MainMenuManage(const Config& config)
 {
     this->buttons_x = config.Read("main_window_screen_width", 0) / 2;// TODO 新建优化
@@ -18,9 +21,8 @@ MainMenuManage::~MainMenuManage()
     DEBUGLOG("~MainMenuManage success||release resource");
 }
 
-void MainMenuManage::init(SDLWindow* sdl_window)
+void MainMenuManage::init()
 {
-    this->menu_main_window = sdl_window;
     for (int i = 0; i < this->array_length; i++)
     {
         this->main_menu_buttons[i]->initButtonCurrentSprite();
@@ -28,7 +30,7 @@ void MainMenuManage::init(SDLWindow* sdl_window)
     INFOLOG("init||init variable success");
     for (int i = 0; i < this->array_length; i++)
     {
-        this->main_menu_buttons[i]->loadResource(this->menu_main_window->getWindow(), this->menu_main_window->getRenderer());
+        this->main_menu_buttons[i]->loadResource(main_window->getWindow(), main_window->getRenderer());
     }
     INFOLOG("loadResource||load resource success");
 }
@@ -37,7 +39,7 @@ void MainMenuManage::startRender()
 {
     for (int i = 0; i < this->array_length; i++)
     {
-        this->main_menu_buttons[i]->buttonRender(this->menu_main_window->getRenderer());
+        this->main_menu_buttons[i]->buttonRender(main_window->getRenderer());
     }
     // DEBUGLOG("startRender");
 }

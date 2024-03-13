@@ -60,3 +60,6 @@ add_custom_command(
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/config" ${PROJECT_BINARY_DIR}/config
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/resources" ${PROJECT_BINARY_DIR}/resources
 )
+
+MESSAGE(STATUS "copy config dir to" ${PROJECT_BINARY_DIR}/config)
+MESSAGE(STATUS "copy resources dir to" ${PROJECT_BINARY_DIR}/resources)

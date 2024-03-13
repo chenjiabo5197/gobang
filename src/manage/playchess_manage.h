@@ -22,8 +22,6 @@
 class PlaychessManage
 {
 private:
-    // 主窗口
-    SDLWindow* playchess_main_window;
 
     // 电脑AI
     Machine* machine;
@@ -67,7 +65,7 @@ public:
     void startRender();
 
     // 初始化
-    void init(SDLWindow* sdl_window, TTF_Font* normal_ttf, TTF_Font* art_ttf);
+    void init(TTF_Font* normal_ttf, TTF_Font* art_ttf);
 
     // 处理事件
     void handleEvents(SDL_Event* event);

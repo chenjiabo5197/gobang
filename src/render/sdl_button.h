@@ -4,6 +4,7 @@
 #include "../logger/logger.h"
 #include "../utils/config.h"
 #include "../common/common.h"
+#include "../common/global.h"
 
 //鼠标按键
 class SDLButton

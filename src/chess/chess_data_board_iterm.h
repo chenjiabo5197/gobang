@@ -18,8 +18,6 @@
 class ChessDataBoardIterm
 {
 private:
-    // 主窗口
-    SDLWindow* chess_data_iterm_window;
     // 名字
     std::string iterm_name;
     // 要渲染的文字坐标
@@ -46,7 +44,7 @@ public:
     ~ChessDataBoardIterm();
 
     // 初始化，传入渲染所需参数
-	void init(SDLWindow* iterm_window, TTF_Font* normal_font, TTF_Font* art_font);
+	void init(TTF_Font* normal_font, TTF_Font* art_font);
 
     // 渲染
     void render(SDL_Color color);

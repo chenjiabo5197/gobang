@@ -7,7 +7,12 @@
 =============================================*/
 #include "top_manage.h"
 
-extern Mix_Chunk* chess_down;
+// 下棋音效
+extern Mix_Chunk* chess_down_sound;
+// 按键选择音效
+extern Mix_Chunk* select_button_sound;
+// 主窗口
+extern SDLWindow* main_window; 
 
 TopManage::TopManage(const Config& config)
 {
@@ -21,7 +26,7 @@ TopManage::TopManage(const Config& config)
     this->select_play_manage = new SelectPlayManage(config);
     this->playchess_manage = new PlaychessManage(config);
     this->settlement_manage = new SettlementManage(config);
-    this->main_window = new SDLWindow(config, "main_window");
+    main_window = new SDLWindow(config, "main_window");
     DEBUGLOG("Manage construct success||render_type={}||art_ttf_path={}||art_ttf_ptsize={}||normal_ttf_resource_path={}||normal_ttf_ptsize={}", 
     (int)this->render_type, this->art_ttf_path, this->art_ttf_ptsize, this->normal_ttf_path, this->normal_ttf_ptsize);
 }
@@ -32,7 +37,7 @@ TopManage::~TopManage()
     delete select_play_manage;
     delete playchess_manage;
     delete settlement_manage;
-    delete main_window;
+    // delete main_window;
     DEBUGLOG("~Manage success||release resource");
 }
 
@@ -141,9 +146,9 @@ void TopManage::start()
             this->setRendererType(PLAYER_WIN_INTERFACE);
         }
         //Clear screen
-        SDL_SetRenderDrawColor(this->main_window->getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
-        SDL_RenderClear(this->main_window->getRenderer());
-        this->main_window->render_background();
+        SDL_SetRenderDrawColor(main_window->getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
+        SDL_RenderClear(main_window->getRenderer());
+        main_window->render_background();
         switch (this->render_type)
         {
         case PLAYCHESS_INTERFACE:
@@ -174,7 +179,7 @@ void TopManage::start()
         }
         last_render_type = this->render_type;
         //Update screen
-        SDL_RenderPresent(this->main_window->getRenderer());
+        SDL_RenderPresent(main_window->getRenderer());
     }
     //Free resources and close SDL
     this->closeRender();
@@ -242,18 +247,26 @@ bool TopManage::loadResource()
         return false;
     }
     DEBUGLOG("Create font success!");
-    chess_down = Mix_LoadWAV("resources/chess_down.mp3");
-    if(chess_down == nullptr)
+    chess_down_sound = Mix_LoadWAV("resources/chess_down.mp3");
+    if(chess_down_sound == nullptr)
     {
-        ERRORLOG("Failed to load chess_down sound effect! SDL_mixer Error={}", Mix_GetError());
+        ERRORLOG("Failed to load chess_down_sound sound effect! SDL_mixer Error={}", Mix_GetError());
         return false;
     }
+    DEBUGLOG("load chess_down_sound success!");
+    select_button_sound = Mix_LoadWAV("resources/select_button.wav");
+    if(select_button_sound == nullptr)
+    {
+        ERRORLOG("Failed to load select_button_sound sound effect! SDL_mixer Error={}", Mix_GetError());
+        return false;
+    }
+    DEBUGLOG("load select_button_sound success!");
     // TODO 优化加载，默认不用加载后面用不到的管理页面
-    this->main_window->init();
-    this->main_menu_manage->init(this->main_window);
-    this->select_play_manage->init(this->main_window, this->art_ttf);
-    this->playchess_manage->init(this->main_window, this->normal_font, this->art_ttf);
-    this->settlement_manage->init(this->main_window, this->art_ttf);
+    main_window->init();
+    this->main_menu_manage->init();
+    this->select_play_manage->init(this->art_ttf);
+    this->playchess_manage->init(this->normal_font, this->art_ttf);
+    this->settlement_manage->init(this->art_ttf);
     this->settlement_manage->set_font_coordinate(this->playchess_manage->get_chessboard_center_x(), this->playchess_manage->get_chessboard_center_y());
     INFOLOG("loadResource success!");
     return true;
@@ -265,9 +278,11 @@ void TopManage::closeRender()
     art_ttf = nullptr;
     TTF_CloseFont(normal_font);
     normal_font = nullptr;
-    this->main_window->free();
-    Mix_FreeChunk(chess_down);
-    chess_down = nullptr;
+    main_window->free();
+    Mix_FreeChunk(chess_down_sound);
+    chess_down_sound = nullptr;
+    select_button_sound = nullptr;
+    main_window = nullptr;
 
     //Quit SDL subsystems
     TTF_Quit();

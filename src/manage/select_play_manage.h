@@ -18,8 +18,6 @@
 class SelectPlayManage
 {
 private:
-    // 主窗口
-    SDLWindow* selete_main_window;
     // 选择先后手的窗口(也是选择棋子颜色，黑色先手)
     SDLWindow* select_chess_color_window;
     
@@ -65,7 +63,7 @@ public:
     void startRender();
 
     // 初始化
-    void init(SDLWindow* sdl_window, TTF_Font* art_ttf);
+    void init(TTF_Font* art_ttf);
 
     // 处理事件
     void handleEvents(SDL_Event* event);

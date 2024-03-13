@@ -32,9 +32,6 @@ private:
     int render_b;
     int render_alpha;
 
-	// 主窗口
-    SDLWindow* chessboard_window;
-
 	// 棋盘渲染的普通字体
 	TTF_Font* global_ttf;
 
@@ -84,7 +81,7 @@ public:
     ~Chessboard();
 
 	// 初始化，传入渲染所需参数
-	void init(SDLWindow* chessboard_window, TTF_Font* global_font);
+	void init(TTF_Font* global_font);
 
 	// 重置棋盘数据
 	void initChessMap();

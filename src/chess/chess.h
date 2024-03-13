@@ -30,7 +30,7 @@ private:
     int chess_x;
     int chess_y;
 
-    // 主窗口
+    //  渲染棋子窗口
     SDLWindow* chess_window;
 
     // 标志该chess是否已经加载资源，以前出现了未加载资源去渲染结果没有数据，找了好久原因

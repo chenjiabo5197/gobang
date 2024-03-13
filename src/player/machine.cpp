@@ -75,7 +75,7 @@ void Machine::resetMachine()
 	// ChessPos pos = think();
     // 程序休眠1s，假装在思考
     // MyUtils::sleep_seconds(1);
-	// mciSendString("play res/chess_down.mp3", 0, 0, 0);
+	// mciSendString("play res/chess_down_sound.mp3", 0, 0, 0);
 	// this->chessboard->chessDown(pos, CHESS_WHITE);
 // 	DEBUGLOG("Machine::go||Machine chess down success");
 // 	return 0;

@@ -23,8 +23,6 @@
 class ChessDataBoard
 {
 private:
-    // 主窗口
-    SDLWindow* chess_data_window;
 
     // 数据板数组
     ChessDataBoardIterm* data_board_arr[4];
@@ -56,7 +54,7 @@ public:
     ~ChessDataBoard();
 
     // 初始化，传入渲染所需参数
-	void init(SDLWindow* chess_data_window, TTF_Font* normal_font, TTF_Font* art_font);
+	void init(TTF_Font* normal_font, TTF_Font* art_font);
 
 	// 初始化数据板信息
 	void initDataBoard(const chess_color_type& type);

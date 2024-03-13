@@ -4,8 +4,10 @@
 SDL_SpinLock player_machine_lock = 0;
 
 SDL_Thread* machine_thread = nullptr;
-
-extern Mix_Chunk* chess_down;
+// 下棋音效
+extern Mix_Chunk* chess_down_sound;
+// 主窗口
+extern SDLWindow* main_window; 
 
 // 是否机器人先手
 bool is_machine_first = false;
@@ -40,13 +42,12 @@ PlaychessManage::~PlaychessManage()
     DEBUGLOG("~PlaychessManage success||release resource");
 }
 
-void PlaychessManage::init(SDLWindow* sdl_window, TTF_Font* normal_ttf, TTF_Font* art_ttf)
+void PlaychessManage::init(TTF_Font* normal_ttf, TTF_Font* art_ttf)
 {
-    this->playchess_main_window = sdl_window;
     this->normal_ttf = normal_ttf;
     this->art_ttf = art_ttf;
-    this->chessboard->init(this->playchess_main_window, this->normal_ttf);
-    this->chess_data_board->init(this->playchess_main_window, this->normal_ttf, this->art_ttf);
+    this->chessboard->init(this->normal_ttf);
+    this->chess_data_board->init(this->normal_ttf, this->art_ttf);
     for (int i = 0; i < this->array_length; i++)
     {
         this->playchess_buttons[i]->initButtonCurrentSprite();
@@ -54,7 +55,7 @@ void PlaychessManage::init(SDLWindow* sdl_window, TTF_Font* normal_ttf, TTF_Font
     INFOLOG("init||init variable success");
     for (int i = 0; i < this->array_length; i++)
     {
-        this->playchess_buttons[i]->loadResource(this->playchess_main_window->getWindow(), this->playchess_main_window->getRenderer());
+        this->playchess_buttons[i]->loadResource(main_window->getWindow(), main_window->getRenderer());
     }
     INFOLOG("loadResource||load resource success");
 }
@@ -65,7 +66,7 @@ void PlaychessManage::startRender()
     this->chess_data_board->render(this->chessboard->get_player_flag_type());
     for (int i = 0; i < this->array_length; i++)
     {
-        this->playchess_buttons[i]->buttonRender(this->playchess_main_window->getRenderer());
+        this->playchess_buttons[i]->buttonRender(main_window->getRenderer());
     }
     // DEBUGLOG("startRender");
 }
@@ -95,7 +96,7 @@ int machineChessDown(void* data)
     {
         pos = machine->think();
     }
-    Mix_PlayChannel(-1, chess_down, 0);
+    Mix_PlayChannel(-1, chess_down_sound, 0);
 	machine->chessboard->chessDown(pos, chess_type);
     machine->addChessNum();
     if(machine->chessboard->checkOver())
@@ -132,7 +133,7 @@ bool PlaychessManage::handleMouseClick(SDL_Event* event)
                 {
                     chess_type = CHESS_BLACK;
                 }
-                Mix_PlayChannel(-1, chess_down, 0);
+                Mix_PlayChannel(-1, chess_down_sound, 0);
                 this->chessboard->chessDown(pos, chess_type);
                 this->single_player->addChessNum();
                 if(this->chessboard->checkOver())
@@ -169,7 +170,7 @@ bool PlaychessManage::handleMouseClick(SDL_Event* event)
                 {
                     chess_type = CHESS_BLACK;
                 }
-                Mix_PlayChannel(-1, chess_down, 0);
+                Mix_PlayChannel(-1, chess_down_sound, 0);
                 this->chessboard->chessDown(pos, chess_type);
                 // this->single_player->addChessNum();  // 双人游戏暂时不需要计算玩家棋子
                 if(this->chessboard->checkOver())

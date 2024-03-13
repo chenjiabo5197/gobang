@@ -12,13 +12,12 @@
 #include "../render/sdl_window.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"
+#include "../common/global.h"
 
 class MainMenuManage
 {
 private:
-    // 主窗口
-    SDLWindow* menu_main_window;
-    
+   
     // 当前页面要渲染的按键数组
     SDLButton* main_menu_buttons[3];
 
@@ -38,7 +37,7 @@ public:
     void startRender();
 
     // 初始化
-    void init(SDLWindow* sdl_window);
+    void init();
 
     // 处理事件
     void handleEvents(SDL_Event* event);

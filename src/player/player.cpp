@@ -44,7 +44,7 @@ int Player::getChessNum()
 // 	{
 // 		INFOLOG("Player::go||valid mouse click chessboard||x={}||y={}", x, y);
 // 		// 落子
-// 		// mciSendString("play res/chess_down.mp3", 0, 0, 0);
+// 		// mciSendString("play res/chess_down_sound.mp3", 0, 0, 0);
 // 		this->chess->chessDown(&pos, kind);
 // 		this->chessNum++;
 // 		DEBUGLOG("Player::go||Player chess down success");
