@@ -37,19 +37,24 @@ void ChessDataBoard::init()
 
 void ChessDataBoard::initDataBoard(const chess_color_type& type)
 {
+    for (int i = 0; i < 2; i++)
+    {
+        this->data_board_arr[i*2] = new ChessDataBoardIterm("temp", this->data_board_x+30, this->data_board_y-50, 0.06, 0.7);
+        this->data_board_arr[i*2+1] = new ChessDataBoardIterm("temp", this->data_board_x+30, this->data_board_y+50, 0.06, 0.7);
+    }
     switch (type)
     {
     case BLACK_COLOR_TYPE:
-        this->data_board_arr[0] = new ChessDataBoardIterm("机器人", this->data_board_x+30, this->data_board_y-50, 0.06, 0.7);
-        this->data_board_arr[1] = new ChessDataBoardIterm("玩家", this->data_board_x+30, this->data_board_y+50, 0.06, 0.7);
+        this->data_board_arr[0]->changeItermName("机器人");
+        this->data_board_arr[1]->changeItermName("玩家");
         break;
     case WHITE_COLOR_TYPE:
-        this->data_board_arr[0] = new ChessDataBoardIterm("机器人", this->data_board_x+30, this->data_board_y+50, 0.06, 0.7);
-        this->data_board_arr[1] = new ChessDataBoardIterm("玩家", this->data_board_x+30, this->data_board_y-50, 0.06, 0.7);
+        this->data_board_arr[0]->changeItermName("玩家");
+        this->data_board_arr[1]->changeItermName("机器人");
         break;
     case TWO_PLAYERS_COLOR_TYPE:
-        this->data_board_arr[2] = new ChessDataBoardIterm("黑方", this->data_board_x+30, this->data_board_y+50, 0.06, 0.7);
-        this->data_board_arr[3] = new ChessDataBoardIterm("白方", this->data_board_x+30, this->data_board_y-50, 0.06, 0.7);
+        this->data_board_arr[2]->changeItermName("白方");
+        this->data_board_arr[3]->changeItermName("黑方");
         break;
     default:
         break;
@@ -57,10 +62,7 @@ void ChessDataBoard::initDataBoard(const chess_color_type& type)
     this->last_chess_sequence = type;
     for (int i = 0; i < 4; i++)
     {
-        if (this->data_board_arr[i] != nullptr)
-        {
-            this->data_board_arr[i]->init();
-        }
+        this->data_board_arr[i]->init();
     }
     INFOLOG("initDataBoard success||chess_color_type={}", (int)type);
 }
@@ -95,12 +97,12 @@ void ChessDataBoard::render(const player_flag_type& type)
         this->data_board_arr[1]->render(current_color);
         break;
     case BLACK_PLAYER:
-        this->data_board_arr[2]->render(current_color);
-        this->data_board_arr[3]->render(color);
+        this->data_board_arr[3]->render(current_color);
+        this->data_board_arr[2]->render(color);
         break;
     case WHITE_PLAYER:
-        this->data_board_arr[2]->render(color);
-        this->data_board_arr[3]->render(current_color);
+        this->data_board_arr[3]->render(color);
+        this->data_board_arr[2]->render(current_color);
         break;
     default:
         break;

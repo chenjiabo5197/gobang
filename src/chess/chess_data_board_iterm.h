@@ -56,6 +56,9 @@ public:
 
     // 交换两个ChessDataBoardIterm的名字、分数的坐标
     void swapField(ChessDataBoardIterm& iterm);
+
+    // 修改iterm_name
+    void changeItermName(const std::string& new_name);
 };
 
 

@@ -74,3 +74,8 @@ void ChessDataBoardIterm::swapField(ChessDataBoardIterm& iterm)
     MyUtils::swapValue(this->iterm_score_multiple, iterm.iterm_score_multiple);
     INFOLOG("swapField||name={}||iterm.name={}", this->iterm_name, iterm.iterm_name);
 }
+
+void ChessDataBoardIterm::changeItermName(const std::string& new_name)
+{
+    this->iterm_name = new_name;
+}

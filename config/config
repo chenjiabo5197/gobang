@@ -43,8 +43,8 @@ symbol_white_chess_resource_path=resources/white.png
 symbol_black_chess_resource_path=resources/black.png
 
 # 结果结算页面文字
-result_resource_path=resources/STXingkai.ttf
-result_ptsize=650
+art_ttf_font_path=resources/STXingkai.ttf
+art_ttf_font_ptsize=650
 result_player_win=胜
 result_player_win_r=0
 result_player_win_g=0
@@ -68,8 +68,8 @@ result_white_win_alpha=255
 
 
 # 普通文字
-normal_ttf_resource_path=resources/STZhongsong.ttf
-normal_ttf_ptsize=50
+normal_ttf_font_path=resources/STZhongsong.ttf
+normal_ttf_font_ptsize=50
 
 # 按键
 # 主菜单 按键中心默认为屏幕中心

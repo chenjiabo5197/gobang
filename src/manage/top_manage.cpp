@@ -22,10 +22,10 @@ TopManage::TopManage(const Config& config)
 {
     this->setRendererType(DEFAULT_INTERFACE);
     std::string temp;
-    this->art_ttf_path = config.Read("result_resource_path", temp);
-    this->art_ttf_ptsize = config.Read("result_ptsize", 0);
-    this->normal_ttf_path = config.Read("normal_ttf_resource_path", temp);
-    this->normal_ttf_ptsize = config.Read("normal_ttf_ptsize", 0);
+    this->art_ttf_path = config.Read("art_ttf_font_path", temp);
+    this->art_ttf_ptsize = config.Read("art_ttf_font_ptsize", 0);
+    this->normal_ttf_path = config.Read("normal_ttf_font_path", temp);
+    this->normal_ttf_ptsize = config.Read("normal_ttf_font_ptsize", 0);
     this->main_menu_manage = new MainMenuManage(config);// TODO 新建优化
     this->select_play_manage = new SelectPlayManage(config);
     this->playchess_manage = new PlaychessManage(config);
@@ -218,7 +218,7 @@ bool TopManage::initRender()
     第二个参数决定采样格式，这里使用默认格式。第三个参数是硬件声道数，这里使用 2 个声道作为立体声声道。
     最后一个参数是采样大小，它决定了播放声音时使用的音块大小。这里使用的是 2048 字节（又称 2 千字节），但要尽量减少播放声音时的延迟，可能需要尝试使用这个值。
     */
-    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) < 0)
     {
         ERRORLOG("SDL_mixer could not initialize! SDL_mixer Error={}", Mix_GetError());
         return false;

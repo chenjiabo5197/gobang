@@ -83,12 +83,12 @@ void SDLButton::handleButtonEvent(SDL_Event* event)
                 break;
             
                 case SDL_MOUSEBUTTONDOWN:
+                Mix_PlayChannel(-1, g_select_button_sound, 0);  // TODO  优化音效延迟
                 mCurrentSprite = BUTTON_SPRITE_MOUSE_DOWN;
                 break;
                 
                 case SDL_MOUSEBUTTONUP:
                 mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
-                Mix_PlayChannel(-1, g_select_button_sound, 0);  // TODO  优化音效延迟
                 break;
             }
         }

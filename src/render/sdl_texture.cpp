@@ -209,6 +209,7 @@ void SDLTexture::free()
     // INFOLOG("free success");
 }
 
+// TODO 优化倍率与目标区域
 void SDLTexture::render(SDL_Renderer* global_renderer, int x, int y, float multiple, SDL_Rect* clip, SDL_Rect* renderQuad, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
     //设置渲染区域并渲染到屏幕
