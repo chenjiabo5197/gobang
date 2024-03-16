@@ -10,6 +10,7 @@
 #include <iostream>
 #include "chess.h"
 #include "../common/common.h"
+#include "../common/global.h"
 #include "../render/sdl_ttf.h"
 #include "../logger/logger.h"
 #include "../render/sdl_window.h"
@@ -35,8 +36,6 @@ private:
     float iterm_score_multiple;
 
     // 棋盘渲染的字体
-	TTF_Font* normal_ttf;
-    TTF_Font* art_ttf;
     SDLTTF* data_board_iterm_ttf;
 public:
     // 只传入姓名坐标，比分坐标可以根据姓名坐标推算出
@@ -44,7 +43,7 @@ public:
     ~ChessDataBoardIterm();
 
     // 初始化，传入渲染所需参数
-	void init(TTF_Font* normal_font, TTF_Font* art_font);
+	void init();
 
     // 渲染
     void render(SDL_Color color);

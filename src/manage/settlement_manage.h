@@ -9,6 +9,7 @@
 
 #include <SDL2/SDL.h>
 #include "../common/common.h"
+#include "../common/global.h"
 #include "../render/sdl_button.h"
 #include "../render/sdl_ttf.h"
 #include "../render/sdl_window.h"
@@ -18,9 +19,6 @@
 class SettlementManage
 {
 private:
-
-    TTF_Font* art_font;
-
     // 当前页面要渲染的按键数组
     SDLButton* settlement_buttons[2];
 
@@ -56,7 +54,7 @@ public:
     void startRender();
 
     // 初始化
-    void init(TTF_Font* art_font);
+    void init();
     
     // 处理事件
     void handleEvents(SDL_Event* event);

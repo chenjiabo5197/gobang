@@ -1,12 +1,12 @@
 #include "main_menu_manage.h"
 
 // 主窗口
-extern SDLWindow* main_window; 
+extern SDLWindow* g_main_window; 
 
 MainMenuManage::MainMenuManage(const Config& config)
 {
-    this->buttons_x = config.Read("main_window_screen_width", 0) / 2;// TODO 新建优化
-    this->buttons_y = config.Read("main_window_screen_height", 0) / 2;
+    this->buttons_x = config.Read("g_main_window_screen_width", 0) / 2;// TODO 新建优化
+    this->buttons_y = config.Read("g_main_window_screen_height", 0) / 2;
     this->button_interval = config.Read("main_menu_buttons_interval", 0);
     this->main_menu_buttons[0] = new SDLButton(config, "start_game", this->buttons_x, this->buttons_y-this->button_interval);
     this->main_menu_buttons[1] = new SDLButton(config, "best_scores", this->buttons_x, this->buttons_y);
@@ -30,7 +30,7 @@ void MainMenuManage::init()
     INFOLOG("init||init variable success");
     for (int i = 0; i < this->array_length; i++)
     {
-        this->main_menu_buttons[i]->loadResource(main_window->getWindow(), main_window->getRenderer());
+        this->main_menu_buttons[i]->loadResource(g_main_window->getWindow(), g_main_window->getRenderer());
     }
     INFOLOG("loadResource||load resource success");
 }
@@ -39,7 +39,7 @@ void MainMenuManage::startRender()
 {
     for (int i = 0; i < this->array_length; i++)
     {
-        this->main_menu_buttons[i]->buttonRender(main_window->getRenderer());
+        this->main_menu_buttons[i]->buttonRender(g_main_window->getRenderer());
     }
     // DEBUGLOG("startRender");
 }

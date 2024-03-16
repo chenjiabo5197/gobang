@@ -8,6 +8,7 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include "../common/global.h"
 #include "../chess/chess.h"
 #include "../render/sdl_ttf.h"
 #include "../render/sdl_button.h"
@@ -51,7 +52,6 @@ private:
     Chess* black_color_chess;
 
     // 棋盘渲染的字体
-    TTF_Font* art_ttf;
     SDLTTF* select_chess_color_ttf;
 
     // 渲染文字到指定位置(选择先后手窗口专用)
@@ -63,7 +63,7 @@ public:
     void startRender();
 
     // 初始化
-    void init(TTF_Font* art_ttf);
+    void init();
 
     // 处理事件
     void handleEvents(SDL_Event* event);

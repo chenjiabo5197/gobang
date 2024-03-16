@@ -1,7 +1,11 @@
 #include "chess_data_board.h"
 
 // 主窗口
-extern SDLWindow* main_window; 
+extern SDLWindow* g_main_window; 
+// 艺术字体 行楷
+extern TTF_Font* g_art_font;
+// 普通字体
+extern TTF_Font* g_normal_font;
 
 ChessDataBoard::ChessDataBoard(const Config& config)
 {
@@ -24,12 +28,10 @@ ChessDataBoard::~ChessDataBoard()
     INFOLOG("~ChessDataBoard success||release resources");
 }
 
-void ChessDataBoard::init(TTF_Font* normal_font, TTF_Font* art_font)
+void ChessDataBoard::init()
 {
-	this->normal_ttf = normal_font;
-    this->art_ttf = art_font;
-    this->symbol_white_chess->init(main_window);
-	this->symbol_black_chess->init(main_window);
+    this->symbol_white_chess->init(g_main_window);
+	this->symbol_black_chess->init(g_main_window);
     INFOLOG("init||ChessDataBoard init success||load resource success");
 }
 
@@ -57,7 +59,7 @@ void ChessDataBoard::initDataBoard(const chess_color_type& type)
     {
         if (this->data_board_arr[i] != nullptr)
         {
-            this->data_board_arr[i]->init(this->normal_ttf, this->art_ttf);
+            this->data_board_arr[i]->init();
         }
     }
     INFOLOG("initDataBoard success||chess_color_type={}", (int)type);
@@ -80,8 +82,8 @@ void ChessDataBoard::render(const player_flag_type& type)
     time_text.str("");
     //  除1000，是因为需要的是秒，而每秒有1000毫秒,小数点后取1位小数
     time_text << std::setiosflags(std::ios::fixed) << std::setprecision(1) << (this->top_timer->timerGetTicks() / 1000.f); 
-    this->renderText("对局开始(s): ", this->normal_ttf, color, this->data_board_x-50, this->data_board_y-110, 0.6);  
-    this->renderText(time_text.str(), this->normal_ttf, color,this->data_board_x+80, this->data_board_y-110, 0.6);  //时间信息
+    this->renderText("对局开始(s): ", g_normal_font, color, this->data_board_x-50, this->data_board_y-110, 0.6);  
+    this->renderText(time_text.str(), g_normal_font, color,this->data_board_x+80, this->data_board_y-110, 0.6);  //时间信息
     switch (type)
     {
     case MACHINE_PLAYER:
@@ -108,7 +110,7 @@ void ChessDataBoard::render(const player_flag_type& type)
     this->symbol_white_chess->set_chess_multiple(0.8);
 	this->symbol_white_chess->chessRender();
 	// 中间行
-    this->renderText("VS", this->art_ttf, color, this->data_board_x, this->data_board_y, 0.08);
+    this->renderText("VS", g_art_font, color, this->data_board_x, this->data_board_y, 0.08);
     //最后一行
     this->symbol_black_chess->set_chess_coordinate(this->data_board_x-80, this->data_board_y+50);
     this->symbol_black_chess->set_chess_multiple(0.8);
@@ -117,8 +119,8 @@ void ChessDataBoard::render(const player_flag_type& type)
 
 void ChessDataBoard::renderText(const std::string& texture_text, TTF_Font* texture_ttf, SDL_Color color, const int& x, const int& y, const float& multiple)
 {
-	this->data_board_ttf->loadRenderText(main_window->getRenderer(), texture_ttf, texture_text, color);
-	this->data_board_ttf->ttfRender(main_window->getRenderer(), x, y, multiple);
+	this->data_board_ttf->loadRenderText(g_main_window->getRenderer(), texture_ttf, texture_text, color);
+	this->data_board_ttf->ttfRender(g_main_window->getRenderer(), x, y, multiple);
 }
 
 void ChessDataBoard::updateScoreInfo(const result_info_type& type)

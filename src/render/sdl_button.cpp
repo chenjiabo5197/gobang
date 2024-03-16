@@ -1,6 +1,6 @@
 #include "sdl_button.h"
 
-extern Mix_Chunk* select_button_sound;
+extern Mix_Chunk* g_select_button_sound;
 
 SDLButton::SDLButton(const Config& config, const std::string button_name, const int& x, const int& y)
 {
@@ -88,7 +88,7 @@ void SDLButton::handleButtonEvent(SDL_Event* event)
                 
                 case SDL_MOUSEBUTTONUP:
                 mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
-                Mix_PlayChannel(-1, select_button_sound, 0);
+                Mix_PlayChannel(-1, g_select_button_sound, 0);  // TODO  优化音效延迟
                 break;
             }
         }

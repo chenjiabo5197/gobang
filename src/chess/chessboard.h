@@ -12,6 +12,7 @@
 #include "chess.h"
 #include "../render/sdl_ttf.h"
 #include "../common/common.h"
+#include "../common/global.h"
 #include "../utils/myUtils.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"
@@ -31,9 +32,6 @@ private:
     int render_g;
     int render_b;
     int render_alpha;
-
-	// 棋盘渲染的普通字体
-	TTF_Font* global_ttf;
 
 	// 棋盘渲染的字体
 	SDLTTF* chessboard_ttf;
@@ -81,7 +79,7 @@ public:
     ~Chessboard();
 
 	// 初始化，传入渲染所需参数
-	void init(TTF_Font* global_font);
+	void init();
 
 	// 重置棋盘数据
 	void initChessMap();

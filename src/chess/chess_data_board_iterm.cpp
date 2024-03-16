@@ -1,7 +1,11 @@
 #include "chess_data_board_iterm.h"
 
 // 主窗口
-extern SDLWindow* main_window; 
+extern SDLWindow* g_main_window; 
+// 艺术字体 行楷
+extern TTF_Font* g_art_font;
+// 普通字体
+extern TTF_Font* g_normal_font;
 
 ChessDataBoardIterm::ChessDataBoardIterm(const std::string& name, const int& name_x, const int& name_y, const float& name_multiple, const float& score_multiple)
 {
@@ -28,18 +32,16 @@ ChessDataBoardIterm::~ChessDataBoardIterm()
     INFOLOG("~ChessDataBoardIterm success, release resource||iterm_name={}", this->iterm_name);
 }
 
-void ChessDataBoardIterm::init(TTF_Font* normal_font, TTF_Font* art_font)
+void ChessDataBoardIterm::init()
 {
-	this->normal_ttf = normal_font;
-    this->art_ttf = art_font;
     DEBUGLOG("init||ChessDataBoardIterm init success||iterm_name={}", this->iterm_name);
 }
 
 
 void ChessDataBoardIterm::render(SDL_Color color)
 {
-    this->renderText(iterm_name, this->art_ttf, color, this->iterm_name_x, this->iterm_name_y, this->iterm_name_multiple);
-    this->renderText(std::to_string(this->iterm_score), this->normal_ttf, color, this->iterm_score_x, this->iterm_score_y, this->iterm_score_multiple);
+    this->renderText(iterm_name, g_art_font, color, this->iterm_name_x, this->iterm_name_y, this->iterm_name_multiple);
+    this->renderText(std::to_string(this->iterm_score), g_normal_font, color, this->iterm_score_x, this->iterm_score_y, this->iterm_score_multiple);
 }
 
 void ChessDataBoardIterm::addScore()
@@ -50,8 +52,8 @@ void ChessDataBoardIterm::addScore()
 
 void ChessDataBoardIterm::renderText(const std::string& texture_text, TTF_Font* texture_ttf, SDL_Color color, const int& x, const int& y, const float& multiple)
 {
-	this->data_board_iterm_ttf->loadRenderText(main_window->getRenderer(), texture_ttf, texture_text, color);
-	this->data_board_iterm_ttf->ttfRender(main_window->getRenderer(), x, y, multiple);
+	this->data_board_iterm_ttf->loadRenderText(g_main_window->getRenderer(), texture_ttf, texture_text, color);
+	this->data_board_iterm_ttf->ttfRender(g_main_window->getRenderer(), x, y, multiple);
 }
 
 void ChessDataBoardIterm::swapField(ChessDataBoardIterm& iterm)

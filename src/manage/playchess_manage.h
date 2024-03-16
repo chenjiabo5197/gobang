@@ -30,11 +30,6 @@ private:
     // 玩家2
     Player* single_player2;
     
-    // 棋盘渲染时普通字体
-    TTF_Font* normal_ttf;
-    // 行楷字体
-    TTF_Font* art_ttf;
-    
     // 当前页面要渲染的按键数组
     SDLButton* playchess_buttons[2];
 
@@ -65,7 +60,7 @@ public:
     void startRender();
 
     // 初始化
-    void init(TTF_Font* normal_ttf, TTF_Font* art_ttf);
+    void init();
 
     // 处理事件
     void handleEvents(SDL_Event* event);

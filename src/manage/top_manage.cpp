@@ -8,11 +8,15 @@
 #include "top_manage.h"
 
 // 下棋音效
-extern Mix_Chunk* chess_down_sound;
+extern Mix_Chunk* g_chess_down_sound;
 // 按键选择音效
-extern Mix_Chunk* select_button_sound;
+extern Mix_Chunk* g_select_button_sound;
 // 主窗口
-extern SDLWindow* main_window; 
+extern SDLWindow* g_main_window; 
+// 艺术字体 行楷
+extern TTF_Font* g_art_font;
+// 普通字体
+extern TTF_Font* g_normal_font;
 
 TopManage::TopManage(const Config& config)
 {
@@ -26,7 +30,7 @@ TopManage::TopManage(const Config& config)
     this->select_play_manage = new SelectPlayManage(config);
     this->playchess_manage = new PlaychessManage(config);
     this->settlement_manage = new SettlementManage(config);
-    main_window = new SDLWindow(config, "main_window");
+    g_main_window = new SDLWindow(config, "g_main_window");
     DEBUGLOG("Manage construct success||render_type={}||art_ttf_path={}||art_ttf_ptsize={}||normal_ttf_resource_path={}||normal_ttf_ptsize={}", 
     (int)this->render_type, this->art_ttf_path, this->art_ttf_ptsize, this->normal_ttf_path, this->normal_ttf_ptsize);
 }
@@ -37,7 +41,7 @@ TopManage::~TopManage()
     delete select_play_manage;
     delete playchess_manage;
     delete settlement_manage;
-    // delete main_window;
+    // delete g_main_window;
     DEBUGLOG("~Manage success||release resource");
 }
 
@@ -103,7 +107,6 @@ void TopManage::start()
                 this->setRendererType(PLAYCHESS_INTERFACE);
                 this->playchess_manage->handleEvents(&event);
             }
-            
             else if (event.type == BACK_MANU_EVENT)
             {
                 this->setRendererType(MAIN_MENU_INTERFACE);
@@ -111,12 +114,7 @@ void TopManage::start()
             else if (event.type == PLAYER_WITHDRAW_EVENT)
             {
                 this->playchess_manage->handleEvents(&event);
-            }
-            // else if (event.type == AGAIN_GAME_EVENT)
-            // {
-            //     this->setRendererType(PLAYCHESS_INTERFACE);
-            //     this->playchess_manage->handleEvents(&event);
-            // }    
+            } 
             else
             {
                 if(this->render_type == PLAYCHESS_INTERFACE)
@@ -146,9 +144,9 @@ void TopManage::start()
             this->setRendererType(PLAYER_WIN_INTERFACE);
         }
         //Clear screen
-        SDL_SetRenderDrawColor(main_window->getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
-        SDL_RenderClear(main_window->getRenderer());
-        main_window->render_background();
+        SDL_SetRenderDrawColor(g_main_window->getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
+        SDL_RenderClear(g_main_window->getRenderer());
+        g_main_window->render_background();
         switch (this->render_type)
         {
         case PLAYCHESS_INTERFACE:
@@ -179,7 +177,7 @@ void TopManage::start()
         }
         last_render_type = this->render_type;
         //Update screen
-        SDL_RenderPresent(main_window->getRenderer());
+        SDL_RenderPresent(g_main_window->getRenderer());
     }
     //Free resources and close SDL
     this->closeRender();
@@ -227,46 +225,49 @@ bool TopManage::initRender()
     }
     DEBUGLOG("SDL_mixer initialize success");
     INFOLOG("initRender success!");
-    this->loadResource();
+    if(!this->loadResource())
+    {
+        return false;
+    }
     return true;
 }
 
 bool TopManage::loadResource()
 {
     //使用 TTF_OpenFont 加载字体。这需要输入字体文件的路径和要渲染的点尺寸
-    this->art_ttf = TTF_OpenFont(this->art_ttf_path.c_str(), this->art_ttf_ptsize);
-    if(art_ttf == nullptr)
+    g_art_font = TTF_OpenFont(this->art_ttf_path.c_str(), this->art_ttf_ptsize);
+    if(g_art_font == nullptr)
     {
         ERRORLOG("Failed to load STXingkai font! SDL_ttf Error={}", TTF_GetError());
         return false;
     }
-    this->normal_font = TTF_OpenFont(this->normal_ttf_path.c_str(), this->normal_ttf_ptsize);
-    if(normal_font == nullptr)
+    g_normal_font = TTF_OpenFont(this->normal_ttf_path.c_str(), this->normal_ttf_ptsize);
+    if(g_normal_font == nullptr)
     {
         ERRORLOG("Failed to load STkaiti font! SDL_ttf Error={}", TTF_GetError());
         return false;
     }
     DEBUGLOG("Create font success!");
-    chess_down_sound = Mix_LoadWAV("resources/chess_down.mp3");
-    if(chess_down_sound == nullptr)
+    g_chess_down_sound = Mix_LoadWAV("resources/chess_down.mp3");
+    if(g_chess_down_sound == nullptr)
     {
-        ERRORLOG("Failed to load chess_down_sound sound effect! SDL_mixer Error={}", Mix_GetError());
+        ERRORLOG("Failed to load g_chess_down_sound sound effect! SDL_mixer Error={}", Mix_GetError());
         return false;
     }
-    DEBUGLOG("load chess_down_sound success!");
-    select_button_sound = Mix_LoadWAV("resources/select_button.wav");
-    if(select_button_sound == nullptr)
+    DEBUGLOG("load g_chess_down_sound success!");
+    g_select_button_sound = Mix_LoadWAV("resources/select_button.wav");
+    if(g_select_button_sound == nullptr)
     {
-        ERRORLOG("Failed to load select_button_sound sound effect! SDL_mixer Error={}", Mix_GetError());
+        ERRORLOG("Failed to load g_select_button_sound sound effect! SDL_mixer Error={}", Mix_GetError());
         return false;
     }
-    DEBUGLOG("load select_button_sound success!");
+    DEBUGLOG("load g_select_button_sound success!");
     // TODO 优化加载，默认不用加载后面用不到的管理页面
-    main_window->init();
+    g_main_window->init();
     this->main_menu_manage->init();
-    this->select_play_manage->init(this->art_ttf);
-    this->playchess_manage->init(this->normal_font, this->art_ttf);
-    this->settlement_manage->init(this->art_ttf);
+    this->select_play_manage->init();
+    this->playchess_manage->init();
+    this->settlement_manage->init();
     this->settlement_manage->set_font_coordinate(this->playchess_manage->get_chessboard_center_x(), this->playchess_manage->get_chessboard_center_y());
     INFOLOG("loadResource success!");
     return true;
@@ -274,15 +275,15 @@ bool TopManage::loadResource()
 
 void TopManage::closeRender()
 {
-    TTF_CloseFont(art_ttf);
-    art_ttf = nullptr;
-    TTF_CloseFont(normal_font);
-    normal_font = nullptr;
-    main_window->free();
-    Mix_FreeChunk(chess_down_sound);
-    chess_down_sound = nullptr;
-    select_button_sound = nullptr;
-    main_window = nullptr;
+    TTF_CloseFont(g_art_font);
+    g_art_font = nullptr;
+    TTF_CloseFont(g_normal_font);
+    g_normal_font = nullptr;
+    g_main_window->free();
+    Mix_FreeChunk(g_chess_down_sound);
+    g_chess_down_sound = nullptr;
+    g_select_button_sound = nullptr;
+    g_main_window = nullptr;
 
     //Quit SDL subsystems
     TTF_Quit();

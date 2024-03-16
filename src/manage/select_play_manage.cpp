@@ -1,12 +1,14 @@
 #include "select_play_manage.h"
 
 // 主窗口
-extern SDLWindow* main_window; 
+extern SDLWindow* g_main_window; 
+// 艺术字体 行楷
+extern TTF_Font* g_art_font;
 
 SelectPlayManage::SelectPlayManage(const Config& config)
 {
-    this->buttons_x = config.Read("main_window_screen_width", 0) / 2;// TODO 新建优化
-    this->buttons_y = config.Read("main_window_screen_height", 0) / 2;
+    this->buttons_x = config.Read("g_main_window_screen_width", 0) / 2;// TODO 新建优化
+    this->buttons_y = config.Read("g_main_window_screen_height", 0) / 2;
     this->button_interval = config.Read("select_play_buttons_interval", 0);
     this->select_play_buttons[0] = new SDLButton(config, "single_player", this->buttons_x, this->buttons_y-1.5*this->button_interval);
     this->select_play_buttons[1] = new SDLButton(config, "two_players", this->buttons_x, this->buttons_y-this->button_interval/2);
@@ -30,9 +32,8 @@ SelectPlayManage::~SelectPlayManage()
     DEBUGLOG("~SelectPlayManage success||release resource");
 }
 
-void SelectPlayManage::init(TTF_Font* art_ttf)
+void SelectPlayManage::init()
 {
-    this->art_ttf = art_ttf;
     for (int i = 0; i < this->array_length; i++)
     {
         this->select_play_buttons[i]->initButtonCurrentSprite();
@@ -40,7 +41,7 @@ void SelectPlayManage::init(TTF_Font* art_ttf)
     INFOLOG("init||init variable success");
     for (int i = 0; i < this->array_length; i++)
     {
-        this->select_play_buttons[i]->loadResource(main_window->getWindow(), main_window->getRenderer());
+        this->select_play_buttons[i]->loadResource(g_main_window->getWindow(), g_main_window->getRenderer());
     }
     INFOLOG("loadResource||load resource success");
 }
@@ -49,7 +50,7 @@ void SelectPlayManage::startRender()
 {
     for (int i = 0; i < this->array_length; i++)
     {
-        this->select_play_buttons[i]->buttonRender(main_window->getRenderer());
+        this->select_play_buttons[i]->buttonRender(g_main_window->getRenderer());
     }
     // DEBUGLOG("startRender");
 }
@@ -248,7 +249,7 @@ bool SelectPlayManage::selectChessRender(std::pair<sdl_button_sprite, sdl_button
         default:
             break;
         }
-        this->renderText(render_text[i], this->art_ttf, color, chess_arr[i]->get_chess_coordinate().first, chess_arr[i]->get_chess_coordinate().second+60, 0.05);
+        this->renderText(render_text[i], g_art_font, color, chess_arr[i]->get_chess_coordinate().first, chess_arr[i]->get_chess_coordinate().second+60, 0.05);
     }
     return is_quit;
 }

@@ -15,6 +15,7 @@
 #include "../render/sdl_timer.h"
 #include "../render/sdl_ttf.h"
 #include "../common/common.h"
+#include "../common/global.h"
 #include "../utils/myUtils.h"
 #include "../logger/logger.h"
 #include "../utils/config.h"
@@ -32,8 +33,6 @@ private:
     chess_color_type last_chess_sequence;
 
 	// 棋盘渲染的字体
-	TTF_Font* normal_ttf;
-    TTF_Font* art_ttf;
     SDLTTF* data_board_ttf;
 
     // 数据板上棋子标志
@@ -54,7 +53,7 @@ public:
     ~ChessDataBoard();
 
     // 初始化，传入渲染所需参数
-	void init(TTF_Font* normal_font, TTF_Font* art_font);
+	void init();
 
 	// 初始化数据板信息
 	void initDataBoard(const chess_color_type& type);

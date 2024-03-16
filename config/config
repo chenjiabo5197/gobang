@@ -7,10 +7,10 @@ log_filesize=10
 log_filenums=10
 
 # 主窗口
-main_window_title=五子棋
-main_window_background_path=resources/background.png
-main_window_screen_width=930
-main_window_screen_height=650
+g_main_window_title=五子棋
+g_main_window_background_path=resources/background.png
+g_main_window_screen_width=930
+g_main_window_screen_height=650
 
 # 选择先后手窗口
 select_chess_color_window_title=选择先后手
