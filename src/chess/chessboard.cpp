@@ -375,7 +375,7 @@ bool Chessboard::checkOver()
 {
 	if (checkWin())
 	{
-		// MyUtils::sleep_seconds(1.5);
+		// sleep_seconds(1.5);
 		if (player_flag == SINGLE_PLAYER)   // 玩家赢
 		{
 			INFOLOG("Chess::checkOver||single player win");

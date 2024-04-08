@@ -12,14 +12,14 @@
 #include <iomanip>
 #include "chess.h"
 #include "chess_data_board_iterm.h"
-#include "../render/sdl_timer.h"
-#include "../render/sdl_ttf.h"
-#include "../common/common.h"
-#include "../common/global.h"
-#include "../utils/myUtils.h"
-#include "../logger/logger.h"
-#include "../utils/config.h"
-#include "../render/sdl_window.h"
+#include "sdl_timer.h"
+#include "sdl_ttf.h"
+#include "common.h"
+#include "global.h"
+#include "myUtils.h"
+#include "logger.h"
+#include "config.h"
+#include "sdl_window.h"
 
 class ChessDataBoard
 {

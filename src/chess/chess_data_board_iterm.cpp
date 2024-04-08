@@ -59,19 +59,19 @@ void ChessDataBoardIterm::renderText(const std::string& texture_text, TTF_Font* 
 void ChessDataBoardIterm::swapField(ChessDataBoardIterm& iterm)
 {
     // 名字
-    // MyUtils::swapValue(this->iterm_name, iterm.iterm_name);
+    // swapValue(this->iterm_name, iterm.iterm_name);
     // 要渲染的文字坐标
-    MyUtils::swapValue(this->iterm_name_x, iterm.iterm_name_x);
-    MyUtils::swapValue(this->iterm_name_y, iterm.iterm_name_y);
+    swapValue(this->iterm_name_x, iterm.iterm_name_x);
+    swapValue(this->iterm_name_y, iterm.iterm_name_y);
     // 文字缩放倍数
-    MyUtils::swapValue(this->iterm_name_multiple, iterm.iterm_name_multiple);
+    swapValue(this->iterm_name_multiple, iterm.iterm_name_multiple);
     // 分数
-    // MyUtils::swapValue(this->iterm_score, iterm.iterm_score);
+    // swapValue(this->iterm_score, iterm.iterm_score);
     // 要渲染的文字坐标
-    MyUtils::swapValue(this->iterm_score_x, iterm.iterm_score_x);
-    MyUtils::swapValue(this->iterm_score_y, iterm.iterm_score_y);
+    swapValue(this->iterm_score_x, iterm.iterm_score_x);
+    swapValue(this->iterm_score_y, iterm.iterm_score_y);
     // 文字缩放倍数
-    MyUtils::swapValue(this->iterm_score_multiple, iterm.iterm_score_multiple);
+    swapValue(this->iterm_score_multiple, iterm.iterm_score_multiple);
     INFOLOG("swapField||name={}||iterm.name={}", this->iterm_name, iterm.iterm_name);
 }
 

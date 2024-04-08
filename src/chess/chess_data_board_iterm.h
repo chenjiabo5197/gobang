@@ -9,12 +9,12 @@
 
 #include <iostream>
 #include "chess.h"
-#include "../common/common.h"
-#include "../common/global.h"
-#include "../render/sdl_ttf.h"
-#include "../logger/logger.h"
-#include "../render/sdl_window.h"
-#include "../utils/myUtils.h"
+#include "common.h"
+#include "global.h"
+#include "sdl_ttf.h"
+#include "logger.h"
+#include "sdl_window.h"
+#include "myUtils.h"
 
 class ChessDataBoardIterm
 {

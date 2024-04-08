@@ -10,7 +10,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include "../logger/logger.h"
+#include "logger.h"
 
 // 封装SDL_Texture
 //Texture wrapper class

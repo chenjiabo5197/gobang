@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL.h>
-#include "../logger/logger.h"
+#include "logger.h"
 
 //The application time based timer
 /*

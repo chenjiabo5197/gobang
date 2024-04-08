@@ -31,13 +31,13 @@ add_subdirectory(src/utils)
 
 # 规定.h头文件路径
 include_directories(${PROJECT_SOURCE_DIR}
-    ${PROJECT_SOURCE_DIR}/chess
-    ${PROJECT_SOURCE_DIR}/common
-    ${PROJECT_SOURCE_DIR}/logger
-    ${PROJECT_SOURCE_DIR}/manage
-    ${PROJECT_SOURCE_DIR}/player
-    ${PROJECT_SOURCE_DIR}/render
-    ${PROJECT_SOURCE_DIR}/utils
+    ${PROJECT_SOURCE_DIR}/src/chess
+    ${PROJECT_SOURCE_DIR}/src//common
+    ${PROJECT_SOURCE_DIR}/src//logger
+    ${PROJECT_SOURCE_DIR}/src//manage
+    ${PROJECT_SOURCE_DIR}/src//player
+    ${PROJECT_SOURCE_DIR}/src//render
+    ${PROJECT_SOURCE_DIR}/src//utils
 )
 
 # 生成可执行文件

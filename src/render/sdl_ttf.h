@@ -9,8 +9,8 @@
 #pragma once
 
 #include "sdl_texture.h"
-#include "../logger/logger.h"
-#include "../utils/config.h"
+#include "logger.h"
+#include "config.h"
 
 class SDLTTF
 {

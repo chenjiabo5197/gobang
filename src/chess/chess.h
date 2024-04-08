@@ -1,10 +1,10 @@
 #pragma once
 
 #include <iostream>
-#include "../render/sdl_texture.h"
-#include "../logger/logger.h"
-#include "../utils/config.h"
-#include "../render/sdl_window.h"
+#include "sdl_texture.h"
+#include "logger.h"
+#include "config.h"
+#include "sdl_window.h"
 
 class Chess
 {

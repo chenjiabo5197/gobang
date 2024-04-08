@@ -10,13 +10,13 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include "chess.h"
-#include "../render/sdl_ttf.h"
-#include "../common/common.h"
-#include "../common/global.h"
-#include "../utils/myUtils.h"
-#include "../logger/logger.h"
-#include "../utils/config.h"
-#include "../render/sdl_window.h"
+#include "sdl_ttf.h"
+#include "common.h"
+#include "global.h"
+#include "myUtils.h"
+#include "logger.h"
+#include "config.h"
+#include "sdl_window.h"
 
 class Chessboard
 {

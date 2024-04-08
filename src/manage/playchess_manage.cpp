@@ -79,7 +79,7 @@ int machineChessDown(void* data)
 	Machine* machine = (Machine *)(data);
     ChessPos pos;
     // 程序休眠1s，假装在思考
-    MyUtils::sleep_seconds(1.5);
+    sleep_seconds(1.5);
     chess_kind_type chess_type = CHESS_DEFAULT;
     if (is_machine_first)
     {

@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.0)
 project(logger_output)
 
 MESSAGE(STATUS "LOGGER BINARY dir: " ${${PROJECT_NAME}_BINARY_DIR})
@@ -9,10 +10,12 @@ message(STATUS "files: " ${LOGGER_FILES})
 
 add_library(${PROJECT_NAME} STATIC ${LOGGER_FILES})
 
-include_directories(${PROJECT_SOURCE_DIR}
+include_directories(
+    ${PROJECT_SOURCE_DIR}
 )
 
 link_directories()
 
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(
+    ${PROJECT_NAME}
 )

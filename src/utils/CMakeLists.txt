@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.0)
+
 project(utils_output)
 
 MESSAGE(STATUS "UTILS BINARY dir: " ${${PROJECT_NAME}_BINARY_DIR})
@@ -9,10 +11,13 @@ message(STATUS "files: " ${UTILS_FILES})
 
 add_library(${PROJECT_NAME} STATIC ${UTILS_FILES})
 
-include_directories(${PROJECT_SOURCE_DIR}
+include_directories(
+    ${PROJECT_SOURCE_DIR}
+    ../logger
 )
 
-link_directories()
+# link_directories()
 
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(
+    ${PROJECT_NAME}
 )

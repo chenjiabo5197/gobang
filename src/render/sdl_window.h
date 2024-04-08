@@ -2,8 +2,8 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <sstream>
-#include "../logger/logger.h"
-#include "../utils/config.h"
+#include "logger.h"
+#include "config.h"
 #include "sdl_texture.h"
 
 class SDLWindow

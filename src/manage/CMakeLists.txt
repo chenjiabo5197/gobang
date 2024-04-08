@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.0)
 project(manage_output)
 
 MESSAGE(STATUS "MANAGE BINARY dir: " ${${PROJECT_NAME}_BINARY_DIR})
@@ -9,12 +10,20 @@ message(STATUS "files: " ${MANAGE_FILES})
 
 add_library(${PROJECT_NAME} STATIC ${MANAGE_FILES})
 
-include_directories(${PROJECT_SOURCE_DIR}
+include_directories(
+    ${PROJECT_SOURCE_DIR}
+    ../render
+    ../logger
+    ../utils
+    ../common
+    ../chess
+    ../player
 )
 
-link_directories()
+# link_directories()
 
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(
+    ${PROJECT_NAME}
     chess_output
     common_output
 )

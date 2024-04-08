@@ -7,9 +7,9 @@
 =============================================*/
 
 #include <iostream>
-#include "manage/top_manage.h"
-#include "logger/logger.h"
-#include "utils/config.h"
+#include "top_manage.h"
+#include "logger.h"
+#include "config.h"
 
 // 初始化配置文件
 Config initConfig(const std::string& config_path)

@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
 #include <iostream>
-#include "../chess/chessboard.h"
-#include "../utils/myUtils.h"
+#include "chessboard.h"
+#include "myUtils.h"
 
 class Machine
 {

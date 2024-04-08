@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.0)
 project(chess_output)
 
 MESSAGE(STATUS "CHESS BINARY dir: " ${${PROJECT_NAME}_BINARY_DIR})
@@ -9,7 +10,12 @@ message(STATUS "files: " ${CHESS_FILES})
 
 add_library(${PROJECT_NAME} STATIC ${CHESS_FILES})
 
-include_directories(${PROJECT_SOURCE_DIR}
+include_directories(
+    ${PROJECT_SOURCE_DIR}
+    ../render
+    ../logger
+    ../utils
+    ../common
 )
 
 link_directories()

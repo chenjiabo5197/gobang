@@ -8,11 +8,11 @@
 #pragma once
 
 #include <SDL2/SDL.h>
-#include "../render/sdl_button.h"
-#include "../render/sdl_window.h"
-#include "../logger/logger.h"
-#include "../utils/config.h"
-#include "../common/global.h"
+#include "sdl_button.h"
+#include "sdl_window.h"
+#include "logger.h"
+#include "config.h"
+#include "global.h"
 
 class MainMenuManage
 {

@@ -1,6 +1,6 @@
 #pragma once
-#include "../logger/logger.h"
-#include "../chess/chessboard.h"
+#include "logger.h"
+#include "chessboard.h"
 
 class Player
 {

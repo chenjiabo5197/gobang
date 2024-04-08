@@ -8,16 +8,16 @@
 #pragma once
 
 #include <SDL2/SDL.h>
-#include "../common/common.h"
-#include "../common/global.h"
-#include "../render/sdl_button.h"
-#include "../render/sdl_window.h"
-#include "../logger/logger.h"
-#include "../utils/config.h"
-#include "../chess/chessboard.h"
-#include "../chess/chess_data_board.h"
-#include "../player/machine.h"
-#include "../player/player.h"
+#include "common.h"
+#include "global.h"
+#include "sdl_button.h"
+#include "sdl_window.h"
+#include "logger.h"
+#include "config.h"
+#include "chessboard.h"
+#include "chess_data_board.h"
+#include "machine.h"
+#include "player.h"
 
 class PlaychessManage
 {

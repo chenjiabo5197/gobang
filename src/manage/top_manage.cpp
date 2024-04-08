@@ -161,7 +161,7 @@ void TopManage::start()
         {
             if (last_render_type != this->render_type)
             {
-                MyUtils::sleep_seconds(1.5);
+                sleep_seconds(1.5);
             }
             this->settlement_manage->startRender();
             break;

@@ -8,13 +8,13 @@
 #pragma once
 
 #include <SDL2/SDL.h>
-#include "../common/global.h"
-#include "../chess/chess.h"
-#include "../render/sdl_ttf.h"
-#include "../render/sdl_button.h"
-#include "../render/sdl_window.h"
-#include "../logger/logger.h"
-#include "../utils/config.h"
+#include "global.h"
+#include "chess.h"
+#include "sdl_ttf.h"
+#include "sdl_button.h"
+#include "sdl_window.h"
+#include "logger.h"
+#include "config.h"
 
 class SelectPlayManage
 {

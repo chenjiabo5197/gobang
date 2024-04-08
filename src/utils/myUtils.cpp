@@ -1,6 +1,6 @@
 #include "myUtils.h"
 
-bool MyUtils::isFileExistAndNotEmpty(const std::string& fileName)
+bool isFileExistAndNotEmpty(const std::string& fileName)
 {
 	std::ifstream ifs;
 	ifs.open(fileName, std::ios::in);
@@ -25,7 +25,7 @@ bool MyUtils::isFileExistAndNotEmpty(const std::string& fileName)
 	return true;
 }
 
-bool MyUtils::saveVectorToCsv(std::vector<BestScoreUser>& v)
+bool saveVectorToCsv(std::vector<BestScoreUser>& v)
 {
 	std::ofstream ofs;
 	// 覆盖写入，默认此时程序中维护的为最新的，因为需要考虑更新排行榜，排行榜数量最大为5个
@@ -48,7 +48,7 @@ bool MyUtils::saveVectorToCsv(std::vector<BestScoreUser>& v)
 	return true;
 }
 
-std::string MyUtils::getCurTime()
+std::string getCurTime()
 {
 	auto NowTime = std::chrono::system_clock::now();
 	time_t ticks = std::chrono::system_clock::to_time_t(NowTime);
@@ -69,13 +69,13 @@ std::string MyUtils::getCurTime()
 	return c_TimeStamp;
 }
 
-std::vector<BestScoreUser> MyUtils::initBestScores()
+std::vector<BestScoreUser> initBestScores()
 {
 	std::vector<BestScoreUser> tempScore;
 	std::ifstream ifs;
 	std::string str;
 	// 文件不为空
-	if (MyUtils::isFileExistAndNotEmpty(BESTSCORESFILE))
+	if (isFileExistAndNotEmpty(BESTSCORESFILE))
 	{
 		std::string buf;
 		ifs.open(BESTSCORESFILE, std::ios::in);
@@ -115,7 +115,7 @@ std::vector<BestScoreUser> MyUtils::initBestScores()
 	return tempScore;
 }
 
-void MyUtils::updateBestScore(std::vector<BestScoreUser> & bestScores, const BestScoreUser& user)
+void updateBestScore(std::vector<BestScoreUser> & bestScores, const BestScoreUser& user)
 {
 	std::vector<BestScoreUser>::iterator it = bestScores.begin();
 	int index = 0;
@@ -136,16 +136,16 @@ void MyUtils::updateBestScore(std::vector<BestScoreUser> & bestScores, const Bes
 	INFOLOG("updateBestScore||updateBestScore success");
 }
 
-BestScoreUser MyUtils::getIBestScoreUser(const std::string& userName, const int& chessNum)
+BestScoreUser getIBestScoreUser(const std::string& userName, const int& chessNum)
 {
 	BestScoreUser temp;
 	temp.userName = userName;
 	temp.userScore = std::to_string(chessNum);
-	temp.curTime = MyUtils::getCurTime();
+	temp.curTime = getCurTime();
 	return temp;
 }
 
-void MyUtils::sleep_seconds(const float& sceonds)
+void sleep_seconds(const float& sceonds)
 {
 	#if defined(__linux__)
 		// Linux系统

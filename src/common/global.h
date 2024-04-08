@@ -9,7 +9,7 @@
 
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
-#include "../render/sdl_window.h"
+#include "sdl_window.h"
 
 // 背景音乐  // TODO 背景音
 extern Mix_Music* g_background_music;

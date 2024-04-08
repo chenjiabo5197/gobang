@@ -1,10 +1,10 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include "sdl_texture.h"
-#include "../logger/logger.h"
-#include "../utils/config.h"
-#include "../common/common.h"
-#include "../common/global.h"
+#include "logger.h"
+#include "config.h"
+#include "common.h"
+#include "global.h"
 
 //鼠标按键
 class SDLButton

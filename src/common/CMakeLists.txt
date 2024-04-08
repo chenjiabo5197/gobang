@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.0)
 project(common_output)
 
 MESSAGE(STATUS "COMMON BINARY dir: " ${${PROJECT_NAME}_BINARY_DIR})
@@ -9,10 +10,15 @@ message(STATUS "files: " ${COMMON_FILES})
 
 add_library(${PROJECT_NAME} STATIC ${COMMON_FILES})
 
-include_directories(${PROJECT_SOURCE_DIR}
+include_directories(
+    ${PROJECT_SOURCE_DIR}
+    ../render
+    ../logger
+    ../utils
 )
 
-link_directories()
-
-target_link_libraries(${PROJECT_NAME}
+link_directories(
+    ../render/build
 )
+
+target_link_libraries(${PROJECT_NAME})
