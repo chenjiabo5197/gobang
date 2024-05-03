@@ -9,10 +9,8 @@
 #### 安装教程
 
 1.  安装SDL2  
-        sudo apt-get install libsdl2-dev  
-        sudo apt-cache search libsdl2-image
-        sudo apt-cache search libsdl2-ttf-dev
-        sudo apt-cache search libsdl2-mixer-dev.
+        sudo apt install libsdl2-dev  
+        sudo apt install libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
 2.  在本地/usr/lib/x86_64-linux-gnu/cmake下新建sdl2_image、sdl2_ttf、sdl2_mixer等文件夹
 3.  各自文件夹里面新建文件,例sdl2_image下新建文件sdl2_image-config.cmake  
         文件内容:  
