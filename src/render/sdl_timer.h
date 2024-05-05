@@ -12,16 +12,16 @@ class SDLTimer
 {
 private:
     //The clock time when the timer started
-    Uint32 mStartTicks;
+    Uint32 m_start_ticks;
 
     //储存当前定时器运行了多长时间
-    Uint32 mPausedTicks;
+    Uint32 m_paused_ticks;
 
     //The timer status
-    bool mPaused;
-    bool mStarted;
+    bool m_paused;
+    bool m_started;
 
-    std::string name;
+    std::string m_name;
 public:
     //Initializes variables
     SDLTimer(const std::string& name);

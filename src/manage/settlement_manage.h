@@ -20,33 +20,33 @@ class SettlementManage
 {
 private:
     // 当前页面要渲染的按键数组
-    SDLButton* settlement_buttons[2];
+    SDLButton* m_settlement_buttons[2];
 
     // 数组长度
-    int array_length;
+    int m_array_length;
 
     //当前页面所有按键的中心位置，按键以此为中心，纵向分布
-    int buttons_x;
-    int buttons_y;
+    int m_buttons_x;
+    int m_buttons_y;
 
     // 按键之间的间隔(上下间隔)
-    int button_interval;
+    int m_button_interval;
 
     // 要渲染字体的坐标(字体中心坐标)
-    int font_x;
-    int font_y;
+    int m_font_x;
+    int m_font_y;
 
     // 玩家赢结算页面的渲染
-    SDLTTF* player_win_interface;
+    SDLTTF* m_player_win_interface;
     // 玩家输结算页面的渲染
-    SDLTTF* player_lose_interface;
+    SDLTTF* m_player_lose_interface;
     // 双人游戏黑方胜利结算页面的渲染
-    SDLTTF* black_win_interface;
+    SDLTTF* m_black_win_interface;
     // 双人游戏白方胜利结算页面的渲染
-    SDLTTF* white_win_interface;
+    SDLTTF* m_white_win_interface;
 
     // 渲染的种类
-    interface_kind_type interface_render_type;
+    interface_kind_type m_interface_render_type;
 public:
     SettlementManage(const Config& config);
     ~SettlementManage();
@@ -60,10 +60,10 @@ public:
     void handleEvents(SDL_Event* event);
 
     // 设置渲染文字的中心坐标
-    void set_font_coordinate(const int& x, const int& y);
+    void setFontCoordinate(const int& x, const int& y);
 
     // 设置要渲染的界面种类
-    void set_interface_render_type(const interface_kind_type& type);
+    void setInterfaceRenderType(const interface_kind_type& type);
 };
 
 

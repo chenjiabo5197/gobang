@@ -15,23 +15,23 @@
 class SDLTTF
 {
 private:
-    SDLTexture* sdl_texture;
+    SDLTexture* m_sdl_texture;
 
     // 是否已经加载渲染文字
-    bool is_load_text;
+    bool m_is_load_text;
 
     // 字体的缩放倍数
-    float ttf_result_multiple;
+    float m_ttf_result_multiple;
 
-    std::string ttf_name;
+    std::string m_ttf_name;
 
     // 渲染的参数
-    int render_r;
-    int render_g;
-    int render_b;
-    int render_alpha;
+    int m_render_r;
+    int m_render_g;
+    int m_render_b;
+    int m_render_alpha;
     // 渲染文字
-    std::string render_text;
+    std::string m_render_text;
 public:
     SDLTTF(const Config& config, const std::string& name);
 

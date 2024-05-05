@@ -8,13 +8,13 @@ class Machine
 {
 private:
     // 棋盘数据，对哪个棋盘下棋
-	Chessboard* chessboard;
+	Chessboard* m_chessboard;
 
 	// 储存各个点的评分情况，作为AI下棋数据
-	std::vector<std::vector<int>> scoreMap;
+	std::vector<std::vector<int>> m_score_map;
 
 	// 棋子数量
-	int chess_num;
+	int m_chess_num;
 
 	/*
 	* AI先计算棋手如果在这个位置落子，会有多大的价值。然后再计算自己如果在这个位置落子，有大大价值。

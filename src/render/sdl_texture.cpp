@@ -10,12 +10,12 @@
 SDLTexture::SDLTexture(const std::string& name)
 {
     //Initialize
-    mTexture = nullptr;
-    mSurfacePixels = nullptr;
-    mWidth = 0;
-    mHeight = 0;
-    this->texture_name = name;
-    INFOLOG("SDLTexture construct success, texture_name={}", this->texture_name);
+    m_texture = nullptr;
+    m_surface_pixels = nullptr;
+    m_width = 0;
+    m_height = 0;
+    m_texture_name = name;
+    INFOLOG("SDLTexture construct success, texture_name={}", m_texture_name);
 }
 
 SDLTexture::~SDLTexture()
@@ -34,7 +34,7 @@ void SDLTexture::setColor(Uint8 red, Uint8 green, Uint8 blue)
     红色和蓝色方格不会受到影响，因为它们没有绿色，但绿色的亮度会减半，白色则会变成浅洋红色（洋红色为红色 255、绿色 0、蓝色 255）。
     颜色调制只是将一种颜色乘以整个纹理的一种方法
     */
-    SDL_SetTextureColorMod(mTexture, red, green, blue);
+    SDL_SetTextureColorMod(m_texture, red, green, blue);
 }
 
 #if defined(SDL_TTF_MAJOR_VERSION)
@@ -62,19 +62,19 @@ bool SDLTexture::loadFromRenderedText(SDL_Renderer* global_renderer, TTF_Font* g
         return false;
     }
     //Create texture from surface pixels
-    mTexture = SDL_CreateTextureFromSurface(global_renderer, textSurface);
-    if(mTexture == nullptr)
+    m_texture = SDL_CreateTextureFromSurface(global_renderer, textSurface);
+    if(m_texture == nullptr)
     {
         ERRORLOG("Unable to create texture from rendered text! SDL Error={}", SDL_GetError());
         return false;
     }
     //Get image dimensions
-    mWidth = textSurface->w;
-    mHeight = textSurface->h;
+    m_width = textSurface->w;
+    m_height = textSurface->h;
     //Get rid of old surface
     SDL_FreeSurface(textSurface);
     //Return success
-    return mTexture != nullptr;
+    return m_texture != nullptr;
 }
 #endif
 
@@ -93,55 +93,55 @@ bool SDLTexture::loadPixelsFromFile(SDL_Window * global_window, const std::strin
     {
         // DEBUGLOG("loadPixelsFromFile loadedSurface success");
         //将现有的表面复制到指定格式的新的表面 第一个参数为源表面指针，第二个参数为像素格式，第三个参数设置为0即可
-        mSurfacePixels = SDL_ConvertSurfaceFormat(loadedSurface, SDL_GetWindowPixelFormat(global_window), 0);
-        if(mSurfacePixels == nullptr)
+        m_surface_pixels = SDL_ConvertSurfaceFormat(loadedSurface, SDL_GetWindowPixelFormat(global_window), 0);
+        if(m_surface_pixels == nullptr)
         {
             ERRORLOG("Unable to convert loaded surface to display format! SDL Error={}", IMG_GetError());
         }
         else
         {
             //Get image dimensions
-            mWidth = mSurfacePixels->w;
-            mHeight = mSurfacePixels->h;
-            // DEBUGLOG("loadPixelsFromFile SDL_ConvertSurfaceFormat success||mWidth={}||mHeight={}", mWidth, mHeight);
+            m_width = m_surface_pixels->w;
+            m_height = m_surface_pixels->h;
+            // DEBUGLOG("loadPixelsFromFile SDL_ConvertSurfaceFormat success||m_width={}||m_height={}", m_width, m_height);
         }
 
         //Get rid of old loaded surface
         SDL_FreeSurface(loadedSurface);
     }
-    // INFOLOG("loadPixelsFromFile mSurfacePixels success||mWidth={}||mHeight={}", mWidth, mHeight);
-    return mSurfacePixels != nullptr;
+    // INFOLOG("loadPixelsFromFile m_surface_pixels success||m_width={}||m_height={}", m_width, m_height);
+    return m_surface_pixels != nullptr;
 }
 
 // 加载纹理
 bool SDLTexture::loadFromPixels(SDL_Renderer* global_renderer)
 {
     //Only load if pixels exist
-    if(mSurfacePixels == nullptr)
+    if(m_surface_pixels == nullptr)
     {
         ERRORLOG("No pixels loaded!");
         return false;
     }
     //Color key image
-    SDL_SetColorKey(mSurfacePixels, SDL_TRUE, SDL_MapRGB(mSurfacePixels->format, 0xff, 0xff, 0xff));
+    SDL_SetColorKey(m_surface_pixels, SDL_TRUE, SDL_MapRGB(m_surface_pixels->format, 0xff, 0xff, 0xff));
 
     //Create texture from surface pixels
-    mTexture = SDL_CreateTextureFromSurface(global_renderer, mSurfacePixels);
-    if(mTexture == nullptr)
+    m_texture = SDL_CreateTextureFromSurface(global_renderer, m_surface_pixels);
+    if(m_texture == nullptr)
     {
         ERRORLOG("Unable to create texture from loaded pixels! SDL Error={}", SDL_GetError());
         return false;
     }
     //Get image dimensions
-    mWidth = mSurfacePixels->w;
-    mHeight = mSurfacePixels->h;
+    m_width = m_surface_pixels->w;
+    m_height = m_surface_pixels->h;
 
     //Get rid of old loaded surface
-    SDL_FreeSurface(mSurfacePixels);
-    mSurfacePixels = nullptr;
+    SDL_FreeSurface(m_surface_pixels);
+    m_surface_pixels = nullptr;
 
     //Return success
-    return mTexture != nullptr;
+    return m_texture != nullptr;
 }
 
 bool SDLTexture::loadFromFile(SDL_Window * global_window, SDL_Renderer* global_renderer, const std::string& path)
@@ -160,17 +160,17 @@ bool SDLTexture::loadFromFile(SDL_Window * global_window, SDL_Renderer* global_r
         ERRORLOG("Failed to texture from pixels, path={}", path.c_str());
         return false;
     }
-    return mTexture != nullptr;
+    return m_texture != nullptr;
 }
 
 Uint32* SDLTexture::getPixels32()
 {
     Uint32* pixels = nullptr;
 
-    if(mSurfacePixels != nullptr)
+    if(m_surface_pixels != nullptr)
     {
-        // pixels =  static_cast(mSurfacePixels->pixels);
-        pixels =  static_cast<Uint32*>(mSurfacePixels->pixels);
+        // pixels =  static_cast(m_surface_pixels->pixels);
+        pixels =  static_cast<Uint32*>(m_surface_pixels->pixels);
     }
 
     return pixels;
@@ -180,10 +180,10 @@ Uint32 SDLTexture::getPitch32()
 {
     Uint32 pitch = 0;
 
-    if(mSurfacePixels != nullptr)
+    if(m_surface_pixels != nullptr)
     {
         // 间距是以字节表示的，需要的是以像素为单位的间距，而每个像素有 32 位/4 字节，因此可以通过除以每个像素的 4 字节来得到每个间距的像素数
-        pitch = mSurfacePixels->pitch / 4;
+        pitch = m_surface_pixels->pitch / 4;
     }
 
     return pitch;
@@ -192,19 +192,19 @@ Uint32 SDLTexture::getPitch32()
 void SDLTexture::free()
 {
     //Free texture if it exists
-    if(mTexture != nullptr)
+    if(m_texture != nullptr)
     {
-        SDL_DestroyTexture(mTexture);
-        mTexture = nullptr;
-        mWidth = 0;
-        mHeight = 0;
+        SDL_DestroyTexture(m_texture);
+        m_texture = nullptr;
+        m_width = 0;
+        m_height = 0;
     }
 
     //Free surface if it exists
-    if(mSurfacePixels != nullptr)
+    if(m_surface_pixels != nullptr)
     {
-        SDL_FreeSurface(mSurfacePixels);
-        mSurfacePixels = nullptr;
+        SDL_FreeSurface(m_surface_pixels);
+        m_surface_pixels = nullptr;
     }
     // INFOLOG("free success");
 }
@@ -213,7 +213,7 @@ void SDLTexture::free()
 void SDLTexture::render(SDL_Renderer* global_renderer, int x, int y, float multiple, SDL_Rect* clip, SDL_Rect* renderQuad, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
     //设置渲染区域并渲染到屏幕
-    SDL_Rect quad = {x, y, this->mWidth, this->mHeight};
+    SDL_Rect quad = {x, y, m_width, m_height};
 
     /* 在特定位置渲染纹理时，需要指定一个目标矩形，该矩形可设置 x/y 位置和宽度/高度。在不知道原始图像尺寸的情况下，无法指定宽度/高度。
     因此，当渲染纹理时，创建一个包含位置参数和成员宽度/高度的矩形，并将此矩形传递给 SDL_RenderCopy
@@ -250,40 +250,40 @@ void SDLTexture::render(SDL_Renderer* global_renderer, int x, int y, float multi
     */
 
     //Render to screen
-    // SDL_RenderCopy(global_renderer, mTexture, clip, &renderQuad);
+    // SDL_RenderCopy(global_renderer, m_texture, clip, &renderQuad);
     //Render to screen 该函数的工作原理与原始的 SDL_RenderCopy 相同，但增加了用于旋转和翻转的参数
-    SDL_RenderCopyEx(global_renderer, mTexture, clip, renderQuad, angle, center, flip);
+    SDL_RenderCopyEx(global_renderer, m_texture, clip, renderQuad, angle, center, flip);
 }
 
 int SDLTexture::getWidth()
 {
-    return mWidth;
+    return m_width;
 }
 
 int SDLTexture::getHeight()
 {
-    return mHeight;
+    return m_height;
 }
 
 void SDLTexture::setBlendMode(SDL_BlendMode blending)
 {
     //Set blending function
     // SDL_SetTextureBlendMode 允许启用混合模式
-    SDL_SetTextureBlendMode(mTexture, blending);
+    SDL_SetTextureBlendMode(m_texture, blending);
 }
         
 void SDLTexture::setAlpha(Uint8 alpha)
 {
     //Modulate texture alpha
     // SDL_SetTextureAlphaMod 则允许设置整个纹理的 Alpha 值
-    SDL_SetTextureAlphaMod(mTexture, alpha);
+    SDL_SetTextureAlphaMod(m_texture, alpha);
 }
 
 // 获取特定位置像素
 Uint32 SDLTexture::getPixel32(Uint32 x, Uint32 y)
 {
     //Convert the pixels to 32 bit
-    Uint32* pixels = static_cast<Uint32*>(mSurfacePixels->pixels);
+    Uint32* pixels = static_cast<Uint32*>(m_surface_pixels->pixels);
 
     //一个二维纹理图像 像素是以一个维度存储的
     return pixels[ (y * getPitch32()) + x ];
@@ -296,18 +296,18 @@ bool SDLTexture::createBlank(SDL_Renderer* global_renderer, int width, int heigh
     free();
 
     //Create uninitialized texture
-    mTexture = SDL_CreateTexture(global_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, width, height);
-    if(mTexture == nullptr)
+    m_texture = SDL_CreateTexture(global_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, width, height);
+    if(m_texture == nullptr)
     {
         ERRORLOG("Unable to create streamable blank texture! SDL Error={}", SDL_GetError());
     }
     else
     {
-        mWidth = width;
-        mHeight = height;
+        m_width = width;
+        m_height = height;
     }
 
-    return mTexture != nullptr;
+    return m_texture != nullptr;
 }
 
 bool SDLTexture::createBlank(SDL_Renderer* global_renderer, int width, int height, SDL_TextureAccess access)
@@ -316,25 +316,25 @@ bool SDLTexture::createBlank(SDL_Renderer* global_renderer, int width, int heigh
     free();
 
     //Create uninitialized texture
-    mTexture = SDL_CreateTexture(global_renderer, SDL_PIXELFORMAT_RGBA8888, access, width, height);
-    if(mTexture == nullptr)
+    m_texture = SDL_CreateTexture(global_renderer, SDL_PIXELFORMAT_RGBA8888, access, width, height);
+    if(m_texture == nullptr)
     {
         ERRORLOG("Unable to create streamable blank texture! SDL Error={}", SDL_GetError());
     }
     else
     {
-        mWidth = width;
-        mHeight = height;
+        m_width = width;
+        m_height = height;
     }
 
-    return mTexture != nullptr;
+    return m_texture != nullptr;
 }
 
 // 对纹理进行渲染，将其设置为渲染目标
 void SDLTexture::setAsRenderTarget(SDL_Renderer* global_renderer)
 {
     //Make self render target
-    SDL_SetRenderTarget(global_renderer, mTexture);
+    SDL_SetRenderTarget(global_renderer, m_texture);
 }
 
 /*
@@ -346,7 +346,7 @@ bool SDLTexture::lockTexture()
     bool success = true;
 
     //Texture is already locked
-    if(mRawPixels != nullptr)
+    if(m_raw_pixels != nullptr)
     {
         ERRORLOG("Texture is already locked!");
         success = false;
@@ -356,7 +356,7 @@ bool SDLTexture::lockTexture()
     {   
         // 函数功能：锁定纹理，第一个参数 纹理指针。第二个参数 锁定区域，NULL 为整个纹理，第三个参数 像素，第四个参数 程度
 
-        if(SDL_LockTexture(mTexture, nullptr, &mRawPixels, &mRawPitch) != 0)
+        if(SDL_LockTexture(m_texture, nullptr, &m_raw_pixels, &m_raw_pitch) != 0)
         {
             ERRORLOG("Unable to lock texture, err={} ", SDL_GetError());
             success = false;
@@ -372,7 +372,7 @@ bool SDLTexture::unlockTexture()
     bool success = true;
 
     //Texture is not locked
-    if(mRawPixels == nullptr)
+    if(m_raw_pixels == nullptr)
     {
         ERRORLOG("Texture is not locked!");
         success = false;
@@ -380,9 +380,9 @@ bool SDLTexture::unlockTexture()
     //Unlock texture
     else
     {
-        SDL_UnlockTexture(mTexture);
-        mRawPixels = nullptr;
-        mRawPitch = 0;
+        SDL_UnlockTexture(m_texture);
+        m_raw_pixels = nullptr;
+        m_raw_pitch = 0;
     }
 
     return success;
@@ -392,9 +392,9 @@ bool SDLTexture::unlockTexture()
 void SDLTexture::copyRawPixels32(void* pixels)
 {
     //Texture is locked
-    if(mRawPixels != nullptr)
+    if(m_raw_pixels != nullptr)
     {
         //Copy to locked pixels
-        memcpy(mRawPixels, pixels, mRawPitch * mHeight);
+        memcpy(m_raw_pixels, pixels, m_raw_pitch * m_height);
     }
 }

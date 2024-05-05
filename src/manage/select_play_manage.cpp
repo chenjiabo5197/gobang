@@ -7,50 +7,50 @@ extern TTF_Font* g_art_font;
 
 SelectPlayManage::SelectPlayManage(const Config& config)
 {
-    this->buttons_x = config.Read("g_main_window_screen_width", 0) / 2;// TODO 新建优化
-    this->buttons_y = config.Read("g_main_window_screen_height", 0) / 2;
-    this->button_interval = config.Read("select_play_buttons_interval", 0);
-    this->select_play_buttons[0] = new SDLButton(config, "single_player", this->buttons_x, this->buttons_y-1.5*this->button_interval);
-    this->select_play_buttons[1] = new SDLButton(config, "two_players", this->buttons_x, this->buttons_y-this->button_interval/2);
-    this->select_play_buttons[2] = new SDLButton(config, "play_internet", this->buttons_x, this->buttons_y+this->button_interval/2);
-    this->select_play_buttons[3] = new SDLButton(config, "normal_back_menu", this->buttons_x, this->buttons_y+1.5*this->button_interval);
-    this->array_length = sizeof(this->select_play_buttons) / sizeof(this->select_play_buttons[0]);
-    this->select_chess_color_window = new SDLWindow(config, "select_chess_color_window");
-    this->white_color_chess = new Chess(config, "symbol_white_chess");
-    this->black_color_chess = new Chess(config, "symbol_black_chess");
-    this->select_chess_color_ttf = new SDLTTF("select_chess_color_ttf");
+    m_buttons_x = config.Read("g_main_window_screen_width", 0) / 2;// TODO 新建优化
+    m_buttons_y = config.Read("g_main_window_screen_height", 0) / 2;
+    m_button_interval = config.Read("select_play_buttons_interval", 0);
+    m_select_play_buttons[0] = new SDLButton(config, "single_player", m_buttons_x, m_buttons_y-1.5*m_button_interval);
+    m_select_play_buttons[1] = new SDLButton(config, "two_players", m_buttons_x, m_buttons_y-m_button_interval/2);
+    m_select_play_buttons[2] = new SDLButton(config, "play_internet", m_buttons_x, m_buttons_y+m_button_interval/2);
+    m_select_play_buttons[3] = new SDLButton(config, "normal_back_menu", m_buttons_x, m_buttons_y+1.5*m_button_interval);
+    m_array_length = sizeof(m_select_play_buttons) / sizeof(m_select_play_buttons[0]);
+    m_select_chess_color_window = new SDLWindow(config, "select_chess_color_window");
+    m_white_color_chess = new Chess(config, "symbol_white_chess");
+    m_black_color_chess = new Chess(config, "symbol_black_chess");
+    m_select_chess_color_ttf = new SDLTTF("select_chess_color_ttf");
     DEBUGLOG("SelectPlayManage construct success||button_interval={}||buttons_x={}||buttons_y={}||array_length={}", 
-    this->button_interval, this->buttons_x, this->buttons_y, this->array_length);
+    m_button_interval, m_buttons_x, m_buttons_y, m_array_length);
 }
 
 SelectPlayManage::~SelectPlayManage()
 {
-    delete select_chess_color_window;
-    delete white_color_chess;
-    delete black_color_chess;
-    delete select_chess_color_ttf;
+    delete m_select_chess_color_window;
+    delete m_white_color_chess;
+    delete m_black_color_chess;
+    delete m_select_chess_color_ttf;
     DEBUGLOG("~SelectPlayManage success||release resource");
 }
 
 void SelectPlayManage::init()
 {
-    for (int i = 0; i < this->array_length; i++)
+    for (int i = 0; i < m_array_length; i++)
     {
-        this->select_play_buttons[i]->initButtonCurrentSprite();
+        m_select_play_buttons[i]->initButtonCurrentSprite();
     }
     INFOLOG("init||init variable success");
-    for (int i = 0; i < this->array_length; i++)
+    for (int i = 0; i < m_array_length; i++)
     {
-        this->select_play_buttons[i]->loadResource(g_main_window->getWindow(), g_main_window->getRenderer());
+        m_select_play_buttons[i]->loadResource(g_main_window->getWindow(), g_main_window->getRenderer());
     }
     INFOLOG("loadResource||load resource success");
 }
 
 void SelectPlayManage::startRender()
 {
-    for (int i = 0; i < this->array_length; i++)
+    for (int i = 0; i < m_array_length; i++)
     {
-        this->select_play_buttons[i]->buttonRender(g_main_window->getRenderer());
+        m_select_play_buttons[i]->buttonRender(g_main_window->getRenderer());
     }
     // DEBUGLOG("startRender");
 }
@@ -62,61 +62,61 @@ void SelectPlayManage::handleEvents(SDL_Event* event)
     {
         this->singlePlaySelectChess();
     }
-    for (int i = 0; i < this->array_length; i++)
+    for (int i = 0; i < m_array_length; i++)
     {
-        this->select_play_buttons[i]->handleButtonEvent(event);
+        m_select_play_buttons[i]->handleButtonEvent(event);
     }
-    if (this->select_play_buttons[0]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP) // TODO 优化BUTTON_SPRITE_MOUSE_UP
+    if (m_select_play_buttons[0]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP) // TODO 优化BUTTON_SPRITE_MOUSE_UP
     {
         // 单人游戏
-        this->current_game_type = SINGLE_PLAYER_GAME;
+        m_current_game_type = SINGLE_PLAYER_GAME;
         SDL_Event event;
         event.type = SINGLE_PLAYER_EVENT;
         SDL_PushEvent(&event);
-        this->select_play_buttons[0]->initButtonCurrentSprite();
+        m_select_play_buttons[0]->initButtonCurrentSprite();
         INFOLOG("handleEvents||push event=SINGLE_PLAYER_EVENT||current_game_type = SINGLE_PLAYER_GAME");
     }
-    if (this->select_play_buttons[1]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+    if (m_select_play_buttons[1]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
     {
         // 双人游戏
-        this->current_game_type = TWO_PLAYERS_GAME;
+        m_current_game_type = TWO_PLAYERS_GAME;
         SDL_Event event;
         event.type = TWO_PLAYER_EVENT;
         SDL_PushEvent(&event);
-        this->select_play_buttons[1]->initButtonCurrentSprite();
+        m_select_play_buttons[1]->initButtonCurrentSprite();
         INFOLOG("handleEvents||push event=TWO_PLAYER_EVENT||current_game_type = TWO_PLAYERS_GAME");
     }
-    if (this->select_play_buttons[2]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+    if (m_select_play_buttons[2]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
     {
         // 网络对战
-        this->current_game_type = PLAYER_INTERNET_GAME;
+        m_current_game_type = PLAYER_INTERNET_GAME;
         SDL_Event event;
         event.type = PLAY_INTERNET_EVENT;
         SDL_PushEvent(&event);
-        this->select_play_buttons[2]->initButtonCurrentSprite();
+        m_select_play_buttons[2]->initButtonCurrentSprite();
         INFOLOG("handleEvents||push event=PLAY_INTERNET_EVENT||current_game_type = PLAYER_INTERNET_GAME");
     }
-    if (this->select_play_buttons[3]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
+    if (m_select_play_buttons[3]->getButtonCurrentSprite() == BUTTON_SPRITE_MOUSE_UP)
     {
         // 返回主菜单
-        this->current_game_type = GAME_KIND_DEFAULT;
+        m_current_game_type = GAME_KIND_DEFAULT;
         SDL_Event event;
         event.type = BACK_MANU_EVENT;
         SDL_PushEvent(&event);
-        this->select_play_buttons[3]->initButtonCurrentSprite();
+        m_select_play_buttons[3]->initButtonCurrentSprite();
         INFOLOG("handleEvents||push event=BACK_MANU_EVENT||current_game_type = GAME_KIND_DEFAULT");
     }
 }
 
 void SelectPlayManage::singlePlaySelectChess()
 {
-    this->select_chess_color_window->init();
-    this->white_color_chess->init(this->select_chess_color_window);
-    this->black_color_chess->init(this->select_chess_color_window);
-    this->white_color_chess->set_chess_coordinate(this->select_chess_color_window->getWidth()/2-60, this->select_chess_color_window->getHeight()/2-20);
-    this->white_color_chess->set_chess_multiple(0.8);
-    this->black_color_chess->set_chess_coordinate(this->select_chess_color_window->getWidth()/2+60, this->select_chess_color_window->getHeight()/2-20);
-    this->black_color_chess->set_chess_multiple(0.8);
+    m_select_chess_color_window->init();
+    m_white_color_chess->init(m_select_chess_color_window);
+    m_black_color_chess->init(m_select_chess_color_window);
+    m_white_color_chess->setChessCoordinate(m_select_chess_color_window->getWidth()/2-60, m_select_chess_color_window->getHeight()/2-20);
+    m_white_color_chess->setChessMultiple(0.8);
+    m_black_color_chess->setChessCoordinate(m_select_chess_color_window->getWidth()/2+60, m_select_chess_color_window->getHeight()/2-20);
+    m_black_color_chess->setChessMultiple(0.8);
     std::pair<sdl_button_sprite, sdl_button_sprite> chess_mouse_type_pair;
     //Hack to get window to stay up
     SDL_Event event;
@@ -129,7 +129,7 @@ void SelectPlayManage::singlePlaySelectChess()
         //Handle events on queue
         while(SDL_PollEvent(&event) != 0)
         {
-            if (event.type == SDL_WINDOWEVENT && event.window.windowID == this->select_chess_color_window->getWindowId())
+            if (event.type == SDL_WINDOWEVENT && event.window.windowID == m_select_chess_color_window->getWindowId())
             {
                 if (event.window.event == SDL_WINDOWEVENT_CLOSE)
                 {
@@ -160,27 +160,27 @@ void SelectPlayManage::singlePlaySelectChess()
             }
         }
         //Clear screen
-        SDL_SetRenderDrawColor(this->select_chess_color_window->getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
-        SDL_RenderClear(this->select_chess_color_window->getRenderer());
+        SDL_SetRenderDrawColor(m_select_chess_color_window->getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
+        SDL_RenderClear(m_select_chess_color_window->getRenderer());
         quit = this->selectChessRender(chess_mouse_type_pair) || quit;
-        SDL_RenderPresent(this->select_chess_color_window->getRenderer());
+        SDL_RenderPresent(m_select_chess_color_window->getRenderer());
     }
     //Free resources and close SDL
-    this->select_chess_color_window->free();
+    m_select_chess_color_window->free();
 }
 
 std::pair<sdl_button_sprite, sdl_button_sprite> SelectPlayManage::handleWindowEvents(SDL_Event* event, bool mouse_focus)
 {
     sdl_button_sprite chess_mouse_type[2] = {BUTTON_SPRITE_MOUSE_OUT, BUTTON_SPRITE_MOUSE_OUT};
-    Chess* chess_arr[2] = {this->white_color_chess, this->black_color_chess};
+    Chess* chess_arr[2] = {m_white_color_chess, m_black_color_chess};
     if (mouse_focus)
     {
         int x, y;
         SDL_GetMouseState(&x, &y);
         for (int i = 0; i < 2; i++)
         {
-            std::pair<int, int> chess_coordinate = chess_arr[i] ->get_chess_coordinate();
-            int chess_size = chess_arr[i]->get_chess_size();
+            std::pair<int, int> chess_coordinate = chess_arr[i] ->getChessCoordinate();
+            int chess_size = chess_arr[i]->getChessSize();
             if (x >= chess_coordinate.first - (chess_size/2) && x <= chess_coordinate.first + (chess_size/2) && y >= chess_coordinate.second - (chess_size/2) && y<= chess_coordinate.second + (chess_size/2))
             {
                 switch (event->type)
@@ -209,13 +209,13 @@ std::pair<sdl_button_sprite, sdl_button_sprite> SelectPlayManage::handleWindowEv
 
 void SelectPlayManage::renderText(const std::string& texture_text, TTF_Font* texture_ttf, SDL_Color color, const int& x, const int& y, const float& multiple)
 {
-	this->select_chess_color_ttf->loadRenderText(this->select_chess_color_window->getRenderer(), texture_ttf, texture_text, color);
-	this->select_chess_color_ttf->ttfRender(this->select_chess_color_window->getRenderer(), x, y, multiple);
+	m_select_chess_color_ttf->loadRenderText(m_select_chess_color_window->getRenderer(), texture_ttf, texture_text, color);
+	m_select_chess_color_ttf->ttfRender(m_select_chess_color_window->getRenderer(), x, y, multiple);
 }
 
 bool SelectPlayManage::selectChessRender(std::pair<sdl_button_sprite, sdl_button_sprite> mouse_event)
 {
-    Chess* chess_arr[2] = {this->white_color_chess, this->black_color_chess};
+    Chess* chess_arr[2] = {m_white_color_chess, m_black_color_chess};
     sdl_button_sprite chess_mouse_type[2] = {mouse_event.first, mouse_event.second};
     std::string render_text[2] = {"后手", "先手"};
     bool is_quit = false;
@@ -249,7 +249,7 @@ bool SelectPlayManage::selectChessRender(std::pair<sdl_button_sprite, sdl_button
         default:
             break;
         }
-        this->renderText(render_text[i], g_art_font, color, chess_arr[i]->get_chess_coordinate().first, chess_arr[i]->get_chess_coordinate().second+60, 0.05);
+        this->renderText(render_text[i], g_art_font, color, chess_arr[i]->getChessCoordinate().first, chess_arr[i]->getChessCoordinate().second+60, 0.05);
     }
     return is_quit;
 }

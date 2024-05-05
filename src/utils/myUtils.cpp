@@ -145,7 +145,7 @@ BestScoreUser getIBestScoreUser(const std::string& userName, const int& chessNum
 	return temp;
 }
 
-void sleep_seconds(const float& sceonds)
+void sleepSeconds(const float& sceonds)
 {
 	#if defined(__linux__)
 		// Linux系统

@@ -5,25 +5,25 @@ extern Mix_Chunk* g_select_button_sound;
 SDLButton::SDLButton(const Config& config, const std::string button_name, const int& x, const int& y)
 {
     std::string temp;
-    this->button_name = button_name;
-    mCurrentSprite = BUTTON_SPRITE_MOUSE_OUT;
-    this->sdl_texture = new SDLTexture(button_name);
-    this->button_x = x;
-    this->button_y= y;
-    this->button_width = config.Read(button_name+"_width", 0);
-    this->button_height = config.Read(button_name+"_height", 0);
-    this->button_multiple = config.Read(button_name+"_multiple", 0.0);
-    this->button_resource_path = config.Read(button_name+"_resourece_path", temp);
-    this->is_load_resource = false;
+    m_button_name = button_name;
+    m_current_sprite = BUTTON_SPRITE_MOUSE_OUT;
+    m_sdl_texture = new SDLTexture(button_name);
+    m_button_x = x;
+    m_button_y= y;
+    m_button_width = config.Read(button_name+"_width", 0);
+    m_button_height = config.Read(button_name+"_height", 0);
+    m_button_multiple = config.Read(button_name+"_multiple", 0.0);
+    m_button_resource_path = config.Read(button_name+"_resourece_path", temp);
+    m_is_load_resource = false;
     INFOLOG("SDLButton construct success||button_name={}||button_x={}||button_y={}||width={}||height={}||multiple={}||resource_path={}", 
-    this->button_name, this->button_x, this->button_y, this->button_width, this->button_height, this->button_multiple, this->button_resource_path);
+    m_button_name, m_button_x, m_button_y, m_button_width, m_button_height, m_button_multiple, m_button_resource_path);
 }
 
 SDLButton::~SDLButton()
 {
-    this->sdl_texture->free();
-    delete sdl_texture;
-    INFOLOG("~SDLButton, release resource||button_name={}", this->button_name);
+    m_sdl_texture->free();
+    delete m_sdl_texture;
+    INFOLOG("~SDLButton, release resource||button_name={}", m_button_name);
 }
 
 // 该函数将在事件循环中调用，处理从事件队列中提取的单个按钮事件
@@ -42,22 +42,22 @@ void SDLButton::handleButtonEvent(SDL_Event* event)
         bool inside = true;
 
         //Mouse is left of the button
-        if(x < button_x - ((int)this->button_width*this->button_multiple) / 2)
+        if(x < m_button_x - ((int)m_button_width*m_button_multiple) / 2)
         {
             inside = false;
         }
         //Mouse is right of the button
-        else if(x > button_x + ((int)this->button_width*this->button_multiple) / 2)
+        else if(x > m_button_x + ((int)m_button_width*m_button_multiple) / 2)
         {
             inside = false;
         }
         //Mouse above the button
-        else if(y < button_y - ((int)this->button_height*this->button_multiple) / 2)
+        else if(y < m_button_y - ((int)m_button_height*m_button_multiple) / 2)
         {
             inside = false;
         }
         //Mouse below the button
-        else if(y > button_y + ((int)this->button_height*this->button_multiple) / 2)
+        else if(y > m_button_y + ((int)m_button_height*m_button_multiple) / 2)
         {
             inside = false;
         }
@@ -70,7 +70,7 @@ void SDLButton::handleButtonEvent(SDL_Event* event)
         */
         if(!inside)
         {
-            mCurrentSprite = BUTTON_SPRITE_MOUSE_OUT;
+            m_current_sprite = BUTTON_SPRITE_MOUSE_OUT;
         }
         //Mouse is inside button
         else
@@ -79,34 +79,34 @@ void SDLButton::handleButtonEvent(SDL_Event* event)
             switch(event->type)
             {
                 case SDL_MOUSEMOTION:
-                mCurrentSprite = BUTTON_SPRITE_MOUSE_OVER_MOTION;
+                m_current_sprite = BUTTON_SPRITE_MOUSE_OVER_MOTION;
                 break;
             
                 case SDL_MOUSEBUTTONDOWN:
                 Mix_PlayChannel(-1, g_select_button_sound, 0);  // TODO  优化音效延迟
-                mCurrentSprite = BUTTON_SPRITE_MOUSE_DOWN;
+                m_current_sprite = BUTTON_SPRITE_MOUSE_DOWN;
                 break;
                 
                 case SDL_MOUSEBUTTONUP:
-                mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
+                m_current_sprite = BUTTON_SPRITE_MOUSE_UP;
                 break;
             }
         }
-        // DEBUGLOG("handleButtonEvent||button_name={}||mCurrentSprite={}", this->button_name, (int)this->mCurrentSprite);
+        // DEBUGLOG("handleButtonEvent||button_name={}||m_current_sprite={}", m_button_name, (int)this->m_current_sprite);
     }
 }
 
 bool SDLButton::loadResource(SDL_Window * global_window, SDL_Renderer* global_renderer)
 {
    //Load data
-    if(!this->sdl_texture->loadPixelsFromFile(global_window, this->button_resource_path))
+    if(!m_sdl_texture->loadPixelsFromFile(global_window, m_button_resource_path))
     {        
-        ERRORLOG("Failed to load texture||button_name={}", this->button_name);
+        ERRORLOG("Failed to load texture||button_name={}", m_button_name);
         return false;
     }
     //Get pixel data
-    Uint32* pixels = this->sdl_texture->getPixels32();
-    int pixelCount = this->sdl_texture->getPitch32() * this->sdl_texture->getHeight();
+    Uint32* pixels = m_sdl_texture->getPixels32();
+    int pixelCount = m_sdl_texture->getPitch32() * m_sdl_texture->getHeight();
     //Map colors
     Uint32 colorKey = SDL_MapRGBA(SDL_GetWindowSurface(global_window)->format, 255, 255, 255, 0xFF);   //取出按键周围的颜色，用下面的值将其设置为透明色
     Uint32 transparent = SDL_MapRGBA(SDL_GetWindowSurface(global_window)->format, 0xFF, 0xFF, 0xFF, 0x00);
@@ -121,57 +121,57 @@ bool SDLButton::loadResource(SDL_Window * global_window, SDL_Renderer* global_re
         }
     }
     //Create texture from manually color keyed pixels
-    if(!this->sdl_texture->loadFromPixels(global_renderer))
+    if(!m_sdl_texture->loadFromPixels(global_renderer))
     {
-        ERRORLOG("Unable to load texture from surface||button_name={}", this->button_name);
+        ERRORLOG("Unable to load texture from surface||button_name={}", m_button_name);
         return false;
     }
     //设置精灵
     for(int i = 0; i < BUTTON_SPRITE_TOTAL; ++i)
     {
         // 根据坐标取出button.png图像中不同区域的图像
-        gSpriteClips[i].x = i * this->button_width;
+        m_sprite_clips[i].x = i * m_button_width;
         if (i == BUTTON_SPRITE_TOTAL - 1)  // 将按键释放后的图像与鼠标在按键外的图像设置为同一个
         {
-            gSpriteClips[i].x = 0;
+            m_sprite_clips[i].x = 0;
         }
-        gSpriteClips[i].y = 0;
-        gSpriteClips[i].w = this->button_width;
-        gSpriteClips[i].h = this->button_height;
+        m_sprite_clips[i].y = 0;
+        m_sprite_clips[i].w = m_button_width;
+        m_sprite_clips[i].h = m_button_height;
     }
-    this->is_load_resource = true;
+    m_is_load_resource = true;
     return true;
 }
 
-// 根据当前的鼠标事件(mCurrentSprite)渲染不同的图像(gSpriteClips)
+// 根据当前的鼠标事件(m_current_sprite)渲染不同的图像(m_sprite_clips)
 bool SDLButton::buttonRender(SDL_Renderer* global_renderer)
 {
-    if (!this->is_load_resource)
+    if (!m_is_load_resource)
     {
-        ERRORLOG("button not load resource, please load resource||button_name={}", this->button_name);
+        ERRORLOG("button not load resource, please load resource||button_name={}", m_button_name);
         return false;
     }
-    int new_width = (int)(this->button_width * this->button_multiple);
-    int new_height = (int)(this->button_height * this->button_multiple);
+    int new_width = (int)(m_button_width * m_button_multiple);
+    int new_height = (int)(m_button_height * m_button_multiple);
     int x_offset = new_width / 2;
     int y_offset = new_height / 2;
-    int center_x = button_x - x_offset;
-    int center_y = button_y - y_offset;
+    int center_x = m_button_x - x_offset;
+    int center_y = m_button_y - y_offset;
     //Show current button sprite
-    this->sdl_texture->render(global_renderer, center_x, center_y, this->button_multiple, &gSpriteClips[mCurrentSprite]);   
-    // DEBUGLOG("buttonRender||x={}||y={}||gSpriteClips.x={}||gSpriteClips.y={}||gSpriteClips.w={}||gSpriteClips.h={}", button_position.x,
-    // button_position.y, gSpriteClips[mCurrentSprite].x, gSpriteClips[mCurrentSprite].y, gSpriteClips[mCurrentSprite].w, gSpriteClips[mCurrentSprite].h);
+    m_sdl_texture->render(global_renderer, center_x, center_y, m_button_multiple, &m_sprite_clips[m_current_sprite]);   
+    // DEBUGLOG("buttonRender||x={}||y={}||m_sprite_clips.x={}||m_sprite_clips.y={}||m_sprite_clips.w={}||m_sprite_clips.h={}", button_position.x,
+    // button_position.y, m_sprite_clips[m_current_sprite].x, m_sprite_clips[m_current_sprite].y, m_sprite_clips[m_current_sprite].w, m_sprite_clips[m_current_sprite].h);
     return true;
 }
 
 sdl_button_sprite SDLButton::getButtonCurrentSprite()
 {
-    return this->mCurrentSprite;
+    return m_current_sprite;
 }
 
 void SDLButton::initButtonCurrentSprite()
 {
-    this->mCurrentSprite = BUTTON_SPRITE_MOUSE_OUT;
+    m_current_sprite = BUTTON_SPRITE_MOUSE_OUT;
 }
 
 

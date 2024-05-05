@@ -20,23 +20,23 @@ class ChessDataBoardIterm
 {
 private:
     // 名字
-    std::string iterm_name;
+    std::string m_iterm_name;
     // 要渲染的文字坐标
-    int iterm_name_x;
-    int iterm_name_y;
+    int m_iterm_name_x;
+    int m_iterm_name_y;
     // 文字缩放倍数
-    float iterm_name_multiple;
+    float m_iterm_name_multiple;
 
     // 分数
-    int iterm_score;
+    int m_iterm_score;
     // 要渲染的文字坐标
-    int iterm_score_x;
-    int iterm_score_y;
+    int m_iterm_score_x;
+    int m_iterm_score_y;
     // 文字缩放倍数
-    float iterm_score_multiple;
+    float m_iterm_score_multiple;
 
     // 棋盘渲染的字体
-    SDLTTF* data_board_iterm_ttf;
+    SDLTTF* m_data_board_iterm_ttf;
 public:
     // 只传入姓名坐标，比分坐标可以根据姓名坐标推算出
     ChessDataBoardIterm(const std::string& name, const int& name_x, const int& name_y, const float& name_multiple, const float& score_multiple);

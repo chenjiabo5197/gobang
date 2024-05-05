@@ -9,34 +9,34 @@
 class SDLWindow
 {
 private:
-    int window_id;
+    int m_window_id;
     //窗口显示 ID 用于跟踪窗口所在的显示屏
-    int window_display_id;
+    int m_window_display_id;
 
     //封装的窗口,渲染
-    SDL_Window* mWindow;
-    SDL_Renderer* mRenderer;
+    SDL_Window* m_window;
+    SDL_Renderer* m_renderer;
 
     // 背景图片的渲染
-    SDLTexture* background_texture;
+    SDLTexture* m_background_texture;
 
     //窗口的尺寸
-    int mWidth;
-    int mHeight;
+    int m_width;
+    int m_height;
 
     //窗口焦点类型的标志
-    bool mMouseFocus;
-    bool mKeyboardFocus;
-    bool mFullScreen;
-    bool mMinimized;
-    bool mShown;
+    bool m_mouse_focus;
+    bool m_keyboard_focus;
+    bool m_full_screen;
+    bool m_minimized;
+    bool m_shown;
 
     // 窗口名，区分
-    std::string name;
+    std::string m_name;
     // 窗口标题
-    std::string title;
+    std::string m_title;
     // 窗口背景图片路径，默认为纯白色
-    std::string background_path;
+    std::string m_background_path;
 
 public:
     //Intializes internals
@@ -79,5 +79,5 @@ public:
     bool isShown();
 
     // 渲染该窗口的背景
-    void render_background();
+    void renderBackground();
 };

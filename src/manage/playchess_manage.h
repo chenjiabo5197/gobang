@@ -24,35 +24,35 @@ class PlaychessManage
 private:
 
     // 电脑AI
-    Machine* machine;
+    Machine* m_machine;
     // 玩家
-    Player* single_player;
+    Player* m_single_player;
     // 玩家2
-    Player* single_player2;
+    Player* m_single_player2;
     
     // 当前页面要渲染的按键数组
-    SDLButton* playchess_buttons[2];
+    SDLButton* m_playchess_buttons[2];
 
     // 是否需要重置单人游戏数据板
-    bool is_reset_single_player_chess_data_board;
+    bool m_is_reset_single_player_chess_data_board;
     // 是否需要重置双人游戏数据板
-    bool is_reset_two_players_chess_data_board;
+    bool m_is_reset_two_players_chess_data_board;
 
     // 按键的数组长度，渲染按键时使用
-    int array_length;
+    int m_array_length;
 
     //当前页面所有按键的中心位置，按键以此为中心，纵向分布
-    int buttons_x;
-    int buttons_y;
+    int m_buttons_x;
+    int m_buttons_y;
 
     // 按键之间的间隔(上下间隔)
-    int button_interval;
+    int m_button_interval;
 
     // 棋盘
-    Chessboard* chessboard;
+    Chessboard* m_chessboard;
 
     // 数据板
-    ChessDataBoard* chess_data_board;
+    ChessDataBoard* m_chess_data_board;
 public:
     PlaychessManage(const Config& config);
     ~PlaychessManage();
@@ -69,8 +69,8 @@ public:
     bool handleMouseClick(SDL_Event* event);
 
     // 获取棋盘中心的坐标
-	int get_chessboard_center_x();
-	int get_chessboard_center_y();
+	int getChessboardCenterX();
+	int getChessboardCenterY();
 };
 
 

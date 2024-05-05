@@ -87,20 +87,20 @@ public:
     bool unlockTexture();
 
 private:
-    std::string texture_name;
+    std::string m_texture_name;
 
     //实际渲染的纹理
-    SDL_Texture* mTexture;
+    SDL_Texture* m_texture;
 
     //像素面，用于生成实际渲染纹理的中间值  loadPixelsFromFile函数的加载结果
-    SDL_Surface* mSurfacePixels;
+    SDL_Surface* m_surface_pixels;
 
     //原始像素
-    void* mRawPixels;
-    int mRawPitch;
+    void* m_raw_pixels;
+    int m_raw_pitch;
 
     //图像的宽和高
-    int mWidth;
-    int mHeight;
+    int m_width;
+    int m_height;
 };
 

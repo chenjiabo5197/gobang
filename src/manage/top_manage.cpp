@@ -22,25 +22,25 @@ TopManage::TopManage(const Config& config)
 {
     this->setRendererType(DEFAULT_INTERFACE);
     std::string temp;
-    this->art_ttf_path = config.Read("art_ttf_font_path", temp);
-    this->art_ttf_ptsize = config.Read("art_ttf_font_ptsize", 0);
-    this->normal_ttf_path = config.Read("normal_ttf_font_path", temp);
-    this->normal_ttf_ptsize = config.Read("normal_ttf_font_ptsize", 0);
-    this->main_menu_manage = new MainMenuManage(config);// TODO 新建优化
-    this->select_play_manage = new SelectPlayManage(config);
-    this->playchess_manage = new PlaychessManage(config);
-    this->settlement_manage = new SettlementManage(config);
+    m_art_ttf_path = config.Read("art_ttf_font_path", temp);
+    m_art_ttf_ptsize = config.Read("art_ttf_font_ptsize", 0);
+    m_normal_ttf_path = config.Read("normal_ttf_font_path", temp);
+    m_normal_ttf_ptsize = config.Read("normal_ttf_font_ptsize", 0);
+    m_main_menu_manage = new MainMenuManage(config);// TODO 新建优化
+    m_select_play_manage = new SelectPlayManage(config);
+    m_playchess_manage = new PlaychessManage(config);
+    m_settlement_manage = new SettlementManage(config);
     g_main_window = new SDLWindow(config, "g_main_window");
     DEBUGLOG("Manage construct success||render_type={}||art_ttf_path={}||art_ttf_ptsize={}||normal_ttf_resource_path={}||normal_ttf_ptsize={}", 
-    (int)this->render_type, this->art_ttf_path, this->art_ttf_ptsize, this->normal_ttf_path, this->normal_ttf_ptsize);
+    (int)m_render_type, m_art_ttf_path, m_art_ttf_ptsize, m_normal_ttf_path, m_normal_ttf_ptsize);
 }
 
 TopManage::~TopManage()
 {
-    delete main_menu_manage;
-    delete select_play_manage;
-    delete playchess_manage;
-    delete settlement_manage;
+    delete m_main_menu_manage;
+    delete m_select_play_manage;
+    delete m_playchess_manage;
+    delete m_settlement_manage;
     // delete g_main_window;
     DEBUGLOG("~Manage success||release resource");
 }
@@ -64,75 +64,76 @@ void TopManage::start()
         //Handle events on queue
         while(SDL_PollEvent(&event) != 0)
         {
-            //User requests quit
-            if(event.type == SDL_QUIT || event.type == EXIT_GAME_EVENT)
+            switch (event.type)
             {
+            case SDL_QUIT:
+            case EXIT_GAME_EVENT:
                 quit = true;
-            }
-            else if (event.type == PLAYER_WIN_EVENT)
-            {
-                this->playchess_manage->handleEvents(&event);
+                break;
+            case PLAYER_WIN_EVENT:
+                m_playchess_manage->handleEvents(&event);
                 this->setRendererType(PLAYER_WIN_PRE_INTERFACE);
-            }
-            else if (event.type == PLAYER_LOSE_EVENT)
-            {
-                this->playchess_manage->handleEvents(&event);
+                break;
+            case PLAYER_LOSE_EVENT:
+                m_playchess_manage->handleEvents(&event);
                 this->setRendererType(PLAYER_LOSE_PRE_INTERFACE);
-            }
-            else if (event.type == TWO_PLAYER_BLACK_WIN_EVENT)
-            {
-                this->playchess_manage->handleEvents(&event);
+                break;
+            case TWO_PLAYER_BLACK_WIN_EVENT:
+                m_playchess_manage->handleEvents(&event);
                 this->setRendererType(BLACK_WIN_INTERFACE);
-            }
-            else if (event.type == TWO_PLAYER_WHITE_WIN_EVENT)
-            {
-                this->playchess_manage->handleEvents(&event);
+                break;
+            case TWO_PLAYER_WHITE_WIN_EVENT:
+                m_playchess_manage->handleEvents(&event);
                 this->setRendererType(WHITE_WIN_INTERFACE);
-            }
-            else if (event.type == START_GAME_EVENT)
-            {
+                break;
+            case START_GAME_EVENT:
                 this->setRendererType(SELECT_PLAY_INTERFACE);
-            }
-            else if (event.type == SINGLE_PLAYER_EVENT || event.type == SINGLE_PLAYER_AGAIN_GAME_EVENT)
-            {
-                this->select_play_manage->handleEvents(&event);
-            }
-            else if (event.type == TWO_PLAYER_EVENT)
-            {
+                break;
+            case SINGLE_PLAYER_EVENT:
+            case SINGLE_PLAYER_AGAIN_GAME_EVENT:
+                m_select_play_manage->handleEvents(&event);
+                break;
+            case TWO_PLAYER_EVENT:
                 this->setRendererType(PLAYCHESS_INTERFACE);
-                this->playchess_manage->handleEvents(&event);
-            }
-            else if (event.type == SINGLE_PLAYER_WHITE_EVENT || event.type == SINGLE_PLAYER_BLACK_EVENT || event.type == TWO_PLAYER_AGAIN_GAME_EVENT)
-            {
+                m_playchess_manage->handleEvents(&event);
+                break;
+            case SINGLE_PLAYER_WHITE_EVENT:
+            case SINGLE_PLAYER_BLACK_EVENT:
+            case TWO_PLAYER_AGAIN_GAME_EVENT:
                 this->setRendererType(PLAYCHESS_INTERFACE);
-                this->playchess_manage->handleEvents(&event);
-            }
-            else if (event.type == BACK_MANU_EVENT)
-            {
+                m_playchess_manage->handleEvents(&event);
+                break;
+            case BACK_MANU_EVENT:
                 this->setRendererType(MAIN_MENU_INTERFACE);
-            }
-            else if (event.type == PLAYER_WITHDRAW_EVENT)
-            {
-                this->playchess_manage->handleEvents(&event);
-            } 
-            else
-            {
-                if(this->render_type == PLAYCHESS_INTERFACE)
+                break;
+            case PLAYER_WITHDRAW_EVENT:
+                m_playchess_manage->handleEvents(&event);
+                break;
+            case BEST_SCORES_EVENT:
+                m_playchess_manage->handleEvents(&event);
+                break;
+            default:  // 其他事件，鼠标移动，点击等事件
+                switch (m_render_type)
                 {
-                    this->playchess_manage->handleEvents(&event);
+                case PLAYCHESS_INTERFACE:
+                    m_playchess_manage->handleEvents(&event);
+                    break;
+                case PLAYER_WIN_INTERFACE:
+                case PLAYER_LOSE_INTERFACE:
+                case BLACK_WIN_INTERFACE:
+                case WHITE_WIN_INTERFACE:
+                    m_settlement_manage->handleEvents(&event);
+                    break;
+                case MAIN_MENU_INTERFACE:
+                    m_main_menu_manage->handleEvents(&event);
+                    break;
+                case SELECT_PLAY_INTERFACE:
+                    m_select_play_manage->handleEvents(&event);
+                    break;
+                default:
+                    break;
                 }
-                else if (this->render_type == PLAYER_WIN_INTERFACE || this->render_type == PLAYER_LOSE_INTERFACE || this->render_type == BLACK_WIN_INTERFACE || this->render_type == WHITE_WIN_INTERFACE)
-                {
-                    this->settlement_manage->handleEvents(&event);
-                }
-                else if (this->render_type == MAIN_MENU_INTERFACE)
-                {
-                    this->main_menu_manage->handleEvents(&event);
-                }
-                else if (this->render_type == SELECT_PLAY_INTERFACE)
-                {
-                    this->select_play_manage->handleEvents(&event);
-                }
+                break;
             }
         }
         if (last_render_type == PLAYER_LOSE_PRE_INTERFACE)
@@ -146,36 +147,36 @@ void TopManage::start()
         //Clear screen
         SDL_SetRenderDrawColor(g_main_window->getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderClear(g_main_window->getRenderer());
-        g_main_window->render_background();
-        switch (this->render_type)
+        g_main_window->renderBackground();
+        switch (m_render_type)
         {
         case PLAYCHESS_INTERFACE:
         case PLAYER_LOSE_PRE_INTERFACE:
         case PLAYER_WIN_PRE_INTERFACE:
-            this->playchess_manage->startRender();
+            m_playchess_manage->startRender();
             break;
         case PLAYER_WIN_INTERFACE:
         case PLAYER_LOSE_INTERFACE:
         case BLACK_WIN_INTERFACE:
         case WHITE_WIN_INTERFACE:
         {
-            if (last_render_type != this->render_type)
+            if (last_render_type != m_render_type)
             {
-                sleep_seconds(1.5);
+                sleepSeconds(1.5);
             }
-            this->settlement_manage->startRender();
+            m_settlement_manage->startRender();
             break;
         }
         case MAIN_MENU_INTERFACE:
-            this->main_menu_manage->startRender();
+            m_main_menu_manage->startRender();
             break;
         case SELECT_PLAY_INTERFACE:
-            this->select_play_manage->startRender();
+            m_select_play_manage->startRender();
             break;
         default:
             break;
         }
-        last_render_type = this->render_type;
+        last_render_type = m_render_type;
         //Update screen
         SDL_RenderPresent(g_main_window->getRenderer());
     }
@@ -235,13 +236,13 @@ bool TopManage::initRender()
 bool TopManage::loadResource()
 {
     //使用 TTF_OpenFont 加载字体。这需要输入字体文件的路径和要渲染的点尺寸
-    g_art_font = TTF_OpenFont(this->art_ttf_path.c_str(), this->art_ttf_ptsize);
+    g_art_font = TTF_OpenFont(m_art_ttf_path.c_str(), m_art_ttf_ptsize);
     if(g_art_font == nullptr)
     {
         ERRORLOG("Failed to load STXingkai font! SDL_ttf Error={}", TTF_GetError());
         return false;
     }
-    g_normal_font = TTF_OpenFont(this->normal_ttf_path.c_str(), this->normal_ttf_ptsize);
+    g_normal_font = TTF_OpenFont(m_normal_ttf_path.c_str(), m_normal_ttf_ptsize);
     if(g_normal_font == nullptr)
     {
         ERRORLOG("Failed to load STkaiti font! SDL_ttf Error={}", TTF_GetError());
@@ -264,11 +265,11 @@ bool TopManage::loadResource()
     DEBUGLOG("load g_select_button_sound success!");
     // TODO 优化加载，默认不用加载后面用不到的管理页面
     g_main_window->init();
-    this->main_menu_manage->init();
-    this->select_play_manage->init();
-    this->playchess_manage->init();
-    this->settlement_manage->init();
-    this->settlement_manage->set_font_coordinate(this->playchess_manage->get_chessboard_center_x(), this->playchess_manage->get_chessboard_center_y());
+    m_main_menu_manage->init();
+    m_select_play_manage->init();
+    m_playchess_manage->init();
+    m_settlement_manage->init();
+    m_settlement_manage->setFontCoordinate(m_playchess_manage->getChessboardCenterX(), m_playchess_manage->getChessboardCenterY());
     INFOLOG("loadResource success!");
     return true;
 }
@@ -295,10 +296,10 @@ void TopManage::closeRender()
 
 void TopManage::setRendererType(const interface_kind_type& render_type)
 {
-    this->render_type = render_type;
+    m_render_type = render_type;
     if(render_type == PLAYER_WIN_INTERFACE || render_type == PLAYER_LOSE_INTERFACE || render_type == BLACK_WIN_INTERFACE || render_type == WHITE_WIN_INTERFACE)
     {
-        this->settlement_manage->set_interface_render_type(render_type);
+        m_settlement_manage->setInterfaceRenderType(render_type);
     }
     INFOLOG("setRendererType||set render_type={}", (int)render_type);
 }

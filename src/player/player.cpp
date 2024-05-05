@@ -2,11 +2,11 @@
 
 Player::Player(Chessboard* chessboard, const std::string& player_name, const chess_kind_type& chess_kind)
 {
-    this->chessboard = chessboard;
-    this->player_name = player_name;
-    this->chess_kind = chess_kind;
-    this->chess_num =0;
-    INFOLOG("Player construct success||player name={}||chess kind={}", this->player_name = player_name, (int)this->chess_kind);
+    m_chessboard = chessboard;
+    m_player_name = player_name;
+    m_chess_kind = chess_kind;
+    m_chess_num =0;
+    INFOLOG("Player construct success||player name={}||chess kind={}", m_player_name = player_name, (int)m_chess_kind);
 }
 
 Player::~Player()
@@ -21,19 +21,19 @@ void Player::init()
 
 void Player::resetPlayer()
 {
-	this->chess_num = 0;
-	INFOLOG("Player::resetPlayer||reset player success||name={}", this->player_name);
+	m_chess_num = 0;
+	INFOLOG("Player::resetPlayer||reset player success||name={}", m_player_name);
 }
 
 void Player::addChessNum()
 {
-    INFOLOG("Player::addChessNum||player_name={}||chess_num={}", this->player_name, ++this->chess_num);
+    INFOLOG("Player::addChessNum||player_name={}||chess_num={}", m_player_name, ++m_chess_num);
 }
 
 int Player::getChessNum()
 {
-    INFOLOG("Player::getChessNum||getChessNum||chess_num={}", this->chess_num);
-	return this->chess_num;
+    INFOLOG("Player::getChessNum||getChessNum||chess_num={}", m_chess_num);
+	return m_chess_num;
 }
 
 // bool Player::go(int x, int y, chess_kind_type kind)

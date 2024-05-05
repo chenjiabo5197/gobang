@@ -22,50 +22,50 @@ class Chessboard
 {
 private:
 	// 棋子
-    Chess* white_chess;   			// 棋盘上落子
-	Chess* white_current_chess;		// 棋盘上最后一步落子
-    Chess* black_chess;
-	Chess* black_current_chess;
+    Chess* m_white_chess;   			// 棋盘上落子
+	Chess* m_white_current_chess;		// 棋盘上最后一步落子
+    Chess* m_black_chess;
+	Chess* m_black_current_chess;
 
 	// 棋盘渲染的参数
-    int render_r;
-    int render_g;
-    int render_b;
-    int render_alpha;
+    int m_render_r;
+    int m_render_g;
+    int m_render_b;
+    int m_render_alpha;
 
 	// 棋盘渲染的字体
-	SDLTTF* chessboard_ttf;
+	SDLTTF* m_chessboard_ttf;
 
 	// 储存当前棋盘大小，当前默认为15
-	int chessboard_size;
+	int m_chessboard_size;
 
     // 储存当前棋盘和棋子情况，空白0，白子1，黑子2
-	std::vector<std::vector<int>> chessMap;
+	std::vector<std::vector<int>> m_chess_map;
 
     // 棋盘左上角坐标
-    int origin_x, origin_y;
+    int m_origin_x, m_origin_y;
 
     // 棋盘中每个格子大小
-    int lattice_size;
+    int m_lattice_size;
 
 	// 棋盘边界的结构体
-	ChessBoardBoundary* chessboard_boundary;
+	ChessBoardBoundary* m_chessboard_boundary;
 
 	// 最近的落子位置，不分黑白棋
-	ChessPos* last_chess_pos;
+	ChessPos* m_last_chess_pos;
 
 	// 最近落子位置，区分黑白棋，目的是为了分别渲染最近一次落子位置
-	ChessPos* black_current_chess_pos;
-	ChessPos* white_current_chess_pos;
+	ChessPos* m_black_current_chess_pos;
+	ChessPos* m_white_current_chess_pos;
+
+	// 当前的下棋方
+	player_flag_type m_player_flag;
+
+	// 储存当前棋盘上所有棋子数据
+	std::vector<ChessData> m_chessboard_data;
 
 	// 初始化/重置当前黑白棋位置参数
 	void initCurrentChessPos();
-
-	// 当前的下棋方
-	player_flag_type player_flag;
-
-	// 储存当前棋盘上所有棋子数据
-	std::vector<ChessData> chessboard_data;
 
 	// 根据悔棋，更新black_current_chess_pos和white_current_chess_pos
 	void updateCurrentChessPos();
@@ -120,17 +120,17 @@ public:
 	bool checkWin();
 
 	// 设置当前的下棋方
-	void set_player_flag_type(const player_flag_type& type);
+	void setPlayerFlagType(const player_flag_type& type);
 
-	player_flag_type get_player_flag_type();
+	player_flag_type getPlayerFlagType();
 
 	// 获取棋盘中心的坐标
-	int get_center_x();
-	int get_center_y();
+	int getCenterX();
+	int getCenterY();
 
 	// 设置悔棋渲染
-	void set_chessboard_withdraw();
+	void setChessboardWithdraw();
 
 	// 判断是否可以进行悔棋
-	bool is_can_withdraw();
+	bool isCanWithdraw();
 };

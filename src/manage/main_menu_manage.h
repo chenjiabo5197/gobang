@@ -19,17 +19,17 @@ class MainMenuManage
 private:
    
     // 当前页面要渲染的按键数组
-    SDLButton* main_menu_buttons[3];
+    SDLButton* m_main_menu_buttons[3];
 
     // 数组长度
-    int array_length;
+    int m_array_length;
 
     // 当前页面所有按键的中心位置，按键以此为中心，纵向分布
-    int buttons_x;
-    int buttons_y;
+    int m_buttons_x;
+    int m_buttons_y;
 
     // 按键之间的间隔(上下间隔)
-    int button_interval;
+    int m_button_interval;
 public:
     MainMenuManage(const Config& config);
     ~MainMenuManage();
@@ -41,4 +41,7 @@ public:
 
     // 处理事件
     void handleEvents(SDL_Event* event);
+
+    // 查看分数排行榜
+    void showBestScore();
 };

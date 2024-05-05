@@ -31,31 +31,31 @@ public:
     void initButtonCurrentSprite();
 
 private:
-    bool is_load_resource;
+    bool m_is_load_resource;
 
     // 按键的资源地址
-    std::string button_resource_path;
+    std::string m_button_resource_path;
 
     // 按键的宽和高
-    int button_width;
-    int button_height;
+    int m_button_width;
+    int m_button_height;
 
     // 按键缩放的尺寸
-    float button_multiple;
+    float m_button_multiple;
 
     //位置坐标,按键的中心处坐标
-    int button_x;
-    int button_y;
+    int m_button_x;
+    int m_button_y;
 
     // 按键精灵  按键外，按键内，鼠标点击，鼠标释放
-    SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL];
+    SDL_Rect m_sprite_clips[BUTTON_SPRITE_TOTAL];
 
     // 按键名
-    std::string button_name;
+    std::string m_button_name;
 
-    SDLTexture* sdl_texture;
+    SDLTexture* m_sdl_texture;
 
     //精灵枚举
-    sdl_button_sprite mCurrentSprite;
+    sdl_button_sprite m_current_sprite;
 };
 

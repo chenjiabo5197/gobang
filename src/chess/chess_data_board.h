@@ -26,28 +26,28 @@ class ChessDataBoard
 private:
 
     // 数据板数组
-    ChessDataBoardIterm* data_board_arr[4];
+    ChessDataBoardIterm* m_data_board_arr[4];
 
     // 单人游戏先后手
-    chess_color_type current_chess_sequence;
-    chess_color_type last_chess_sequence;
+    chess_color_type m_current_chess_sequence;
+    chess_color_type m_last_chess_sequence;
 
 	// 棋盘渲染的字体
-    SDLTTF* data_board_ttf;
+    SDLTTF* m_data_board_ttf;
 
     // 数据板上棋子标志
-    Chess* symbol_white_chess;		
-    Chess* symbol_black_chess;
+    Chess* m_symbol_white_chess;		
+    Chess* m_symbol_black_chess;
 
     // 数据板中心坐标
-    int data_board_x;
-    int data_board_y;
+    int m_data_board_x;
+    int m_data_board_y;
+
+    // 总计时器，显示当前对局进行的时间
+    SDLTimer* m_top_timer;
 
     // 渲染文字到指定位置
 	void renderText(const std::string& texture_text, TTF_Font* texture_ttf, SDL_Color color, const int& x, const int& y, const float& multiple);
-
-    // 总计时器，显示当前对局进行的时间
-    SDLTimer* top_timer;
 public:
     ChessDataBoard(const Config& config);
     ~ChessDataBoard();

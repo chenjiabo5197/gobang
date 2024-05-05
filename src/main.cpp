@@ -51,7 +51,7 @@ void initLogger(const Config& config)
     ERRORLOG("this is a error log");
     CRITICALLOG("this is critical log");*/
 }
-
+// TODO 函数名为驼峰命名，变量名为下划线分割，类属性名m_
 int main()
 {
     Config config = initConfig("config/config");

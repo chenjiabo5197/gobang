@@ -30,21 +30,21 @@ class TopManage
 private:
 
     // 各个子页面管理
-    MainMenuManage* main_menu_manage;
-    SelectPlayManage* select_play_manage;
-    PlaychessManage* playchess_manage;
-    SettlementManage* settlement_manage;
+    MainMenuManage* m_main_menu_manage;
+    SelectPlayManage* m_select_play_manage;
+    PlaychessManage* m_playchess_manage;
+    SettlementManage* m_settlement_manage;
 
     // 行楷字体
-    std::string art_ttf_path;
-    int art_ttf_ptsize;
+    std::string m_art_ttf_path;
+    int m_art_ttf_ptsize;
 
     // 普通字体
-    std::string normal_ttf_path;
-    int normal_ttf_ptsize;
+    std::string m_normal_ttf_path;
+    int m_normal_ttf_ptsize;
 
     // 渲染的种类
-    interface_kind_type render_type;
+    interface_kind_type m_render_type;
 public:
     TopManage(const Config& config);
     ~TopManage();

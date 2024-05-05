@@ -44,7 +44,7 @@ extern void updateBestScore(std::vector<BestScoreUser> & bestScores, const BestS
 extern BestScoreUser getIBestScoreUser(const std::string& userName, const int& chessNum);
 
 // 让程序休眠的秒数
-extern void sleep_seconds(const float& seconds);
+extern void sleepSeconds(const float& seconds);
 
 // 交换两个值
 template<typename T>
