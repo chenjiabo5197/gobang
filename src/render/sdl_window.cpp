@@ -62,14 +62,9 @@ bool SDLWindow::init()
 
     if (m_background_path != "")
     {
-        if(!m_background_texture->loadPixelsFromFile(m_window, m_background_path))
+        if(!m_background_texture->loadFromFile(m_window, m_renderer, m_background_path))
         {        
             ERRORLOG("Failed to load texture!"); 
-            return false;
-        }
-        if(!m_background_texture->loadFromPixels(m_renderer))
-        {
-            ERRORLOG("Unable to load texture from surface!");
             return false;
         }
         DEBUGLOG("init||background_path={}||load resource success!", m_background_path);

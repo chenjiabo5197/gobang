@@ -22,8 +22,8 @@
 #include "sdl_ttf.h"
 #include "sdl_window.h"
 #include "chessboard.h"
-#include "../player/machine.h"
-#include "../player/player.h"
+#include "machine.h"
+#include "player.h"
 
 class TopManage
 {

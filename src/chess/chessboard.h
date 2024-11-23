@@ -13,7 +13,7 @@
 #include "sdl_ttf.h"
 #include "common.h"
 #include "global.h"
-#include "myUtils.h"
+#include "my_utils.h"
 #include "logger.h"
 #include "config.h"
 #include "sdl_window.h"

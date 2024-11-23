@@ -16,7 +16,7 @@
 #include "sdl_ttf.h"
 #include "common.h"
 #include "global.h"
-#include "myUtils.h"
+#include "my_utils.h"
 #include "logger.h"
 #include "config.h"
 #include "sdl_window.h"
@@ -24,7 +24,6 @@
 class ChessDataBoard
 {
 private:
-
     // 数据板数组
     ChessDataBoardIterm* m_data_board_arr[4];
 
@@ -48,6 +47,7 @@ private:
 
     // 渲染文字到指定位置
 	void renderText(const std::string& texture_text, TTF_Font* texture_ttf, SDL_Color color, const int& x, const int& y, const float& multiple);
+
 public:
     ChessDataBoard(const Config& config);
     ~ChessDataBoard();

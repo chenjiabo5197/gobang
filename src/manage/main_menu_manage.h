@@ -30,6 +30,9 @@ private:
 
     // 按键之间的间隔(上下间隔)
     int m_button_interval;
+
+    // 判断是否在展示排行榜页面
+    bool m_is_show_best_score;
 public:
     MainMenuManage(const Config& config);
     ~MainMenuManage();

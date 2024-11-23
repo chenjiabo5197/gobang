@@ -2,7 +2,7 @@
 #include <vector>
 #include <iostream>
 #include "chessboard.h"
-#include "myUtils.h"
+#include "my_utils.h"
 
 class Machine
 {

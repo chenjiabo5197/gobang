@@ -12,6 +12,7 @@ MainMenuManage::MainMenuManage(const Config& config)
     m_main_menu_buttons[1] = new SDLButton(config, "best_scores", m_buttons_x, m_buttons_y);
     m_main_menu_buttons[2] = new SDLButton(config, "exit_game", m_buttons_x, m_buttons_y+m_button_interval);
     m_array_length = sizeof(m_main_menu_buttons) / sizeof(m_main_menu_buttons[0]);
+    m_is_show_best_score = false;
     DEBUGLOG("MainMenuManage construct success||button_interval={}||buttons_x={}||buttons_y={}||array_length={}", 
     m_button_interval, m_buttons_x, m_buttons_y, m_array_length);
 }
@@ -37,9 +38,16 @@ void MainMenuManage::init()
 
 void MainMenuManage::startRender()
 {
-    for (int i = 0; i < m_array_length; i++)
+    if (m_is_show_best_score)
     {
-        m_main_menu_buttons[i]->buttonRender(g_main_window->getRenderer());
+        DEBUGLOG("111");
+    }
+    else
+    {
+        for (int i = 0; i < m_array_length; i++)
+        {
+            m_main_menu_buttons[i]->buttonRender(g_main_window->getRenderer());
+        }
     }
     // DEBUGLOG("startRender");
 }
@@ -86,7 +94,7 @@ void MainMenuManage::handleEvents(SDL_Event* event)
 
 void MainMenuManage::showBestScore()
 {
-    
+    m_is_show_best_score = true;
 }
 
 

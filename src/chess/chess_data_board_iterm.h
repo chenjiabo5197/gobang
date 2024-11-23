@@ -14,7 +14,7 @@
 #include "sdl_ttf.h"
 #include "logger.h"
 #include "sdl_window.h"
-#include "myUtils.h"
+#include "my_utils.h"
 
 class ChessDataBoardIterm
 {
